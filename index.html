@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VitrineCentro — protótipo integrado</title>
+<link rel="stylesheet" href="css/estilo.css"><link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b4541a">
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="#inicio"><span aria-hidden="true">🏛️</span> Vitrine<span>Centro</span></a>
+    <nav class="main" aria-label="Principal">
+      <a href="#inicio" data-r="inicio">Início</a>
+      <a href="#favoritos" data-r="favoritos">Favoritos</a>
+      <a href="#anotacoes" data-r="anotacoes">Anotações</a>
+      <a href="#sobre" data-r="sobre">Sobre os dados</a>
+    </nav>
+    <div class="a11y" role="group" aria-label="Acessibilidade da página">
+      <button id="bt-contraste" aria-pressed="false">Alto contraste</button>
+      <button id="bt-ampliar" aria-pressed="false">A+ Texto</button>
+    </div>
+  </div>
+</header>
+<main id="conteudo" class="wrap" tabindex="-1">
+  <p class="aviso" role="note"><strong>Protótipo com dados fictícios.</strong> Negócios, horários, contatos e condições de acesso são exemplos de teste. As informações de acesso não são certificação nem garantia: confirme antes da visita.</p>
+  <div id="app" aria-live="polite"></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="dados/dados.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('PWA ativo e pronto offline!'))
+      .catch((err) => console.log('Erro ao registrar PWA:', err));
+  }
+</script>
+</body>
+</html>
