@@ -1,0 +1,12 @@
+.vscode/
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+*.log
+.env
+.env.local
+
+node_modules/
