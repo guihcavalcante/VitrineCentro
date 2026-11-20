@@ -336,6 +336,7 @@ function aplicarA11y(){
   const a = ler(KEY.a11y, {contraste:false, ampliado:false});
   document.body.classList.toggle("contraste", a.contraste);
   document.body.classList.toggle("ampliado", a.ampliado);
+  document.documentElement.classList.toggle("ampliado", a.ampliado);
   document.getElementById("bt-contraste").setAttribute("aria-pressed", a.contraste);
   document.getElementById("bt-ampliar").setAttribute("aria-pressed", a.ampliado);
 }

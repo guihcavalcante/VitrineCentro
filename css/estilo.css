@@ -9,7 +9,7 @@ body.contraste{
   --brand:#ffd400; --brand-ink:#000; --brand-soft:#222;
   --ok:#7dff9b; --ok-soft:#000; --no:#ff8a8a; --no-soft:#000; --unk:#ffd400; --unk-soft:#000; --focus:#00e5ff;
 }
-body.ampliado{--fs:20px}
+html.ampliado, body.ampliado{--fs:20px}
 *{box-sizing:border-box}
 html{font-size:var(--fs)}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
