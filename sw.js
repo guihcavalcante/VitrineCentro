@@ -1,26 +1,21 @@
-const CACHE_NAME = 'vitrine-centro-v1';
-const ARQUIVOS_CACHE = [
-  './',
-  './index.html',
-  './css/estilo.css',
-  './js/app.js',
-  './dados/dados.js'
-];
+const CACHE_NAME = "vitrine-centro-v1";
 
-// Instala o cache no navegador
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ARQUIVOS_CACHE);
-    })
-  );
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
 });
 
-// Serve os arquivos direto do cache se estiver offline
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((resposta) => {
-      return resposta || fetch(e.request);
-    })
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((resposta) => {
+        const copia = resposta.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
+        return resposta;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

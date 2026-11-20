@@ -35,9 +35,18 @@
 <script src="js/app.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js')
-      .then(() => console.log('PWA ativo e pronto offline!'))
-      .catch((err) => console.log('Erro ao registrar PWA:', err));
+    navigator.serviceWorker.register('./sw.js').then((reg) => {
+      // Verifica se há atualização no arquivo sw.js ao abrir o app
+      reg.addEventListener('updatefound', () => {
+        const novoWorker = reg.installing;
+        novoWorker.addEventListener('statechange', () => {
+          if (novoWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // Força a atualização da página para carregar o JS/CSS novo
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(err => console.log('Erro no PWA:', err));
   }
 </script>
 </body>
