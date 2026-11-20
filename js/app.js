@@ -18,12 +18,6 @@ function ler(k, padrao){ try{ const v = localStorage.getItem(k); return v ? JSON
 function gravar(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ toast("Não foi possível salvar neste navegador."); return false; } }
 
 // ---------- utilidades ----------
-// ---------- utilidades ----------
-function vibrar(padrao = [60]) {
-  if ("vibrate" in navigator) {
-    try { navigator.vibrate(padrao); } catch(e) {}
-  }
-}
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 const fmtData = iso => { const [y,m,d] = String(iso).split("-"); return d && m && y ? `${d}/${m}/${y}` : iso; };
@@ -340,34 +334,13 @@ window.addEventListener("hashchange", () => {
 // ---------- acessibilidade da página ----------
 function aplicarA11y(){
   const a = ler(KEY.a11y, {contraste:false, ampliado:false});
-  
   document.body.classList.toggle("contraste", a.contraste);
   document.body.classList.toggle("ampliado", a.ampliado);
-  
-  // Força o aumento real da fonte em todo o PWA
-  document.documentElement.style.fontSize = a.ampliado ? "120%" : "100%";
-
-  const btnContraste = document.getElementById("bt-contraste");
-  const btnAmpliar = document.getElementById("bt-ampliar");
-  
-  if (btnContraste) btnContraste.setAttribute("aria-pressed", a.contraste);
-  if (btnAmpliar) {
-    btnAmpliar.setAttribute("aria-pressed", a.ampliado);
-    btnAmpliar.textContent = a.ampliado ? "A- Texto Normal" : "A+ Texto";
-  }
+  document.getElementById("bt-contraste").setAttribute("aria-pressed", a.contraste);
+  document.getElementById("bt-ampliar").setAttribute("aria-pressed", a.ampliado);
 }
-
 ["contraste","ampliado"].forEach(k => {
-  const el = document.getElementById(k === "contraste" ? "bt-contraste" : "bt-ampliar");
-  if (el) {
-    el.onclick = () => {
-      vibrar([50]); // Feedback tátil ao tocar no botão
-      const a = ler(KEY.a11y, {contraste:false, ampliado:false});
-      a[k] = !a[k];
-      gravar(KEY.a11y, a);
-      aplicarA11y();
-    };
-  }
+  document.getElementById(k === "contraste" ? "bt-contraste" : "bt-ampliar").onclick = () => { const a = ler(KEY.a11y, {contraste:false, ampliado:false}); a[k] = !a[k]; gravar(KEY.a11y, a); aplicarA11y(); };
 });
 
 // ---------- inicialização ----------
