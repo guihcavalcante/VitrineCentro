@@ -1880,6 +1880,53 @@
     if (location.hash === "#acessibilidade") telaAcessibilidade();
   });
 
+  // ---------- instalação PWA offline (beforeinstallprompt + appinstalled) ----------
+  const $btInstalarPwa = document.getElementById("bt-instalar-pwa");
+  let eventoInstalacaoPwa = null;
+
+  function pwaJaInstalado() {
+    return Boolean(
+      (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+        window.navigator.standalone === true
+    );
+  }
+
+  if ($btInstalarPwa) {
+    $btInstalarPwa.hidden = true;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      if (pwaJaInstalado()) return;
+      e.preventDefault();
+      eventoInstalacaoPwa = e;
+      $btInstalarPwa.hidden = false;
+    });
+
+    $btInstalarPwa.addEventListener("click", async () => {
+      if (!eventoInstalacaoPwa) return;
+      const promptPendente = eventoInstalacaoPwa;
+      try {
+        await promptPendente.prompt();
+        const escolha = await promptPendente.userChoice;
+        if (escolha && escolha.outcome === "accepted") {
+          eventoInstalacaoPwa = null;
+          $btInstalarPwa.hidden = true;
+          vibrar("sucesso");
+          anunciar("Instalação do aplicativo VitrineCentro iniciada.");
+        }
+      } catch (_e) {
+        eventoInstalacaoPwa = null;
+        $btInstalarPwa.hidden = true;
+      }
+    });
+
+    window.addEventListener("appinstalled", () => {
+      eventoInstalacaoPwa = null;
+      $btInstalarPwa.hidden = true;
+      vibrar("sucesso");
+      anunciar("VitrineCentro instalado com sucesso para uso offline.");
+    });
+  }
+
   // ---------- inicialização ----------
   try {
     if (typeof window.DADOS === "undefined") {
