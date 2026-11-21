@@ -13,9 +13,11 @@
     itens: "vc_fav_itens",
     lojas: "vc_fav_lojas",
     notas: "vc_anotacoes",
+    curadoria: "vc_curadoria",
     semana: "vc_semana_demo",
     a11y: "vc_a11y",
   };
+  const FORMSPREE_URL = "https://formspree.io/f/myewnzyr";
 
   const $app = document.getElementById("app");
   const $srAnuncio = document.getElementById("sr-anuncio");
@@ -1033,6 +1035,7 @@
           </button>
           <a class="btn sec" href="#anotacoes-${esc(n.id)}"><span aria-hidden="true">✎</span> Anotar dúvida</a>
           <button type="button" class="btn sec" id="bt-exp-negocio"><span aria-hidden="true">📄</span> Exportar ficha (PDF / WhatsApp)</button>
+          <a class="btn sec" href="#sugerir-${esc(n.id)}"><span aria-hidden="true">📝</span> Sugerir atualização deste local</a>
         </div>
         ${
           noTema
@@ -1449,6 +1452,278 @@
     }
   }
 
+  // ---------- tela: colaborar / curadoria colaborativa (#sugerir) ----------
+  function fmtDataHora(iso) {
+    try {
+      return new Date(iso).toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (_e) {
+      return String(iso || "");
+    }
+  }
+
+  function telaSugerir(idLoja, focoSeletor) {
+    definirTitulo("Colaborar");
+    const lojaPre = idLoja ? negocio(idLoja) : null;
+    const estabInicial = lojaPre
+      ? `${lojaPre.nome} — ${lojaPre.referencia_local}`
+      : "";
+    const perfilInicial = lojaPre
+      ? C.PERFIS_CURADORIA[2]
+      : C.PERFIS_CURADORIA[0];
+    const fila = ler(KEY.curadoria, []);
+
+    $app.innerHTML = `<section aria-labelledby="tit-sugerir">
+      <h1 id="tit-sugerir">Colaborar com a VitrineCentro</h1>
+      <div class="aviso" role="note">
+        <p><strong>Curadoria colaborativa:</strong> sua sugestão é enviada para análise da equipe (CDL/Sebrae) quando há conexão com a internet e também fica salva localmente neste navegador (localStorage) para consulta.</p>
+      </div>
+
+      ${
+        lojaPre
+          ? `<p class="meta">Atualizando informações de <strong>${esc(lojaPre.nome)}</strong>. <a href="#negocio-${esc(lojaPre.id)}">Voltar à ficha da loja</a></p>`
+          : `<p class="meta">Espaço aberto para lojistas cadastrarem ou atualizarem seus negócios e para cidadãos/visitantes sugerirem correções ou melhorias de acessibilidade.</p>`
+      }
+
+      <form id="f-sugerir" class="form-sugerir" novalidate>
+        <div class="campo">
+          <label class="lbl" for="sug-perfil">Perfil e Tipo</label>
+          <select id="sug-perfil" name="perfil" class="campo-sel" required>
+            ${C.PERFIS_CURADORIA.map(
+              (p) =>
+                `<option value="${esc(p)}" ${p === perfilInicial ? "selected" : ""}>${esc(p)}</option>`
+            ).join("")}
+          </select>
+        </div>
+
+        <div class="campo">
+          <label class="lbl" for="sug-estabelecimento">Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+          <input id="sug-estabelecimento" name="estabelecimento" type="text" class="campo-inp" maxlength="160" required aria-required="true" aria-describedby="erro-sug-estab" placeholder="Ex.: Café da Praça — Praça Fausto Cardoso, nº 42" value="${esc(estabInicial)}">
+          <p id="erro-sug-estab" class="msg-erro" role="alert"></p>
+        </div>
+
+        <div class="campo">
+          <label class="lbl" for="sug-informacao">O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+          <textarea id="sug-informacao" name="informacao" maxlength="600" required aria-required="true" aria-describedby="ajuda-sug-info erro-sug-info" placeholder="Ex.: novo horário, telefone, ou condição de acessibilidade (rampa, piso tátil, etc)."></textarea>
+          <span id="ajuda-sug-info" class="meta">Descreva o novo horário, contato ou condição de acessibilidade física/atitudinal observada.</span>
+          <p id="erro-sug-info" class="msg-erro" role="alert"></p>
+        </div>
+
+        <div class="campo">
+          <label class="lbl" id="lbl-sug-contato" for="sug-contato">Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)</label>
+          <input id="sug-contato" name="contato" type="text" class="campo-inp" maxlength="120" required aria-required="true" aria-describedby="ajuda-sug-contato erro-sug-contato" placeholder="Ex.: CNPJ ou WhatsApp oficial da loja para verificação">
+          <span id="ajuda-sug-contato" class="meta">Usado pela equipe de curadoria (CDL/Sebrae) para confirmar a veracidade e evitar trotes.</span>
+          <p id="erro-sug-contato" class="msg-erro" role="alert"></p>
+        </div>
+
+        <div class="acoes">
+          <button type="submit" class="btn" id="bt-enviar-sugestao">Enviar para curadoria</button>
+        </div>
+      </form>
+
+      <section aria-labelledby="tit-curadoria">
+        <h2 id="tit-curadoria" tabindex="-1">Solicitações em Análise (Curadoria Local) (${fila.length})</h2>
+        <p class="meta">Registro salvo apenas neste aparelho para acompanhamento e demonstração do fluxo de curadoria.</p>
+        ${
+          fila.length
+            ? `<ul class="lista-curadoria">${fila
+                .map((item) => {
+                  const aprovado = item.status === "aprovado";
+                  const seloStatus = aprovado
+                    ? `<span class="estado observado"><span aria-hidden="true">✓</span> Aprovado</span>`
+                    : `<span class="estado desconhecido"><span aria-hidden="true">⏳</span> Pendente</span>`;
+                  const seloEnvio = item.enviadoEmail
+                    ? `<span class="badge-envio enviado"><span aria-hidden="true">✉️</span> Enviado à curadoria</span>`
+                    : `<span class="badge-envio offline"><span aria-hidden="true">💾</span> Salvo offline</span>`;
+                  const textoContato = item.contato ? esc(item.contato) : "Envio anônimo (não informado)";
+                  return `<li>
+                    <article class="curadoria-item${aprovado ? " aprovado" : ""}">
+                      <div class="curadoria-topo">
+                        <span class="tag">${esc(item.perfil)}</span>
+                        ${seloStatus}
+                        ${seloEnvio}
+                      </div>
+                      <h3>${esc(item.estabelecimento)}</h3>
+                      <p>${esc(item.informacao)}</p>
+                      <p class="meta"><strong>Validação / Contato:</strong> ${textoContato} · <time datetime="${esc(item.data)}">${esc(fmtDataHora(item.data))}</time></p>
+                      <div class="acoes">
+                        ${
+                          !aprovado
+                            ? `<button type="button" class="btn sec peq" data-aprovar-cur="${esc(item.id)}" aria-label="Simular aprovação da solicitação para ${esc(item.estabelecimento)}"><span aria-hidden="true">✓</span> Simular Aprovação</button>`
+                            : ""
+                        }
+                        <button type="button" class="btn sec peq" data-excluir-cur="${esc(item.id)}" aria-label="Excluir solicitação para ${esc(item.estabelecimento)}">Excluir</button>
+                      </div>
+                    </article>
+                  </li>`;
+                })
+                .join("")}</ul>`
+            : `<p class="vazio">Nenhuma solicitação registrada ainda. Envie uma sugestão acima para acompanhar na curadoria local.</p>`
+        }
+      </section>
+    </section>`;
+
+    const $form = document.getElementById("f-sugerir");
+    const $perfil = document.getElementById("sug-perfil");
+    const $estab = document.getElementById("sug-estabelecimento");
+    const $info = document.getElementById("sug-informacao");
+    const $contato = document.getElementById("sug-contato");
+    const $lblContato = document.getElementById("lbl-sug-contato");
+    const $ajudaContato = document.getElementById("ajuda-sug-contato");
+    const $errEstab = document.getElementById("erro-sug-estab");
+    const $errInfo = document.getElementById("erro-sug-info");
+    const $errContato = document.getElementById("erro-sug-contato");
+    const $btEnviar = document.getElementById("bt-enviar-sugestao");
+
+    function atualizarCampoContato() {
+      const ehCidadao = $perfil.value === C.PERFIS_CURADORIA[2];
+      if (ehCidadao) {
+        $contato.required = false;
+        $contato.removeAttribute("required");
+        $contato.removeAttribute("aria-required");
+        $contato.removeAttribute("aria-invalid");
+        $errContato.textContent = "";
+        $lblContato.textContent = "Seu nome ou contato (opcional — você pode enviar anonimamente)";
+        $contato.placeholder = "Opcional (ex.: seu nome ou WhatsApp para retorno)";
+        $ajudaContato.textContent =
+          "Se preferir, deixe em branco para colaborar anonimamente.";
+      } else {
+        $contato.required = true;
+        $contato.setAttribute("required", "");
+        $contato.setAttribute("aria-required", "true");
+        $lblContato.textContent = "Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)";
+        $contato.placeholder = "Ex.: CNPJ ou WhatsApp oficial da loja para verificação";
+        $ajudaContato.textContent =
+          "Usado pela equipe de curadoria (CDL/Sebrae) para confirmar a veracidade e evitar trotes.";
+      }
+    }
+
+    atualizarCampoContato();
+    $perfil.addEventListener("change", atualizarCampoContato);
+
+    const limparErroCampo = (campo, errEl) => {
+      campo.addEventListener("input", () => {
+        if (campo.value.trim()) {
+          campo.removeAttribute("aria-invalid");
+          errEl.textContent = "";
+        }
+      });
+    };
+    limparErroCampo($estab, $errEstab);
+    limparErroCampo($info, $errInfo);
+    limparErroCampo($contato, $errContato);
+
+    $form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const entrada = {
+        perfil: $perfil.value,
+        estabelecimento: $estab.value,
+        informacao: $info.value,
+        contato: $contato.value,
+        loja_id: lojaPre ? lojaPre.id : null,
+      };
+      const validacao = C.criarRegistroCuradoria(entrada, false);
+      if (!validacao.ok) {
+        vibrar("erro");
+        let primeiroInvalido = null;
+        const pares = [
+          ["estabelecimento", $estab, $errEstab],
+          ["informacao", $info, $errInfo],
+          ["contato", $contato, $errContato],
+        ];
+        pares.forEach(([chave, el, errEl]) => {
+          if (validacao.erros[chave]) {
+            el.setAttribute("aria-invalid", "true");
+            errEl.textContent = validacao.erros[chave];
+            if (!primeiroInvalido) primeiroInvalido = el;
+          } else {
+            el.removeAttribute("aria-invalid");
+            errEl.textContent = "";
+          }
+        });
+        anunciar("Verifique os campos obrigatórios destacados no formulário de colaboração.", true);
+        if (primeiroInvalido) primeiroInvalido.focus();
+        return;
+      }
+
+      $btEnviar.disabled = true;
+      $btEnviar.textContent = "Enviando…";
+
+      let enviadoEmail = false;
+      if (typeof fetch === "function" && navigator.onLine !== false) {
+        try {
+          const resp = await fetch(FORMSPREE_URL, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              perfil: validacao.registro.perfil,
+              estabelecimento: validacao.registro.estabelecimento,
+              informacao: validacao.registro.informacao,
+              contato: validacao.registro.contato || "Anônimo (não informado)",
+              loja_id: validacao.registro.loja_id,
+              origem: "VitrineCentro PWA",
+              data: validacao.registro.data,
+            }),
+          });
+          enviadoEmail = Boolean(resp && resp.ok);
+        } catch (_err) {
+          enviadoEmail = false;
+        }
+      }
+
+      const registroFinal = { ...validacao.registro, enviadoEmail };
+      const atual = ler(KEY.curadoria, []);
+      atual.unshift(registroFinal);
+      gravar(KEY.curadoria, atual.slice(0, 50));
+
+      vibrar("sucesso");
+      anunciar(
+        enviadoEmail
+          ? "Sugestão enviada à curadoria e salva localmente com status Pendente."
+          : "Sem conexão no momento: sugestão salva offline na fila de curadoria local."
+      );
+      telaSugerir(null, "#tit-curadoria");
+    });
+
+    $app.querySelectorAll("[data-aprovar-cur]").forEach((b) => {
+      b.addEventListener("click", () => {
+        const atual = ler(KEY.curadoria, []);
+        const alvoItem = atual.find((x) => x.id === b.dataset.aprovarCur);
+        const atualizada = C.aprovarRegistroCuradoria(atual, b.dataset.aprovarCur);
+        gravar(KEY.curadoria, atualizada);
+        vibrar("sucesso");
+        anunciar(
+          alvoItem
+            ? `Solicitação de ${alvoItem.estabelecimento} marcada como Aprovada na curadoria local.`
+            : "Solicitação marcada como Aprovada na curadoria local."
+        );
+        telaSugerir(idLoja, "#tit-curadoria");
+      });
+    });
+
+    $app.querySelectorAll("[data-excluir-cur]").forEach((b) => {
+      b.addEventListener("click", () => {
+        const filtrada = ler(KEY.curadoria, []).filter((x) => x.id !== b.dataset.excluirCur);
+        gravar(KEY.curadoria, filtrada);
+        anunciar("Solicitação excluída da curadoria local.");
+        telaSugerir(idLoja, "#tit-curadoria");
+      });
+    });
+
+    if (focoSeletor) {
+      const alvo = document.querySelector(focoSeletor);
+      if (alvo) alvo.focus();
+    }
+  }
+
   // ---------- tela: sobre os dados ----------
   function telaSobre() {
     definirTitulo("Sobre os dados");
@@ -1468,7 +1743,7 @@
         <li>Textos culturais trazem fonte e devem ser conferidos antes de qualquer uso público.</li>
       </ul>
       <h2>Apagar meus dados locais</h2>
-      <p>Esta ação remove seus favoritos, lojas salvas e anotações guardadas neste aparelho. Suas preferências de acessibilidade continuam preservadas.</p>
+      <p>Esta ação remove seus favoritos, lojas salvas, anotações e fila local de curadoria guardados neste aparelho. Suas preferências de acessibilidade continuam preservadas.</p>
       <p><button type="button" class="btn sec" id="bt-limpar">Apagar favoritos, lojas salvas e anotações</button></p>
     </section>`;
 
@@ -1476,9 +1751,9 @@
     btLimpar.addEventListener("click", () => {
       pedirConfirmacao(
         "Apagar dados locais?",
-        "Tem certeza de que deseja apagar seus itens favoritos, lojas salvas e anotações deste aparelho? Esta ação não pode ser desfeita.",
+        "Tem certeza de que deseja apagar seus itens favoritos, lojas salvas, anotações e fila de curadoria deste aparelho? Esta ação não pode ser desfeita.",
         () => {
-          [KEY.itens, KEY.lojas, KEY.notas, KEY.semana].forEach((k) => {
+          [KEY.itens, KEY.lojas, KEY.notas, KEY.curadoria, KEY.semana].forEach((k) => {
             try {
               localStorage.removeItem(k);
             } catch (_e) {}
@@ -1654,6 +1929,9 @@
     } else if (m[0] === "anotacoes") {
       r = "anotacoes";
       telaAnotacoes(m[1] || null, focoSeletor);
+    } else if (m[0] === "sugerir") {
+      r = "sugerir";
+      telaSugerir(m[1] || null, focoSeletor);
     } else if (m[0] === "sobre") {
       r = "sobre";
       telaSobre();

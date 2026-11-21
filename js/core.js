@@ -482,6 +482,61 @@
     return (maisClara + 0.05) / (maisEscura + 0.05);
   }
 
+  // ---------- Curadoria Colaborativa (Lojistas e Cidadãos) ----------
+  const PERFIS_CURADORIA = [
+    "Sou Lojista — Cadastrar comércio",
+    "Sou Lojista — Atualizar meu comércio",
+    "Sou Cidadão — Sugerir atualização",
+  ];
+
+  function contatoObrigatorioParaPerfil(perfil) {
+    return perfil !== PERFIS_CURADORIA[2];
+  }
+
+  function criarRegistroCuradoria(entrada, enviadoEmail) {
+    const src = entrada || {};
+    const perfil = PERFIS_CURADORIA.includes(src.perfil) ? src.perfil : PERFIS_CURADORIA[2];
+    const estabelecimento = String(src.estabelecimento || "").trim();
+    const informacao = String(src.informacao || "").trim();
+    const contato = String(src.contato || "").trim();
+    const erros = {};
+
+    if (!estabelecimento) {
+      erros.estabelecimento = "Informe o nome do estabelecimento e o endereço ou rua.";
+    }
+    if (!informacao) {
+      erros.informacao = "Descreva o que deseja cadastrar ou atualizar.";
+    }
+    if (contatoObrigatorioParaPerfil(perfil) && !contato) {
+      erros.contato = "Informe o CNPJ ou WhatsApp oficial da loja para verificação pela curadoria.";
+    }
+
+    if (Object.keys(erros).length) {
+      return { ok: false, erros, registro: null };
+    }
+
+    return {
+      ok: true,
+      erros: {},
+      registro: {
+        id: "cur" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+        perfil,
+        estabelecimento,
+        informacao,
+        contato,
+        loja_id: src.loja_id || null,
+        data: src.data || new Date().toISOString(),
+        enviadoEmail: Boolean(enviadoEmail),
+        status: "pendente",
+      },
+    };
+  }
+
+  function aprovarRegistroCuradoria(lista, id) {
+    if (!Array.isArray(lista)) return [];
+    return lista.map((item) => (item && item.id === id ? { ...item, status: "aprovado" } : item));
+  }
+
   return {
     ESTADO_TXT,
     ESTADO_ICONE,
@@ -490,6 +545,7 @@
     ESCALAS_FONTE,
     A11Y_PADRAO,
     PONTO_CENTRO_ARACAJU,
+    PERFIS_CURADORIA,
     esc,
     norm,
     fmtData,
@@ -506,6 +562,8 @@
     ordenarPorDistancia,
     montarDadosCompartilhamento,
     montarDadosCompartilhamentoItem,
+    criarRegistroCuradoria,
+    aprovarRegistroCuradoria,
     luminanciaRelativa,
     razaoContraste,
   };
