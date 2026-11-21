@@ -166,7 +166,40 @@ test('index.html usa ícone oficial sem emoji de museu e contém diálogo de rot
   assert.match(html, /<html lang="pt-BR">/);
   assert.match(html, /icon-512\.png/);
   assert.ok(!html.includes('🏛️'), 'emoji de museu deve ter sido substituído pelo ícone oficial');
+  assert.match(html, /<a href="#sugerir" data-r="sugerir">Colaborar<\/a>/);
   assert.match(html, /<dialog id="dlg-confirmar"/);
   assert.match(html, /<dialog id="dlg-roteiro"/);
   assert.match(html, /id="area-impressao"/);
+});
+
+test('curadoria colaborativa valida contato obrigatório para lojista, permite anônimo para cidadão e simula aprovação', () => {
+  const invalidoLojista = core.criarRegistroCuradoria(
+    {
+      perfil: core.PERFIS_CURADORIA[0],
+      estabelecimento: 'Loja Teste — Rua A',
+      informacao: 'Horário novo',
+      contato: '',
+    },
+    false
+  );
+  assert.equal(invalidoLojista.ok, false);
+  assert.ok(invalidoLojista.erros.contato);
+
+  const cidadaoAnonimo = core.criarRegistroCuradoria(
+    {
+      perfil: core.PERFIS_CURADORIA[2],
+      estabelecimento: 'Café da Praça — Praça Fausto Cardoso',
+      informacao: 'Nova rampa instalada na entrada lateral',
+      contato: '',
+      loja_id: 'n1',
+    },
+    true
+  );
+  assert.equal(cidadaoAnonimo.ok, true);
+  assert.equal(cidadaoAnonimo.registro.contato, '');
+  assert.equal(cidadaoAnonimo.registro.enviadoEmail, true);
+  assert.equal(cidadaoAnonimo.registro.status, 'pendente');
+
+  const aprovada = core.aprovarRegistroCuradoria([cidadaoAnonimo.registro], cidadaoAnonimo.registro.id);
+  assert.equal(aprovada[0].status, 'aprovado');
 });
