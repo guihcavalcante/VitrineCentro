@@ -164,7 +164,7 @@ test('exportação de roteiro offline e narração por voz geram textos completo
 test('index.html usa ícone oficial sem emoji de museu e contém diálogo de roteiro offline e landmarks', () => {
   const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
   assert.match(html, /<html lang="pt-BR">/);
-  assert.match(html, /\/assets\/aistudio\/icon-512\.png_096c48e0\.jpg/);
+  assert.match(html, /icon-512\.png/);
   assert.ok(!html.includes('🏛️'), 'emoji de museu deve ter sido substituído pelo ícone oficial');
   assert.match(html, /<dialog id="dlg-confirmar"/);
   assert.match(html, /<dialog id="dlg-roteiro"/);

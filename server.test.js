@@ -31,7 +31,7 @@ test('serves index.html and core static assets', async () => {
       '/manifest.json',
       '/sw.js',
       '/favicon.png',
-      '/assets/aistudio/icon-512.png_096c48e0.jpg',
+      '/icon-512.png',
     ]) {
       const res = await fetch(`${baseUrl}${asset}`);
       assert.equal(res.status, 200, `Expected 200 for ${asset}`);
