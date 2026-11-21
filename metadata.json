@@ -1,0 +1,5 @@
+{
+  "name": "VitrineCentro — protótipo integrado",
+  "description": "Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.",
+  "requestFramePermissions": ["geolocation"]
+}

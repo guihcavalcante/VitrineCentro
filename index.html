@@ -2,46 +2,123 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VitrineCentro — protótipo integrado</title>
-<link rel="stylesheet" href="css/estilo.css"><link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#b4541a">
-<link rel="icon" type="image/png" href="./favicon.png?v=5">
+<meta name="description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
+<meta property="og:title" content="VitrineCentro — protótipo integrado">
+<meta property="og:description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
+<link rel="stylesheet" href="css/estilo.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8f3808">
+<link rel="icon" type="image/jpeg" href="/assets/aistudio/icon-512.png_096c48e0.jpg">
+<link rel="apple-touch-icon" href="/assets/aistudio/icon-512.png_096c48e0.jpg">
 </head>
 <body>
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<nav class="barra-atalhos" id="barra-atalhos" aria-label="Atalhos de acessibilidade e navegação rápida">
+  <div class="wrap barra-atalhos-inner">
+    <ul class="skip-lista">
+      <li><a class="skip-link" href="#conteudo" accesskey="1">Ir para o conteúdo <kbd aria-hidden="true">1</kbd></a></li>
+      <li><a class="skip-link" href="#menu-principal" accesskey="2">Ir para o menu <kbd aria-hidden="true">2</kbd></a></li>
+      <li><a class="skip-link" href="#busca-atalho" id="atalho-busca" accesskey="3">Ir para a busca <kbd aria-hidden="true">3</kbd></a></li>
+      <li><a class="skip-link" href="#rodape" accesskey="4">Ir para o rodapé <kbd aria-hidden="true">4</kbd></a></li>
+    </ul>
+    <div class="a11y" id="barra-a11y-controles" role="group" aria-label="Preferências de acessibilidade">
+      <button type="button" id="bt-contraste" aria-pressed="false" accesskey="c">Alto contraste</button>
+      <button type="button" id="bt-fonte-menos" aria-label="Diminuir tamanho do texto">A−</button>
+      <button type="button" id="bt-fonte-mais" aria-label="Aumentar tamanho do texto">A+</button>
+      <button type="button" id="bt-espacamento" aria-pressed="false">Espaçamento</button>
+      <button type="button" id="bt-animacao" aria-pressed="false">Sem animações</button>
+    </div>
+  </div>
+</nav>
+
 <header class="top">
   <div class="wrap bar">
-    <a class="logo" href="#inicio"><span aria-hidden="true">🏛️</span> Vitrine<span>Centro</span></a>
-    <nav class="main" aria-label="Principal">
+    <a class="logo" href="#inicio" aria-label="VitrineCentro — página inicial">
+      <img src="/assets/aistudio/icon-512.png_096c48e0.jpg" alt="" aria-hidden="true" class="logo-img" width="42" height="42">
+      <span class="logo-texto">Vitrine<span class="logo-destaque">Centro</span></span>
+    </a>
+    <div class="mobile-controles">
+      <button type="button" class="btn-header-toggle" id="bt-toggle-a11y" aria-expanded="false" aria-controls="barra-atalhos" aria-label="Abrir preferências rápidas de acessibilidade">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
+        <span class="toggle-lbl">Acessib.</span>
+      </button>
+      <button type="button" class="btn-header-toggle" id="bt-menu-mobile" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu de navegação">
+        <svg class="ico-menu-abrir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="ico-menu-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span class="toggle-lbl">Menu</span>
+      </button>
+    </div>
+    <nav id="menu-principal" class="main" aria-label="Menu principal" tabindex="-1">
       <a href="#inicio" data-r="inicio">Início</a>
       <a href="#favoritos" data-r="favoritos">Favoritos</a>
       <a href="#anotacoes" data-r="anotacoes">Anotações</a>
       <a href="#sobre" data-r="sobre">Sobre os dados</a>
+      <a href="#acessibilidade" data-r="acessibilidade" accesskey="5">Acessibilidade</a>
     </nav>
-    <div class="a11y" role="group" aria-label="Acessibilidade da página">
-      <button id="bt-contraste" aria-pressed="false">Alto contraste</button>
-      <button id="bt-ampliar" aria-pressed="false">A+ Texto</button>
-    </div>
   </div>
 </header>
-<main id="conteudo" class="wrap" tabindex="-1">
-  <p class="aviso" role="note"><strong>Protótipo com dados fictícios.</strong> Negócios, horários, contatos e condições de acesso são exemplos de teste. As informações de acesso não são certificação nem garantia: confirme antes da visita.</p>
-  <div id="app" aria-live="polite"></div>
-</main>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<main id="conteudo" class="wrap" tabindex="-1">
+  <aside class="aviso" aria-label="Aviso importante sobre os dados">
+    <p><strong>Protótipo com dados fictícios.</strong> Negócios, horários, contatos e condições de acesso são exemplos de teste. As informações de acesso não são certificação nem garantia: confirme antes da visita.</p>
+  </aside>
+  <div id="app"></div>
+</main>
+
+<footer id="rodape" class="rodape" tabindex="-1">
+  <div class="wrap rodape-inner">
+    <div class="rodape-marca">
+      <img src="/assets/aistudio/icon-512.png_096c48e0.jpg" alt="" aria-hidden="true" class="logo-img logo-img-sm" width="32" height="32">
+      <p><strong>VitrineCentro</strong> — protótipo offline sem rastreamento, sem login e sem envio de dados.</p>
+    </div>
+    <p class="meta">Projetado segundo <strong>WCAG 2.2 (AA/AAA)</strong>, <strong>eMAG 3.1</strong>, <strong>LBI (Lei nº 13.146/2015)</strong>, <strong>Lei nº 11.126/2005 (Cão-Guia)</strong>, <strong>Lei nº 10.048/2000 (Prioridade)</strong> e <strong>ABNT NBR 17060</strong>.</p>
+    <nav aria-label="Links do rodapé" class="rodape-nav">
+      <a href="#acessibilidade">Declaração de Acessibilidade e Atalhos</a>
+      <a href="#sobre">Sobre os dados</a>
+      <a href="#conteudo">Voltar ao topo</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="sr-only" id="sr-anuncio" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="sr-only" id="sr-alerta" role="alert" aria-live="assertive" aria-atomic="true"></div>
+<div class="toast" id="toast" aria-hidden="true"></div>
+
+<dialog id="dlg-confirmar" class="modal" aria-labelledby="dlg-tit" aria-describedby="dlg-desc">
+  <h2 id="dlg-tit">Confirmar ação</h2>
+  <p id="dlg-desc"></p>
+  <div class="acoes">
+    <button type="button" class="btn" id="dlg-ok">Confirmar</button>
+    <button type="button" class="btn sec" id="dlg-cancelar">Cancelar</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-roteiro" class="modal modal-lg" aria-labelledby="dlg-rot-tit" aria-describedby="dlg-rot-desc">
+  <h2 id="dlg-rot-tit">Roteiro Offline (Impressão, PDF ou WhatsApp)</h2>
+  <p id="dlg-rot-desc" class="meta">Use os botões abaixo para imprimir em folha limpa (ou salvar como PDF), copiar o texto pronto para WhatsApp ou baixar o arquivo offline.</p>
+  <label class="lbl" for="roteiro-texto">Prévia do roteiro em texto simples</label>
+  <textarea id="roteiro-texto" class="roteiro-previa" readonly rows="12"></textarea>
+  <div class="acoes">
+    <button type="button" class="btn" id="bt-rot-imprimir"><span aria-hidden="true">🖨️</span> Imprimir / Salvar PDF</button>
+    <button type="button" class="btn sec" id="bt-rot-copiar"><span aria-hidden="true">📋</span> Copiar para WhatsApp</button>
+    <button type="button" class="btn sec" id="bt-rot-baixar"><span aria-hidden="true">⬇️</span> Baixar arquivo .TXT</button>
+    <button type="button" class="btn sec" id="bt-rot-fechar">Fechar</button>
+  </div>
+</dialog>
+
+<section id="area-impressao" class="area-impressao" aria-hidden="true"></section>
+
+<script src="js/core.js"></script>
 <script src="dados/dados.js"></script>
 <script src="js/app.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then((reg) => {
-      // Verifica se há atualização no arquivo sw.js ao abrir o app
       reg.addEventListener('updatefound', () => {
         const novoWorker = reg.installing;
         novoWorker.addEventListener('statechange', () => {
           if (novoWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // Força a atualização da página para carregar o JS/CSS novo
             window.location.reload();
           }
         });

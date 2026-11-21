@@ -22,7 +22,10 @@ window.DADOS = {
     "balcao": "Balcão rebaixado",
     "banheiro": "Banheiro adaptado",
     "atendimento": "Atendimento em Libras",
-    "rota": "Rota da calçada até a entrada"
+    "rota": "Rota da calçada até a entrada",
+    "cao_guia": "Aceita cão-guia (Lei nº 11.126/2005)",
+    "prioritario": "Atendimento prioritário no caixa (Lei nº 10.048/2000)",
+    "braille": "Cardápio ou material em Braille"
   },
   "negocios": [
     {
@@ -34,6 +37,8 @@ window.DADOS = {
       "horario_informado": "Seg a Sáb, 7h às 18h",
       "contato_autorizado": "(00) 0000-0001 — exemplo fictício",
       "data_confirmacao": "2026-11-10",
+      "lat": -10.9111,
+      "lng": -37.0493,
       "exemplo_ficticio": true
     },
     {
@@ -45,6 +50,8 @@ window.DADOS = {
       "horario_informado": "Ter a Sáb, 9h às 17h",
       "contato_autorizado": "@atelie.exemplo — perfil fictício",
       "data_confirmacao": "2026-11-08",
+      "lat": -10.9136,
+      "lng": -37.0522,
       "exemplo_ficticio": true
     },
     {
@@ -56,6 +63,8 @@ window.DADOS = {
       "horario_informado": "Seg a Sex, 15h às 20h",
       "contato_autorizado": "(00) 0000-0003 — exemplo fictício",
       "data_confirmacao": "2026-11-11",
+      "lat": -10.9082,
+      "lng": -37.0472,
       "exemplo_ficticio": true
     },
     {
@@ -67,6 +76,8 @@ window.DADOS = {
       "horario_informado": "Qua a Dom, 14h às 21h",
       "contato_autorizado": "contato@exemplo.invalid — e-mail fictício",
       "data_confirmacao": "2026-11-05",
+      "lat": -10.9125,
+      "lng": -37.0477,
       "exemplo_ficticio": true
     },
     {
@@ -78,6 +89,8 @@ window.DADOS = {
       "horario_informado": "Seg a Sex, 8h às 17h",
       "contato_autorizado": "(00) 0000-0005 — exemplo fictício",
       "data_confirmacao": "2026-11-12",
+      "lat": -10.9154,
+      "lng": -37.0504,
       "exemplo_ficticio": true
     }
   ],
@@ -459,6 +472,126 @@ window.DADOS = {
       "estado": "observado",
       "descricao": "Piso tátil na entrada da galeria.",
       "fonte_observacao": "Observação da equipe (simulada)"
+    },
+    {
+      "id": "a36",
+      "negocio_id": "n1",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Sinalização na entrada informando entrada livre para cão-guia.",
+      "fonte_observacao": "Observação da equipe (simulada) em 10/11"
+    },
+    {
+      "id": "a37",
+      "negocio_id": "n1",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Placa de atendimento prioritário visível no caixa.",
+      "fonte_observacao": "Observação da equipe (simulada) em 10/11"
+    },
+    {
+      "id": "a38",
+      "negocio_id": "n1",
+      "tipo": "braille",
+      "estado": "observado",
+      "descricao": "Cardápio resumido em Braille disponível no balcão.",
+      "fonte_observacao": "Informado pelo estabelecimento (simulado)"
+    },
+    {
+      "id": "a39",
+      "negocio_id": "n2",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Responsável confirmou acolhimento a visitantes com cão-guia.",
+      "fonte_observacao": "Informado pelo estabelecimento (simulado)"
+    },
+    {
+      "id": "a40",
+      "negocio_id": "n2",
+      "tipo": "prioritario",
+      "estado": "desconhecido",
+      "descricao": "Não foi verificado se há sinalização de atendimento prioritário.",
+      "fonte_observacao": "—"
+    },
+    {
+      "id": "a41",
+      "negocio_id": "n2",
+      "tipo": "braille",
+      "estado": "nao_observado",
+      "descricao": "Catálogo apenas impresso em tinta; sem versão em Braille.",
+      "fonte_observacao": "Observação da equipe (simulada) em 08/11"
+    },
+    {
+      "id": "a42",
+      "negocio_id": "n3",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Atendimento em área aberta na calçada, livre para cão-guia.",
+      "fonte_observacao": "Observação da equipe (simulada) em 11/11"
+    },
+    {
+      "id": "a43",
+      "negocio_id": "n3",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Atendimento prioritário organizado verbalmente na fila.",
+      "fonte_observacao": "Informado pelo estabelecimento (simulado)"
+    },
+    {
+      "id": "a44",
+      "negocio_id": "n3",
+      "tipo": "braille",
+      "estado": "nao_observado",
+      "descricao": "Preços apenas em placa escrita à mão.",
+      "fonte_observacao": "Observação da equipe (simulada) em 11/11"
+    },
+    {
+      "id": "a45",
+      "negocio_id": "n4",
+      "tipo": "cao_guia",
+      "estado": "desconhecido",
+      "descricao": "Não foi confirmado com a equipe do espaço.",
+      "fonte_observacao": "—"
+    },
+    {
+      "id": "a46",
+      "negocio_id": "n4",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Entrada e assentos reservados para atendimento prioritário.",
+      "fonte_observacao": "Informado pelo estabelecimento (simulado)"
+    },
+    {
+      "id": "a47",
+      "negocio_id": "n4",
+      "tipo": "braille",
+      "estado": "desconhecido",
+      "descricao": "Não foi verificado se a programação possui versão em Braille.",
+      "fonte_observacao": "—"
+    },
+    {
+      "id": "a48",
+      "negocio_id": "n5",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Galeria sinaliza permissão permanente para cão-guia.",
+      "fonte_observacao": "Observação da equipe (simulada) em 12/11"
+    },
+    {
+      "id": "a49",
+      "negocio_id": "n5",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Senha preferencial no balcão de orçamento.",
+      "fonte_observacao": "Observação da equipe (simulada) em 12/11"
+    },
+    {
+      "id": "a50",
+      "negocio_id": "n5",
+      "tipo": "braille",
+      "estado": "nao_observado",
+      "descricao": "Tabela de serviços sem versão em Braille no momento.",
+      "fonte_observacao": "Informado pelo estabelecimento (simulado)"
     }
   ],
   "fotos_autorizadas": [

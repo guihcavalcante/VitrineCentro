@@ -1,0 +1,16 @@
+{
+  "name": "vitrine-centro",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VitrineCentro — protótipo integrado de pequenos negócios do Centro com condições de acesso e tema cultural da semana",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node --check server.js && node --check js/core.js && node --check js/app.js && node --check dados/dados.js && node --check sw.js",
+    "lint": "node --check server.js && node --check js/core.js && node --check js/app.js && node --check dados/dados.js && node --check sw.js",
+    "test": "node --test server.test.js a11y.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

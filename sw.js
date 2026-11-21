@@ -1,4 +1,4 @@
-const CACHE_NAME = "vitrine-centro-v1";
+const CACHE_NAME = "vitrine-centro-v5";
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
