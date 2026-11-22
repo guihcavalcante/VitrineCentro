@@ -142,19 +142,36 @@
     );
   }
 
+  function montarTextoPaginaAtual() {
+    const h = location.hash.slice(1) || "inicio";
+    const m = h.split("-");
+    if (m[0] === "negocio" && m[1] && negocio(m[1])) {
+      return C.montarTextoNarracaoNegocio(D, m[1], temaAtual());
+    }
+    const clone = $app.cloneNode(true);
+    clone.querySelectorAll("script, style, svg, [aria-hidden='true'], [hidden]").forEach((el) => el.remove());
+    const limpo = (clone.textContent || "").replace(/\s+/g, " ").trim();
+    return limpo ? `${document.title}. ${limpo}` : document.title;
+  }
+
   function atualizarControlesVoz() {
     const btOuvir = document.getElementById("bt-voz-ouvir");
     const btPausar = document.getElementById("bt-voz-pausar");
+    const selVel = document.getElementById("sel-voz-vel");
     const status = document.getElementById("voz-status");
-    if (!btOuvir) return;
-    btOuvir.setAttribute("aria-pressed", String(voz.ativa));
-    btOuvir.innerHTML = voz.ativa
-      ? `${ICO_VOZ} <span>Parar leitura</span>`
-      : `${ICO_VOZ} <span>Ouvir ficha em voz alta</span>`;
+    if (btOuvir) {
+      btOuvir.setAttribute("aria-pressed", String(voz.ativa));
+      btOuvir.innerHTML = voz.ativa
+        ? `${ICO_VOZ} <span>Parar leitura</span>`
+        : `${ICO_VOZ} <span>Ouvir ficha em voz alta</span>`;
+    }
     if (btPausar) {
       btPausar.hidden = !voz.ativa;
       btPausar.setAttribute("aria-pressed", String(voz.pausada));
       btPausar.textContent = voz.pausada ? "Retomar leitura" : "Pausar leitura";
+    }
+    if (selVel) {
+      selVel.value = String(voz.velocidade);
     }
     if (status) {
       status.textContent = !voz.ativa
@@ -162,6 +179,42 @@
         : voz.pausada
           ? "Leitura pausada."
           : `Lendo em voz alta (${voz.velocidade}x)…`;
+    }
+
+    const btPopOuvir = document.getElementById("bt-pop-voz-ouvir");
+    const btPopPausar = document.getElementById("bt-pop-voz-pausar");
+    const btPopParar = document.getElementById("bt-pop-voz-parar");
+    const selPopVel = document.getElementById("sel-pop-voz-vel");
+    const popStatus = document.getElementById("pop-voz-status");
+    const disponivel = temVoz();
+
+    if (btPopOuvir) {
+      btPopOuvir.disabled = !disponivel;
+      btPopOuvir.setAttribute("aria-pressed", String(voz.ativa));
+      btPopOuvir.innerHTML = voz.ativa
+        ? `${ICO_VOZ} <span>Lendo página (${voz.velocidade}×)</span>`
+        : `${ICO_VOZ} <span>Ouvir página (Leitura por voz)</span>`;
+    }
+    if (btPopPausar) {
+      btPopPausar.hidden = !voz.ativa;
+      btPopPausar.setAttribute("aria-pressed", String(voz.pausada));
+      btPopPausar.textContent = voz.pausada ? "Retomar" : "Pausar";
+    }
+    if (btPopParar) {
+      btPopParar.hidden = !voz.ativa;
+    }
+    if (selPopVel) {
+      selPopVel.disabled = !disponivel;
+      selPopVel.value = String(voz.velocidade);
+    }
+    if (popStatus) {
+      popStatus.textContent = !disponivel
+        ? "Leitura por voz indisponível neste navegador."
+        : !voz.ativa
+          ? "Leitura em português pronta."
+          : voz.pausada
+            ? "Leitura pausada."
+            : `Lendo em voz alta (${voz.velocidade}×)…`;
     }
   }
 
@@ -372,8 +425,7 @@
           : "";
 
     let titulo = "Ver distância a pé";
-    let desc =
-      "Mostre quantos metros faltam até cada comércio. O cálculo roda no seu aparelho, sem mapas externos nem envio de localização.";
+    let desc = "Cálculo 100% offline no seu aparelho, sem enviar sua localização.";
     let acoes = `
       <button type="button" class="btn sec peq" id="bt-radar">Usar meu GPS</button>
       <button type="button" class="btn sec peq" id="bt-radar-demo">Simular no Centro</button>
@@ -381,7 +433,7 @@
 
     if (radar.status === "buscando") {
       titulo = "Obtendo sua posição…";
-      desc = "Autorize a localização no navegador. Suas coordenadas ficam apenas na memória deste aparelho.";
+      desc = "Autorize a localização no navegador. Nada sai deste aparelho.";
       acoes = `
         <button type="button" class="btn sec peq" id="bt-radar" disabled>Localizando…</button>
         <button type="button" class="btn sec peq" id="bt-radar-demo">Simular no Centro</button>
@@ -389,11 +441,11 @@
     } else if (radar.status === "ativo" && radar.origem) {
       titulo =
         radar.modo === "demo"
-          ? "Distâncias a partir da Praça Fausto Cardoso (simulação)"
+          ? "Simulação: Praça Fausto Cardoso"
           : "Distâncias a partir da sua localização";
-      desc = `Referência: ${esc(radar.origem.rotulo)}. Distâncias em linha reta com tempo estimado a pé.`;
+      desc = `Referência: ${esc(radar.origem.rotulo)} · tempo estimado a pé.`;
       acoes = `
-        <button type="button" class="btn sec peq" id="bt-radar-ordem" aria-pressed="${radar.ordenar}">Ordenar por mais perto</button>
+        <button type="button" class="btn sec peq" id="bt-radar-ordem" aria-pressed="${radar.ordenar}">Mais perto primeiro</button>
         <button type="button" class="btn sec peq" id="bt-radar">${radar.modo === "demo" ? "Usar meu GPS" : "Atualizar GPS"}</button>
         <button type="button" class="btn sec peq" id="bt-radar-desativar">Desativar</button>
       `;
@@ -661,23 +713,54 @@
   const negocioNoTema = (nid, t) =>
     D.tema_lugares.find((x) => x.tema_id === t.id && x.negocio_id === nid);
 
-  // ---------- ilustração acessível (WCAG 1.1.1) ----------
+  // ---------- ilustração acessível no estilo Brand Book (WCAG 1.1.1) ----------
   function ilustracao(n, foto) {
-    const cor =
-      { "Alimentação": "#c46d22", "Arte e Cultura": "#6d3fb5", "Serviços": "#236c9e" }[n.categoria] ||
-      "#666666";
+    const paletas = {
+      "Alimentação": { parede: "#FFF3E0", detalhe: "#E85D4A", toldoB: "#F7B538", porta: "#0F766E" },
+      "Arte e Cultura": { parede: "#E6FAF6", detalhe: "#0F766E", toldoB: "#F7B538", porta: "#E85D4A" },
+      "Serviços": { parede: "#FEF6E4", detalhe: "#E85D4A", toldoB: "#0F766E", porta: "#0F766E" },
+    };
+    const p = paletas[n.categoria] || paletas["Alimentação"];
     const titleId = `svg-tit-${esc(n.id)}`;
-    return `<figure>
-      <svg viewBox="0 0 320 170" role="img" aria-labelledby="${titleId}">
+    return `<figure class="ficha-figura">
+      <svg viewBox="0 0 360 210" role="img" aria-labelledby="${titleId}">
         <title id="${titleId}">${esc(foto.texto_alternativo)}</title>
-        <rect width="320" height="170" fill="${cor}" opacity=".22"/>
-        <rect x="40" y="40" width="240" height="110" rx="6" fill="${cor}" opacity=".62"/>
-        <rect x="135" y="80" width="50" height="70" rx="4" fill="#ffffff" opacity=".9"/>
-        <rect x="40" y="28" width="240" height="22" rx="4" fill="${cor}"/>
-        <text x="160" y="125" font-size="34" text-anchor="middle" aria-hidden="true">${n.icone}</text>
-        <rect x="0" y="150" width="320" height="20" fill="#707070" opacity=".55"/>
+        <rect width="360" height="210" fill="#FFFBF5"/>
+        <circle cx="304" cy="42" r="24" fill="#FEF3C7"/>
+        <circle cx="304" cy="42" r="14" fill="#F7B538" opacity="0.55"/>
+        <path d="M18 182 H342" stroke="#E5E0D8" stroke-width="4" stroke-linecap="round"/>
+        <rect x="0" y="182" width="360" height="28" fill="#F3ECE1"/>
+        <!-- Fachada principal -->
+        <rect x="64" y="66" width="232" height="116" rx="10" fill="${p.parede}" stroke="#E5E0D8" stroke-width="2"/>
+        <!-- Vitrine lateral -->
+        <rect x="84" y="104" width="84" height="58" rx="8" fill="#FFFFFF" stroke="${p.porta}" stroke-width="2.5"/>
+        <rect x="92" y="112" width="68" height="42" rx="4" fill="#CCFBF1" opacity="0.6"/>
+        <!-- Porta acessível em nível -->
+        <rect x="190" y="100" width="82" height="82" rx="8" fill="${p.porta}"/>
+        <rect x="199" y="110" width="64" height="54" rx="5" fill="#FFFFFF" opacity="0.92"/>
+        <circle cx="264" cy="146" r="3" fill="#F7B538"/>
+        <!-- Toldo listrado oficial Brand Book -->
+        <path d="M52 68 L68 38 H108 L100 68 Z" fill="${p.detalhe}"/>
+        <path d="M108 38 H152 L148 68 H100 Z" fill="${p.toldoB}"/>
+        <path d="M152 38 H208 L212 68 H148 Z" fill="${p.detalhe}"/>
+        <path d="M208 38 H252 L260 68 H212 Z" fill="${p.toldoB}"/>
+        <path d="M252 38 H292 L308 68 H260 Z" fill="${p.detalhe}"/>
+        <path d="M52 68 A24 11 0 0 0 100 68 Z" fill="#D14936"/>
+        <path d="M100 68 A24 11 0 0 0 148 68 Z" fill="#E59E1F"/>
+        <path d="M148 68 A32 11 0 0 0 212 68 Z" fill="#D14936"/>
+        <path d="M212 68 A24 11 0 0 0 260 68 Z" fill="#E59E1F"/>
+        <path d="M260 68 A24 11 0 0 0 308 68 Z" fill="#D14936"/>
+        <!-- Vasos de plantas acolhedores na calçada -->
+        <rect x="34" y="160" width="20" height="22" rx="4" fill="#E85D4A"/>
+        <circle cx="44" cy="151" r="13" fill="#0F766E"/>
+        <circle cx="37" cy="156" r="8" fill="#14B8A6"/>
+        <rect x="306" y="160" width="20" height="22" rx="4" fill="#E85D4A"/>
+        <circle cx="316" cy="151" r="13" fill="#0F766E"/>
+        <circle cx="323" cy="156" r="8" fill="#14B8A6"/>
+        <!-- Ícone da categoria na vitrine -->
+        <text x="126" y="143" font-size="30" text-anchor="middle" aria-hidden="true">${n.icone}</text>
       </svg>
-      <figcaption>${esc(foto.legenda)}<span class="aut">Texto alternativo: ${esc(foto.texto_alternativo)} · Autorização: exemplo fictício (sem foto real)</span></figcaption>
+      <figcaption>${esc(foto.legenda)}<span class="aut">Texto alternativo: ${esc(foto.texto_alternativo)} · Ilustração demonstrativa (exemplo fictício)</span></figcaption>
     </figure>`;
   }
 
@@ -780,33 +863,36 @@
 
     $app.innerHTML = `
     <section class="hero" aria-labelledby="hero-tit">
-      <div class="hero-copy">
-        <h1 id="hero-tit">Descubra o comércio do Centro com clareza</h1>
-        <p class="hero-sub">Horários, endereços e condições reais de entrada e atendimento para planejar seu passeio a pé.</p>
-      </div>
-
-      <div class="hero-busca" role="search" aria-label="Buscar comércios no Centro">
-        <label for="q" class="sr-only">Buscar comércio, produto, serviço ou rua</label>
-        <div class="busca-box">
-          <span class="busca-ico">${ICO_BUSCA}</span>
-          <input id="q" type="search" placeholder="Buscar por café, cordel, acarajé, serviços ou rua…" value="${esc(filtro.q)}" autocomplete="off">
-          <button type="button" class="btn-limpar-x" id="bt-limpar-q" aria-label="Limpar texto da busca" ${temTextoBusca ? "" : "hidden"}>${ICO_X}</button>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="hero-eyebrow">Guia do comércio do Centro · 100% offline</p>
+          <h1 id="hero-tit">O comércio do Centro <span class="hero-destaque">acessível</span> para todas as pessoas</h1>
+          <p class="hero-sub">Horários, endereços e condições reais de entrada e atendimento para você planejar seu passeio pelo Centro com autonomia e tranquilidade.</p>
         </div>
-      </div>
 
-      <div class="filtros-bar">
-        <div class="filtros-rapidos" role="group" aria-label="Filtros rápidos de comércios">
-          <button type="button" class="chip chip-quick" id="bt-filtro-todas" data-quick="todas" aria-pressed="${todasAtivo}">Todos</button>
-          <button type="button" class="chip chip-quick" data-nec="degrau" aria-pressed="${filtro.nec === "degrau"}">Sem degraus ou rampa</button>
-          <button type="button" class="chip chip-quick" data-nec="prioritario" aria-pressed="${filtro.nec === "prioritario"}">Atendimento prioritário</button>
-          <button type="button" class="chip chip-quick" data-nec="cao_guia" aria-pressed="${filtro.nec === "cao_guia"}">Aceita cão-guia</button>
-          <button type="button" class="chip chip-quick" id="bt-filtro-aberto" data-aberto="true" aria-pressed="${filtro.abertoAgora}">Aberto agora</button>
-          <button type="button" class="chip chip-mais" id="bt-mais-filtros" aria-expanded="${maisFiltrosAberto}" aria-controls="painel-mais-filtros">
-            ${ICO_SLIDERS} <span>Mais filtros</span>
-          </button>
+        <form class="hero-busca" id="form-busca" role="search" aria-label="Buscar comércios no Centro">
+          <label for="q" class="sr-only">Buscar comércio, produto, serviço ou rua</label>
+          <div class="busca-box">
+            <span class="busca-ico">${ICO_BUSCA}</span>
+            <input id="q" type="search" placeholder="Buscar por café, cordel, acarajé, serviços ou rua…" value="${esc(filtro.q)}" autocomplete="off">
+            <button type="button" class="btn-limpar-x" id="bt-limpar-q" aria-label="Limpar texto da busca" ${temTextoBusca ? "" : "hidden"}>${ICO_X}</button>
+            <button type="submit" class="btn-busca-pill" id="bt-buscar">Buscar</button>
+          </div>
+        </form>
+
+        <div class="filtros-bar">
+          <div class="filtros-rapidos" role="group" aria-label="Filtros rápidos de comércios">
+            <button type="button" class="chip chip-quick" id="bt-filtro-todas" data-quick="todas" aria-pressed="${todasAtivo}">Todos</button>
+            <button type="button" class="chip chip-quick" data-nec="degrau" aria-pressed="${filtro.nec === "degrau"}">Sem degraus ou rampa</button>
+            <button type="button" class="chip chip-quick" data-nec="prioritario" aria-pressed="${filtro.nec === "prioritario"}">Atendimento prioritário</button>
+            <button type="button" class="chip chip-quick" data-nec="cao_guia" aria-pressed="${filtro.nec === "cao_guia"}">Aceita cão-guia</button>
+            <button type="button" class="chip chip-quick" id="bt-filtro-aberto" data-aberto="true" aria-pressed="${filtro.abertoAgora}">Aberto agora</button>
+            <button type="button" class="chip chip-mais" id="bt-mais-filtros" aria-expanded="${maisFiltrosAberto}" aria-controls="painel-mais-filtros">
+              ${ICO_SLIDERS} <span>Mais filtros</span>
+            </button>
+          </div>
+          <button type="button" class="btn-limpar-filtros" id="bt-limpar-filtros" ${todasAtivo ? "hidden" : ""}>Limpar filtros</button>
         </div>
-        <button type="button" class="btn-limpar-filtros" id="bt-limpar-filtros" ${todasAtivo ? "hidden" : ""}>Limpar filtros</button>
-      </div>
 
       <div id="painel-mais-filtros" class="filtros-avancados" ${maisFiltrosAberto ? "" : "hidden"}>
         <fieldset class="chips">
@@ -828,6 +914,72 @@
             )
             .join("")}
         </fieldset>
+      </div>
+      </div>
+
+      <div class="hero-cena" aria-hidden="true">
+        <svg viewBox="0 0 1120 118" fill="none" focusable="false">
+          <path d="M16 112 H1104" stroke="#E5E0D8" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Árvore esquerda -->
+          <rect x="64" y="88" width="6" height="24" rx="2" fill="#A67C52"/>
+          <circle cx="67" cy="76" r="17" fill="#0F766E" opacity="0.88"/>
+          <circle cx="57" cy="82" r="10" fill="#14B8A6" opacity="0.85"/>
+          <!-- Loja 1: Café (toldo coral/amarelo) -->
+          <rect x="108" y="48" width="154" height="64" rx="6" fill="#FFFFFF" stroke="#E5E0D8" stroke-width="1.8"/>
+          <rect x="122" y="72" width="44" height="26" rx="4" fill="#CCFBF1"/>
+          <rect x="178" y="68" width="32" height="44" rx="4" fill="#0F766E"/>
+          <rect x="184" y="74" width="20" height="20" rx="2" fill="#FFFFFF" opacity="0.9"/>
+          <rect x="220" y="72" width="28" height="26" rx="4" fill="#FEF3C7"/>
+          <path d="M100 50 L112 30 H142 L134 50 Z" fill="#E85D4A"/>
+          <path d="M142 30 H172 L168 50 H134 Z" fill="#F7B538"/>
+          <path d="M172 30 H202 L202 50 H168 Z" fill="#E85D4A"/>
+          <path d="M202 30 H232 L236 50 H202 Z" fill="#F7B538"/>
+          <path d="M232 30 H258 L270 50 H236 Z" fill="#E85D4A"/>
+          <!-- Loja 2: Livraria / Cordel (toldo teal/amarelo) -->
+          <rect x="284" y="34" width="166" height="78" rx="6" fill="#FFFFFF" stroke="#E5E0D8" stroke-width="1.8"/>
+          <rect x="300" y="66" width="54" height="30" rx="4" fill="#FEF3C7"/>
+          <rect x="368" y="62" width="36" height="50" rx="4" fill="#E85D4A"/>
+          <rect x="375" y="70" width="22" height="22" rx="2" fill="#FFFFFF" opacity="0.92"/>
+          <rect x="414" y="66" width="24" height="30" rx="4" fill="#CCFBF1"/>
+          <path d="M276 38 L290 18 H324 L316 38 Z" fill="#0F766E"/>
+          <path d="M324 18 H358 L354 38 H316 Z" fill="#F7B538"/>
+          <path d="M358 18 H392 L392 38 H354 Z" fill="#0F766E"/>
+          <path d="M392 18 H426 L430 38 H392 Z" fill="#F7B538"/>
+          <path d="M426 18 H446 L458 38 H430 Z" fill="#0F766E"/>
+          <!-- Vaso central -->
+          <rect x="478" y="94" width="16" height="18" rx="3" fill="#E85D4A"/>
+          <circle cx="486" cy="87" r="11" fill="#0F766E"/>
+          <!-- Rampa acessível estilizada no centro da calçada -->
+          <path d="M518 112 L552 96 H604 V112 Z" fill="#CCFBF1" stroke="#0F766E" stroke-width="1.5"/>
+          <circle cx="576" cy="70" r="14" fill="#F7B538" opacity="0.28"/>
+          <path d="M576 58 L578 63 L583 65 L578 67 L576 72 L574 67 L569 65 L574 63 Z" fill="#E85D4A"/>
+          <!-- Loja 3: Tabuleiro / Gastronomia -->
+          <rect x="634" y="42" width="162" height="70" rx="6" fill="#FFFFFF" stroke="#E5E0D8" stroke-width="1.8"/>
+          <rect x="650" y="70" width="46" height="26" rx="4" fill="#CCFBF1"/>
+          <rect x="708" y="66" width="34" height="46" rx="4" fill="#0F766E"/>
+          <rect x="714" y="72" width="22" height="22" rx="2" fill="#FFFFFF" opacity="0.9"/>
+          <rect x="752" y="70" width="30" height="26" rx="4" fill="#FEF3C7"/>
+          <path d="M626 44 L640 24 H672 L664 44 Z" fill="#E85D4A"/>
+          <path d="M672 24 H704 L700 44 H664 Z" fill="#F7B538"/>
+          <path d="M704 24 H736 L736 44 H700 Z" fill="#E85D4A"/>
+          <path d="M736 24 H768 L772 44 H736 Z" fill="#F7B538"/>
+          <path d="M768 24 H792 L804 44 H772 Z" fill="#E85D4A"/>
+          <!-- Loja 4: Casa da Música / Serviços -->
+          <rect x="818" y="50" width="160" height="62" rx="6" fill="#FFFFFF" stroke="#E5E0D8" stroke-width="1.8"/>
+          <rect x="834" y="72" width="52" height="26" rx="4" fill="#FEF3C7"/>
+          <rect x="898" y="68" width="34" height="44" rx="4" fill="#E85D4A"/>
+          <rect x="904" y="74" width="22" height="20" rx="2" fill="#FFFFFF" opacity="0.92"/>
+          <rect x="942" y="72" width="22" height="26" rx="4" fill="#CCFBF1"/>
+          <path d="M810 52 L824 32 H856 L848 52 Z" fill="#0F766E"/>
+          <path d="M856 32 H888 L884 52 H848 Z" fill="#F7B538"/>
+          <path d="M888 32 H920 L920 52 H884 Z" fill="#0F766E"/>
+          <path d="M920 32 H952 L956 52 H920 Z" fill="#F7B538"/>
+          <path d="M952 32 H974 L986 52 H956 Z" fill="#0F766E"/>
+          <!-- Árvore direita -->
+          <rect x="1032" y="88" width="6" height="24" rx="2" fill="#A67C52"/>
+          <circle cx="1035" cy="76" r="17" fill="#0F766E" opacity="0.88"/>
+          <circle cx="1046" cy="82" r="10" fill="#14B8A6" opacity="0.85"/>
+        </svg>
       </div>
     </section>
 
@@ -891,6 +1043,22 @@
       });
       $app.querySelectorAll("[data-nec]").forEach((x) => {
         x.setAttribute("aria-pressed", String(filtro.nec === x.dataset.nec));
+      });
+    }
+
+    const formBusca = document.getElementById("form-busca");
+    if (formBusca) {
+      formBusca.addEventListener("submit", (e) => {
+        e.preventDefault();
+        filtro.q = q.value;
+        sincronizarBotoesFiltro();
+        desenharLista(t);
+        const $cont = document.getElementById("contador");
+        if ($cont) anunciar($cont.textContent || "Busca atualizada.");
+        const $secLojas = document.getElementById("tit-busca");
+        if ($secLojas) {
+          $secLojas.scrollIntoView({ behavior: lerA11y().reduzirAnimacao ? "auto" : "smooth", block: "start" });
+        }
       });
     }
 
@@ -1242,13 +1410,15 @@
       ${foto ? ilustracao(n, foto) : ""}
     </div>
 
-    <section aria-labelledby="tit-itens">
-      <h2 id="tit-itens">O que tem aqui</h2>
+    <section class="secao-ficha secao-itens" aria-labelledby="tit-itens">
+      <div class="secao-ficha-head">
+        <h2 id="tit-itens">O que tem aqui</h2>
+      </div>
       <div class="itens">
         ${
           itensDe(n.id)
             .map(
-              (i) => `<article class="card">
+              (i) => `<article class="card item-card">
                 <div class="ic" aria-hidden="true">${i.icone}</div>
                 <h3>${esc(i.titulo)}</h3>
                 <p class="meta">${esc(i.descricao_curta)}</p>
@@ -1260,42 +1430,46 @@
       </div>
     </section>
 
-    <section aria-labelledby="acesso">
-      <h2 id="acesso">Condições de acesso (físicas e atitudinais)</h2>
-      <p class="meta">Informações por item, com dimensão, estado e fonte. Inclui direitos previstos em lei (cão-guia, atendimento prioritário e Braille). Não é selo de acessibilidade. ${
-        desc ? `<strong>${desc} item(ns) ainda desconhecido(s)</strong> — vale confirmar antes de ir.` : ""
-      }</p>
+    <section class="secao-ficha secao-acesso" aria-labelledby="acesso">
+      <div class="secao-ficha-head">
+        <h2 id="acesso">Condições de acesso (físicas e atitudinais)</h2>
+        <p class="meta">Informações por item, com dimensão, estado e fonte. Inclui direitos previstos em lei (cão-guia, atendimento prioritário e Braille). Não é selo de acessibilidade. ${
+          desc ? `<strong>${desc} item(ns) ainda desconhecido(s)</strong> — vale confirmar antes de ir.` : ""
+        }</p>
+      </div>
       <ul class="legenda-estados" aria-label="Legenda dos estados de acesso">
         <li>${estadoBadge("observado")} <span>a condição foi vista ou informada</span></li>
         <li>${estadoBadge("nao_observado")} <span>a condição não foi vista</span></li>
         <li>${estadoBadge("desconhecido")} <span>ninguém verificou</span></li>
       </ul>
-      <table class="acesso" role="table">
-        <caption class="sr-only">Condições de acesso físicas e atitudinais de ${esc(n.nome)}</caption>
-        <thead role="rowgroup">
-          <tr role="row">
-            <th scope="col" role="columnheader">Condição</th>
-            <th scope="col" role="columnheader">Dimensão</th>
-            <th scope="col" role="columnheader">Estado</th>
-            <th scope="col" role="columnheader">Descrição</th>
-            <th scope="col" role="columnheader">Fonte</th>
-          </tr>
-        </thead>
-        <tbody role="rowgroup">
-          ${ac
-            .map((a) => {
-              const dim = ATRIBUTOS_ATITUDINAIS.has(a.tipo) ? "Atitudinal / Lei" : "Física";
-              return `<tr role="row">
-                <th scope="row" role="rowheader">${esc(D.tipos_acesso[a.tipo] || a.tipo)}</th>
-                <td role="cell" data-label="Dimensão"><span class="tag">${dim}</span></td>
-                <td role="cell" data-label="Estado">${estadoBadge(a.estado)}</td>
-                <td role="cell" data-label="Descrição">${esc(a.descricao)}</td>
-                <td role="cell" data-label="Fonte" class="meta">${esc(a.fonte_observacao)}</td>
-              </tr>`;
-            })
-            .join("")}
-        </tbody>
-      </table>
+      <div class="tabela-acesso-wrap">
+        <table class="acesso" role="table">
+          <caption class="sr-only">Condições de acesso físicas e atitudinais de ${esc(n.nome)}</caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">Condição</th>
+              <th scope="col" role="columnheader">Dimensão</th>
+              <th scope="col" role="columnheader">Estado</th>
+              <th scope="col" role="columnheader">Descrição</th>
+              <th scope="col" role="columnheader">Fonte</th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            ${ac
+              .map((a) => {
+                const dim = ATRIBUTOS_ATITUDINAIS.has(a.tipo) ? "Atitudinal / Lei" : "Física";
+                return `<tr role="row">
+                  <th scope="row" role="rowheader">${esc(D.tipos_acesso[a.tipo] || a.tipo)}</th>
+                  <td role="cell" data-label="Dimensão"><span class="tag">${dim}</span></td>
+                  <td role="cell" data-label="Estado">${estadoBadge(a.estado)}</td>
+                  <td role="cell" data-label="Descrição">${esc(a.descricao)}</td>
+                  <td role="cell" data-label="Fonte" class="meta">${esc(a.fonte_observacao)}</td>
+                </tr>`;
+              })
+              .join("")}
+          </tbody>
+        </table>
+      </div>
     </section>`;
 
     document.getElementById("bt-loja").addEventListener("click", () => alternarLoja(n.id, "#bt-loja"));
@@ -2257,7 +2431,10 @@
     );
     if (aberto) {
       definirMenuMobile(false);
-      const primeiro = $popoverA11y.querySelector("#bt-tema-claro") || $popoverA11y.querySelector("#bt-contraste");
+      const primeiro =
+        $popoverA11y.querySelector("#bt-pop-voz-ouvir") ||
+        $popoverA11y.querySelector("#bt-tema-claro") ||
+        $popoverA11y.querySelector("#bt-contraste");
       if (primeiro) primeiro.focus();
     }
   }
@@ -2404,7 +2581,7 @@
 
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
-      metaTheme.setAttribute("content", a.contraste ? "#000000" : escuroAtivo ? "#04392b" : "#064e3b");
+      metaTheme.setAttribute("content", a.contraste ? "#000000" : escuroAtivo ? "#0F172A" : "#FFFBF5");
     }
 
     const btTema = document.getElementById("bt-tema");
@@ -2486,6 +2663,39 @@
   if (btTemaEscuroPop) {
     btTemaEscuroPop.addEventListener("click", () => definirTema("escuro"));
   }
+
+  const btPopVozOuvir = document.getElementById("bt-pop-voz-ouvir");
+  const btPopVozPausar = document.getElementById("bt-pop-voz-pausar");
+  const btPopVozParar = document.getElementById("bt-pop-voz-parar");
+  const selPopVozVel = document.getElementById("sel-pop-voz-vel");
+
+  if (btPopVozOuvir) {
+    btPopVozOuvir.addEventListener("click", () => {
+      if (voz.ativa) {
+        pararVoz(false);
+      } else {
+        iniciarLeituraTexto(montarTextoPaginaAtual());
+      }
+    });
+  }
+  if (btPopVozPausar) {
+    btPopVozPausar.addEventListener("click", alternarPausaVoz);
+  }
+  if (btPopVozParar) {
+    btPopVozParar.addEventListener("click", () => pararVoz(false));
+  }
+  if (selPopVozVel) {
+    selPopVozVel.addEventListener("change", (e) => {
+      voz.velocidade = Number(e.target.value) || 1;
+      if (voz.ativa) {
+        iniciarLeituraTexto(montarTextoPaginaAtual());
+      } else {
+        atualizarControlesVoz();
+        anunciar(`Velocidade de leitura ajustada para ${voz.velocidade} vezes.`);
+      }
+    });
+  }
+  atualizarControlesVoz();
 
   if (window.matchMedia) {
     const mqEscuro = window.matchMedia("(prefers-color-scheme: dark)");

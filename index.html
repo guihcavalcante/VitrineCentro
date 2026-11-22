@@ -9,10 +9,10 @@
 <meta property="og:description" content="Guia prático do comércio local do Centro com informações claras de entrada, atendimento, horários e roteiro offline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#064e3b">
+<meta name="theme-color" content="#FFFBF5">
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./icon-512.png">
 </head>
@@ -32,8 +32,25 @@
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="#inicio" aria-label="VitrineCentro — página inicial">
-      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img" width="32" height="32">
-      <span class="logo-texto">Vitrine<span class="logo-destaque">Centro</span></span>
+      <svg class="logo-svg" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true" focusable="false">
+        <path class="logo-spark-coral" d="M56 12 L57.4 15.2 L60.6 16.6 L57.4 18 L56 21.2 L54.6 18 L51.4 16.6 L54.6 15.2 Z" fill="#E85D4A"/>
+        <path class="logo-spark-sun" d="M8 38 L9.1 40.4 L11.5 41.5 L9.1 42.6 L8 45 L6.9 42.6 L4.5 41.5 L6.9 40.4 Z" fill="#F7B538"/>
+        <circle class="logo-spark-sun" cx="55" cy="46" r="2.3" fill="#F7B538"/>
+        <path class="logo-pin" d="M13 27 C13 38.5 22.8 49.6 30.3 57.6 C31.2 58.6 32.8 58.6 33.7 57.6 C41.2 49.6 51 38.5 51 27 Z" fill="#0F766E"/>
+        <path class="logo-pin-shade" d="M32 27 H51 C51 38.5 41.2 49.6 33.7 57.6 C33.1 58.2 32.5 58.4 32 58.4 Z" fill="#0B5D56" opacity="0.45"/>
+        <circle class="logo-pin-hole" cx="32" cy="35" r="8.6" fill="var(--header-bg, #FFFFFF)"/>
+        <path class="logo-coral" d="M15.2 10.6 C15.7 9 16.9 8 18.6 8 H21.8 L18.2 24 H9 Z" fill="#E85D4A"/>
+        <path class="logo-sun" d="M21.8 8 H28.6 L27.4 24 H18.2 Z" fill="#F7B538"/>
+        <path class="logo-coral" d="M28.6 8 H35.4 L36.6 24 H27.4 Z" fill="#E85D4A"/>
+        <path class="logo-sun" d="M35.4 8 H42.2 L45.8 24 H36.6 Z" fill="#F7B538"/>
+        <path class="logo-coral" d="M42.2 8 H45.4 C47.1 8 48.3 9 48.8 10.6 L55 24 H45.8 Z" fill="#E85D4A"/>
+        <path class="logo-coral-dark" d="M9 24 A4.6 4.6 0 0 0 18.2 24 Z" fill="#D14936"/>
+        <path class="logo-sun-dark" d="M18.2 24 A4.6 4.6 0 0 0 27.4 24 Z" fill="#E59E1F"/>
+        <path class="logo-coral-dark" d="M27.4 24 A4.6 4.6 0 0 0 36.6 24 Z" fill="#D14936"/>
+        <path class="logo-sun-dark" d="M36.6 24 A4.6 4.6 0 0 0 45.8 24 Z" fill="#E59E1F"/>
+        <path class="logo-coral-dark" d="M45.8 24 A4.6 4.6 0 0 0 55 24 Z" fill="#D14936"/>
+      </svg>
+      <span class="logo-texto"><span class="logo-vitrine">Vitrine</span><span class="logo-centro">Centro</span></span>
     </a>
 
     <nav id="menu-principal" class="main" aria-label="Menu principal" tabindex="-1">
@@ -63,6 +80,30 @@
             </button>
           </div>
           <div class="a11y popover-a11y-lista" id="barra-a11y-controles" role="group" aria-label="Preferências de aparência e acessibilidade">
+            <div class="popover-voz" id="popover-voz-bloco" role="region" aria-label="Leitura por voz da página">
+              <div class="popover-voz-head">
+                <strong class="popover-voz-tit">Leitura por voz</strong>
+                <span class="popover-voz-sub">Ouça esta página em português</span>
+              </div>
+              <button type="button" id="bt-pop-voz-ouvir" class="popover-voz-btn" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                <span>Ouvir página (Leitura por voz)</span>
+              </button>
+              <div class="popover-voz-controles">
+                <button type="button" id="bt-pop-voz-pausar" class="popover-voz-mini" aria-pressed="false" hidden>Pausar</button>
+                <button type="button" id="bt-pop-voz-parar" class="popover-voz-mini" hidden>Parar</button>
+                <label class="popover-voz-vel" for="sel-pop-voz-vel">
+                  <span>Velocidade</span>
+                  <select id="sel-pop-voz-vel" aria-label="Velocidade da leitura por voz">
+                    <option value="0.85">0,85×</option>
+                    <option value="1" selected>1×</option>
+                    <option value="1.25">1,25×</option>
+                  </select>
+                </label>
+              </div>
+              <p id="pop-voz-status" class="popover-voz-status" aria-live="polite">Leitura em português pronta.</p>
+            </div>
+
             <div class="popover-tema-row" role="group" aria-label="Tema visual">
               <span class="popover-fonte-lbl">Aparência</span>
               <div class="popover-tema-btns">
@@ -71,6 +112,7 @@
               </div>
             </div>
             <button type="button" id="bt-contraste" aria-pressed="false" accesskey="c">Alto contraste</button>
+
             <div class="popover-fonte-row">
               <span class="popover-fonte-lbl">Tamanho do texto <span id="popover-fonte-pct" class="popover-fonte-pct">100%</span></span>
               <div class="popover-fonte-btns">
@@ -81,7 +123,7 @@
             <button type="button" id="bt-espacamento" aria-pressed="false">Espaçamento de leitura</button>
             <button type="button" id="bt-animacao" aria-pressed="false">Reduzir animações</button>
           </div>
-          <a href="#acessibilidade" data-r="acessibilidade" accesskey="5" class="popover-a11y-link" id="link-declaracao-a11y">Mais ajustes, leitura por voz e atalhos →</a>
+          <a href="#acessibilidade" data-r="acessibilidade" accesskey="5" class="popover-a11y-link" id="link-declaracao-a11y">Mais ajustes, declaração e atalhos →</a>
         </div>
       </div>
 
@@ -117,8 +159,21 @@
   <div class="wrap rodape-inner">
     <div class="rodape-topo">
       <div class="rodape-marca">
-        <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img logo-img-sm" width="28" height="28">
-        <p><strong>VitrineCentro</strong> — guia prático do comércio do Centro, funciona offline, sem login e sem rastreamento.</p>
+        <svg class="logo-svg logo-svg-sm" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
+          <path class="logo-pin" d="M13 27 C13 38.5 22.8 49.6 30.3 57.6 C31.2 58.6 32.8 58.6 33.7 57.6 C41.2 49.6 51 38.5 51 27 Z" fill="#0F766E"/>
+          <circle class="logo-pin-hole" cx="32" cy="35" r="8.6" fill="var(--card, #FFFFFF)"/>
+          <path class="logo-coral" d="M15.2 10.6 C15.7 9 16.9 8 18.6 8 H21.8 L18.2 24 H9 Z" fill="#E85D4A"/>
+          <path class="logo-sun" d="M21.8 8 H28.6 L27.4 24 H18.2 Z" fill="#F7B538"/>
+          <path class="logo-coral" d="M28.6 8 H35.4 L36.6 24 H27.4 Z" fill="#E85D4A"/>
+          <path class="logo-sun" d="M35.4 8 H42.2 L45.8 24 H36.6 Z" fill="#F7B538"/>
+          <path class="logo-coral" d="M42.2 8 H45.4 C47.1 8 48.3 9 48.8 10.6 L55 24 H45.8 Z" fill="#E85D4A"/>
+          <path class="logo-coral-dark" d="M9 24 A4.6 4.6 0 0 0 18.2 24 Z" fill="#D14936"/>
+          <path class="logo-sun-dark" d="M18.2 24 A4.6 4.6 0 0 0 27.4 24 Z" fill="#E59E1F"/>
+          <path class="logo-coral-dark" d="M27.4 24 A4.6 4.6 0 0 0 36.6 24 Z" fill="#D14936"/>
+          <path class="logo-sun-dark" d="M36.6 24 A4.6 4.6 0 0 0 45.8 24 Z" fill="#E59E1F"/>
+          <path class="logo-coral-dark" d="M45.8 24 A4.6 4.6 0 0 0 55 24 Z" fill="#D14936"/>
+        </svg>
+        <p><strong class="logo-rodape-nome"><span class="logo-vitrine">Vitrine</span><span class="logo-centro">Centro</span></strong> — guia prático do comércio do Centro, funciona offline, sem login e sem rastreamento.</p>
       </div>
       <nav aria-label="Links do rodapé" class="rodape-nav">
         <a href="#acessibilidade">Acessibilidade e atalhos</a>

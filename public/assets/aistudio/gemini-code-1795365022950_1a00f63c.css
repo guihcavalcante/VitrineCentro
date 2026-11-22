@@ -1,0 +1,26 @@
+:root {
+  /* Cores Principais */
+  --brand-coral: #E85D4A;
+  --brand-coral-hover: #D14936;
+  --brand-sun: #F7B538;
+  --brand-teal: #0F766E;
+
+  /* Superfícies e Texto */
+  --bg-page: #FFFBF5;
+  --bg-surface: #FFFFFF;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --border-subtle: #E5E0D8;
+
+  /* Acessibilidade e Foco */
+  --focus-ring: #0F766E;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+}
+
+/* Foco visível de alto contraste para navegação por teclado */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
