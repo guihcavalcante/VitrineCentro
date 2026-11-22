@@ -67,14 +67,31 @@
     erro: "",
   };
 
-  // Ícones SVG decorativos (aria-hidden="true")
-  const ICO_RADAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6.2-6.2"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>`;
-  const ICO_DIST = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.7-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.3-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>`;
-  const ICO_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>`;
-  const ICO_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
-  const ICO_BUSCA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16.4" y2="16.4"/></svg>`;
-  const ICO_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
-  const ICO_SLIDERS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="9" cy="7" r="2.2" fill="currentColor"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="15" cy="17" r="2.2" fill="currentColor"/></svg>`;
+  // Ícones SVG finos e consistentes (1.8px, aria-hidden="true")
+  const ICO_RADAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l5.8-5.8"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>`;
+  const ICO_DIST = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.7-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.3-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/></svg>`;
+  const ICO_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.4" y1="13.4" x2="15.6" y2="17.6"/><line x1="15.6" y1="6.4" x2="8.4" y2="10.6"/></svg>`;
+  const ICO_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const ICO_BUSCA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16.4" y2="16.4"/></svg>`;
+  const ICO_X = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const ICO_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
+  const ICO_SLIDERS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="9" cy="7" r="2" fill="currentColor"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="15" cy="17" r="2" fill="currentColor"/></svg>`;
+  const ICO_VOZ = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.8 5.5a9 9 0 0 1 0 13"/></svg>`;
+  const ICO_MAP_EMPTY = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>`;
+  const ICO_NOTE_EMPTY = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>`;
+
+  function iconeAcesso(tipo) {
+    const mapa = {
+      degrau: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18h18"/><path d="M5 18L19 9"/></svg>`,
+      cao_guia: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="9" r="1.4"/><circle cx="11" cy="6.5" r="1.4"/><circle cx="15" cy="7.5" r="1.4"/><circle cx="18" cy="11" r="1.4"/><path d="M8.5 14.5c0-2 1.8-3.5 4-3.5s4 1.5 4 3.5c0 1.8-1.4 3-3 3h-2c-1.6 0-3-1.2-3-3z"/></svg>`,
+      prioritario: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 20v-1a5 5 0 0 1 10 0v1"/><path d="M18 7l1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L15 9.3l2-.3 1-2z"/></svg>`,
+      banheiro: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="5.5" r="2"/><path d="M10 10v5h5l2 4"/><path d="M8.5 12.5A4.5 4.5 0 1 0 13 19"/></svg>`,
+      braille: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="8" cy="7" r="1.7"/><circle cx="8" cy="12" r="1.7"/><circle cx="8" cy="17" r="1.7"/><circle cx="15.5" cy="7" r="1.7"/><circle cx="15.5" cy="12" r="1.7"/></svg>`,
+      atendimento: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V6a1.5 1.5 0 0 1 3 0v4"/><path d="M10 10V5a1.5 1.5 0 0 1 3 0v5"/><path d="M13 10V6.5a1.5 1.5 0 0 1 3 0V12"/><path d="M16 11.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7l-2.3-3.5a1.4 1.4 0 0 1 2.2-1.7L7 14"/></svg>`,
+      rota: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H13a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h4.8"/></svg>`,
+    };
+    return mapa[tipo] || ICO_CHECK;
+  }
 
   // ---------- armazenamento local seguro ----------
   function ler(k, padrao) {
@@ -132,18 +149,16 @@
     if (!btOuvir) return;
     btOuvir.setAttribute("aria-pressed", String(voz.ativa));
     btOuvir.innerHTML = voz.ativa
-      ? `<span aria-hidden="true">⏹️</span> Parar leitura em voz alta`
-      : `<span aria-hidden="true">🔊</span> Ouvir ficha em voz alta`;
+      ? `${ICO_VOZ} <span>Parar leitura</span>`
+      : `${ICO_VOZ} <span>Ouvir ficha em voz alta</span>`;
     if (btPausar) {
       btPausar.hidden = !voz.ativa;
       btPausar.setAttribute("aria-pressed", String(voz.pausada));
-      btPausar.innerHTML = voz.pausada
-        ? `<span aria-hidden="true">▶️</span> Retomar leitura`
-        : `<span aria-hidden="true">⏸️</span> Pausar leitura`;
+      btPausar.textContent = voz.pausada ? "Retomar leitura" : "Pausar leitura";
     }
     if (status) {
       status.textContent = !voz.ativa
-        ? "Pronto para leitura em português."
+        ? "Leitura em português disponível."
         : voz.pausada
           ? "Leitura pausada."
           : `Lendo em voz alta (${voz.velocidade}x)…`;
@@ -356,31 +371,31 @@
           ? " buscando"
           : "";
 
-    let titulo = "Radar de Distância Offline";
+    let titulo = "Ver distância a pé";
     let desc =
-      "Descubra a distância em linha reta até cada loja — cálculo 100% local (fórmula de Haversine), sem mapas pagos e sem enviar sua posição.";
+      "Mostre quantos metros faltam até cada comércio. O cálculo roda no seu aparelho, sem mapas externos nem envio de localização.";
     let acoes = `
-      <button type="button" class="btn btn-radar-prim" id="bt-radar">Ativar Radar (GPS)</button>
-      <button type="button" class="btn btn-radar-sec" id="bt-radar-demo">Simular no Centro (Aracaju)</button>
+      <button type="button" class="btn sec peq" id="bt-radar">Usar meu GPS</button>
+      <button type="button" class="btn sec peq" id="bt-radar-demo">Simular no Centro</button>
     `;
 
     if (radar.status === "buscando") {
-      titulo = "Buscando sua localização…";
-      desc = "Confirme o pedido de permissão no navegador. Suas coordenadas ficam somente na memória deste aparelho.";
+      titulo = "Obtendo sua posição…";
+      desc = "Autorize a localização no navegador. Suas coordenadas ficam apenas na memória deste aparelho.";
       acoes = `
-        <button type="button" class="btn btn-radar-prim" id="bt-radar" disabled>Localizando…</button>
-        <button type="button" class="btn btn-radar-sec" id="bt-radar-demo">Simular no Centro</button>
+        <button type="button" class="btn sec peq" id="bt-radar" disabled>Localizando…</button>
+        <button type="button" class="btn sec peq" id="bt-radar-demo">Simular no Centro</button>
       `;
     } else if (radar.status === "ativo" && radar.origem) {
       titulo =
         radar.modo === "demo"
-          ? "Radar ativo · Centro de Aracaju (simulação)"
-          : "Radar offline ativo · Sua localização";
-      desc = `Ponto de referência: ${esc(radar.origem.rotulo)}. Distâncias em linha reta com estimativa de caminhada.`;
+          ? "Distâncias a partir da Praça Fausto Cardoso (simulação)"
+          : "Distâncias a partir da sua localização";
+      desc = `Referência: ${esc(radar.origem.rotulo)}. Distâncias em linha reta com tempo estimado a pé.`;
       acoes = `
-        <button type="button" class="btn btn-radar-sec" id="bt-radar-ordem" aria-pressed="${radar.ordenar}">Ordenar por mais perto</button>
-        <button type="button" class="btn btn-radar-sec" id="bt-radar">${radar.modo === "demo" ? "Usar meu GPS" : "Atualizar GPS"}</button>
-        <button type="button" class="btn btn-radar-sec" id="bt-radar-desativar">Desativar</button>
+        <button type="button" class="btn sec peq" id="bt-radar-ordem" aria-pressed="${radar.ordenar}">Ordenar por mais perto</button>
+        <button type="button" class="btn sec peq" id="bt-radar">${radar.modo === "demo" ? "Usar meu GPS" : "Atualizar GPS"}</button>
+        <button type="button" class="btn sec peq" id="bt-radar-desativar">Desativar</button>
       `;
     }
 
@@ -672,27 +687,27 @@
     return `<section class="indice-cidadao" aria-labelledby="tit-indice">
       <div class="indice-topo">
         <div>
-          <span class="tag">Civic Tech · Dados Abertos</span>
-          <h2 id="tit-indice">Índice de Acessibilidade Cidadã do Centro</h2>
-          <p class="meta">Panorama agregado das condições físicas e atitudinais registradas nos <strong>${idx.totalNegocios} negócios</strong> do protótipo (exemplos fictícios prontos para auditoria cívica real e diálogo com políticas públicas).</p>
+          <p class="secao-kicker">Panorama cívico · Dados abertos</p>
+          <h2 id="tit-indice">Índice de Acessibilidade do Centro</h2>
+          <p class="meta">Resumo das condições físicas e de atendimento observadas nos <strong>${idx.totalNegocios} comércios</strong> cadastrados — transparente sobre o que já foi checado e o que ainda precisa de visita.</p>
         </div>
         <button type="button" class="btn sec" id="bt-exportar-inicio">
-          <span aria-hidden="true">📄</span> Exportar Roteiro Offline (PDF / WhatsApp)
+          Exportar guia offline
         </button>
       </div>
 
       <div class="indice-resumo" role="list" aria-label="Resumo geral de verificação">
         <div class="indice-kpi" role="listitem">
           <strong>${idx.totalNegocios}</strong>
-          <span>negócios mapeados</span>
+          <span>comércios mapeados</span>
         </div>
         <div class="indice-kpi" role="listitem">
           <strong>${idx.pctVerificados}%</strong>
-          <span>condições verificadas (${idx.verificados}/${idx.totalAtributos})</span>
+          <span>itens verificados (${idx.verificados} de ${idx.totalAtributos})</span>
         </div>
         <div class="indice-kpi indice-kpi-alerta" role="listitem">
           <strong>${idx.pctDesconhecidos}%</strong>
-          <span>lacunas desconhecidas (${idx.desconhecidos}/${idx.totalAtributos})</span>
+          <span>ainda não verificados (${idx.desconhecidos} de ${idx.totalAtributos})</span>
         </div>
       </div>
 
@@ -701,19 +716,19 @@
           .map(
             (ind) => `<article class="indice-card">
               <div class="indice-card-head">
-                <span class="tag">${ind.grupo === "atitudinal" ? "Atitudinal / Lei" : "Física"}</span>
+                <span class="indice-grupo">${ind.grupo === "atitudinal" ? "Atendimento e lei" : "Estrutura física"}</span>
                 <strong class="indice-pct">${ind.pct}%</strong>
               </div>
               <h3>${esc(ind.rotulo)}</h3>
-              <div class="barra-prog" role="progressbar" aria-label="${esc(ind.rotulo)}: ${ind.pct}% dos negócios" aria-valuenow="${ind.pct}" aria-valuemin="0" aria-valuemax="100">
+              <div class="barra-prog" role="progressbar" aria-label="${esc(ind.rotulo)}: ${ind.pct}% dos comércios" aria-valuenow="${ind.pct}" aria-valuemin="0" aria-valuemax="100">
                 <div class="barra-prog-fill" style="width:${ind.pct}%"></div>
               </div>
               <p class="meta">
-                <strong>${ind.atendidos}</strong> de ${ind.total} com condição observada ·
-                <strong>${ind.semVerificacao}</strong> desconhecido(s)
+                <strong>${ind.atendidos}</strong> de ${ind.total} confirmados ·
+                <strong>${ind.semVerificacao}</strong> sem verificação
               </p>
               <button type="button" class="btn sec peq" data-filtrar-indice="${esc(ind.tipo)}">
-                Filtrar por ${esc(ind.rotulo)}
+                Ver comércios
               </button>
             </article>`
           )
@@ -732,14 +747,14 @@
       $navRoteiroCount.textContent = String(qtd);
       $navRoteiroCount.setAttribute(
         "aria-label",
-        qtd === 1 ? "1 loja salva no roteiro" : `${qtd} lojas salvas no roteiro`
+        qtd === 1 ? "1 comércio salvo no roteiro" : `${qtd} comércios salvos no roteiro`
       );
     }
 
     if ($barraRoteiro && $barraRoteiroTxt) {
       $barraRoteiro.hidden = qtd === 0;
       $barraRoteiroTxt.textContent =
-        qtd === 1 ? "1 loja no seu roteiro" : `${qtd} lojas no seu roteiro`;
+        qtd === 1 ? "1 comércio no seu roteiro" : `${qtd} comércios no seu roteiro`;
       document.body.classList.toggle("com-barra-roteiro", qtd > 0);
     }
   }
@@ -761,37 +776,41 @@
     const necFisicas = NECESSIDADES.filter((n) => n.grupo === "fisico");
     const necAtitudinais = NECESSIDADES.filter((n) => n.grupo === "atitudinal");
     const todasAtivo = !filtrosAtivos();
+    const temTextoBusca = Boolean(filtro.q && filtro.q.length > 0);
 
     $app.innerHTML = `
     <section class="hero" aria-labelledby="hero-tit">
       <div class="hero-copy">
-        <h1 id="hero-tit">Descubra o comércio do Centro com acessibilidade</h1>
-        <p class="hero-sub">Cafés, cultura e serviços locais com informações claras de entrada, atendimento e rotas.</p>
+        <h1 id="hero-tit">Descubra o comércio do Centro com clareza</h1>
+        <p class="hero-sub">Horários, endereços e condições reais de entrada e atendimento para planejar seu passeio a pé.</p>
       </div>
 
-      <div class="hero-busca" role="search" aria-label="Buscar negócios no Centro">
-        <label for="q" class="sr-only">Buscar loja, produto, serviço ou rua</label>
+      <div class="hero-busca" role="search" aria-label="Buscar comércios no Centro">
+        <label for="q" class="sr-only">Buscar comércio, produto, serviço ou rua</label>
         <div class="busca-box">
           <span class="busca-ico">${ICO_BUSCA}</span>
-          <input id="q" type="search" placeholder="Busque por café, cordel, acarajé, serviços ou rua…" value="${esc(filtro.q)}" autocomplete="off">
-          <button type="button" class="btn-limpar-q" id="bt-limpar-filtros" ${todasAtivo ? "hidden" : ""}>Limpar</button>
+          <input id="q" type="search" placeholder="Buscar por café, cordel, acarajé, serviços ou rua…" value="${esc(filtro.q)}" autocomplete="off">
+          <button type="button" class="btn-limpar-x" id="bt-limpar-q" aria-label="Limpar texto da busca" ${temTextoBusca ? "" : "hidden"}>${ICO_X}</button>
         </div>
       </div>
 
-      <div class="filtros-rapidos" role="group" aria-label="Filtros rápidos de lojas">
-        <button type="button" class="chip chip-quick" id="bt-filtro-todas" data-quick="todas" aria-pressed="${todasAtivo}">Todas</button>
-        <button type="button" class="chip chip-quick" data-nec="degrau" aria-pressed="${filtro.nec === "degrau"}">Sem degraus / Rampa</button>
-        <button type="button" class="chip chip-quick" data-nec="prioritario" aria-pressed="${filtro.nec === "prioritario"}">Atendimento prioritário</button>
-        <button type="button" class="chip chip-quick" data-nec="cao_guia" aria-pressed="${filtro.nec === "cao_guia"}">Aceita cão-guia</button>
-        <button type="button" class="chip chip-quick" id="bt-filtro-aberto" data-aberto="true" aria-pressed="${filtro.abertoAgora}">Aberto agora</button>
-        <button type="button" class="chip chip-mais" id="bt-mais-filtros" aria-expanded="${maisFiltrosAberto}" aria-controls="painel-mais-filtros">
-          ${ICO_SLIDERS} <span>Mais filtros</span>
-        </button>
+      <div class="filtros-bar">
+        <div class="filtros-rapidos" role="group" aria-label="Filtros rápidos de comércios">
+          <button type="button" class="chip chip-quick" id="bt-filtro-todas" data-quick="todas" aria-pressed="${todasAtivo}">Todos</button>
+          <button type="button" class="chip chip-quick" data-nec="degrau" aria-pressed="${filtro.nec === "degrau"}">Sem degraus ou rampa</button>
+          <button type="button" class="chip chip-quick" data-nec="prioritario" aria-pressed="${filtro.nec === "prioritario"}">Atendimento prioritário</button>
+          <button type="button" class="chip chip-quick" data-nec="cao_guia" aria-pressed="${filtro.nec === "cao_guia"}">Aceita cão-guia</button>
+          <button type="button" class="chip chip-quick" id="bt-filtro-aberto" data-aberto="true" aria-pressed="${filtro.abertoAgora}">Aberto agora</button>
+          <button type="button" class="chip chip-mais" id="bt-mais-filtros" aria-expanded="${maisFiltrosAberto}" aria-controls="painel-mais-filtros">
+            ${ICO_SLIDERS} <span>Mais filtros</span>
+          </button>
+        </div>
+        <button type="button" class="btn-limpar-filtros" id="bt-limpar-filtros" ${todasAtivo ? "hidden" : ""}>Limpar filtros</button>
       </div>
 
       <div id="painel-mais-filtros" class="filtros-avancados" ${maisFiltrosAberto ? "" : "hidden"}>
         <fieldset class="chips">
-          <legend>Categorias</legend>
+          <legend>Categoria</legend>
           ${D.categorias
             .map(
               (c) =>
@@ -800,7 +819,7 @@
             .join("")}
         </fieldset>
         <fieldset class="chips">
-          <legend>Outras condições físicas e atitudinais (mantém itens desconhecidos visíveis)</legend>
+          <legend>Outras condições de acesso (itens ainda não verificados continuam visíveis)</legend>
           ${[...necFisicas, ...necAtitudinais]
             .filter((n) => !["degrau", "prioritario", "cao_guia"].includes(n.tipo))
             .map(
@@ -814,7 +833,7 @@
 
     <section class="secao-lojas" aria-labelledby="tit-busca">
       <div class="secao-lojas-head">
-        <h2 id="tit-busca">Estabelecimentos no Centro</h2>
+        <h2 id="tit-busca">Comércios no Centro</h2>
         <p class="contador" id="contador" role="status" aria-live="polite" aria-atomic="true"></p>
       </div>
       ${renderRadarBar()}
@@ -822,15 +841,15 @@
     </section>
 
     <section class="tema" aria-labelledby="tema-tit">
-      <span class="kicker">Tema cultural da semana · a partir de ${fmtData(t.semana_inicio)}</span>
-      <h2 id="tema-tit"><span aria-hidden="true">${t.icone}</span> ${esc(t.titulo)}</h2>
+      <span class="kicker">Roteiro cultural da semana · desde ${fmtData(t.semana_inicio)}</span>
+      <h2 id="tema-tit">${esc(t.titulo)}</h2>
       <p>${esc(t.texto)}</p>
       <div class="tema-lugares">
         ${lugares
           .map((l) => {
             const n = negocio(l.negocio_id);
             return `<a class="tl" href="#negocio-${esc(n.id)}">
-              <strong><span aria-hidden="true">${n.icone}</span> ${esc(n.nome)}</strong>
+              <strong>${esc(n.nome)}</strong>
               <span>${esc(l.curiosidade)}</span>
             </a>`;
           })
@@ -838,9 +857,9 @@
       </div>
       <p class="fonte">Fonte: ${esc(t.fonte)} · ${esc(t.aviso_ficticio)}</p>
       <div class="demo-semana">
-        <label for="sel-semana">Modo demonstração — ver outra semana:</label>
+        <label for="sel-semana">Ver outra semana:</label>
         <select id="sel-semana">
-          <option value="">Automático (pela data de hoje)</option>
+          <option value="">Automático (data atual)</option>
           ${temas
             .map(
               (x) =>
@@ -854,6 +873,7 @@
     ${renderIndiceCidadao()}`;
 
     const q = document.getElementById("q");
+    const btLimparQ = document.getElementById("bt-limpar-q");
     const btLimpar = document.getElementById("bt-limpar-filtros");
     const btTodas = document.getElementById("bt-filtro-todas");
     const btAberto = document.getElementById("bt-filtro-aberto");
@@ -864,6 +884,7 @@
       const ativo = filtrosAtivos();
       if (btTodas) btTodas.setAttribute("aria-pressed", String(!ativo));
       if (btLimpar) btLimpar.hidden = !ativo;
+      if (btLimparQ) btLimparQ.hidden = !q.value.length;
       if (btAberto) btAberto.setAttribute("aria-pressed", String(filtro.abertoAgora));
       $app.querySelectorAll("[data-cat]").forEach((x) => {
         x.setAttribute("aria-pressed", String(filtro.cat === x.dataset.cat));
@@ -879,13 +900,24 @@
       desenharLista(t);
     });
 
+    if (btLimparQ) {
+      btLimparQ.addEventListener("click", () => {
+        filtro.q = "";
+        q.value = "";
+        sincronizarBotoesFiltro();
+        desenharLista(t);
+        anunciar("Texto da busca limpo.");
+        q.focus();
+      });
+    }
+
     if (btTodas) {
       btTodas.addEventListener("click", () => {
         filtro = { q: "", cat: null, nec: null, abertoAgora: false };
         q.value = "";
         sincronizarBotoesFiltro();
         desenharLista(t);
-        anunciar("Mostrando todos os estabelecimentos.");
+        anunciar("Exibindo todos os comércios.");
       });
     }
 
@@ -952,7 +984,7 @@
       if (e.target.value) gravar(KEY.semana, e.target.value);
       else localStorage.removeItem(KEY.semana);
       telaInicio("#sel-semana");
-      anunciar(`Tema da semana atualizado para ${temaAtual().titulo}.`);
+      anunciar(`Roteiro cultural atualizado para ${temaAtual().titulo}.`);
     });
 
     const btExpInicio = document.getElementById("bt-exportar-inicio");
@@ -980,16 +1012,22 @@
     const sufixoRadar =
       radar.status === "ativo" && radar.origem
         ? radar.ordenar
-          ? " · por proximidade"
-          : " · com distância ativa"
+          ? " · ordenados por proximidade"
+          : " · com distância a pé"
         : "";
-    $cont.textContent = `${res.length} de ${D.negocios.length} locais${sufixoRadar}`;
+    const total = D.negocios.length;
+    const textoContagem =
+      res.length === total
+        ? `Exibindo ${total} ${total === 1 ? "comércio" : "comércios"}${sufixoRadar}`
+        : `Exibindo ${res.length} de ${total} ${total === 1 ? "comércio" : "comércios"}${sufixoRadar}`;
+    $cont.textContent = textoContagem;
 
     if (!res.length) {
       $l.innerHTML = `<div class="vazio" style="grid-column:1/-1">
-        <p><strong>Nenhum estabelecimento encontrado com estes filtros.</strong></p>
-        <p>Tente outro termo ou toque em limpar para ver todos os locais do Centro.</p>
-        <button type="button" class="btn sec" id="limpar-vazio">Ver todos os locais</button>
+        <div class="vazio-ico">${ICO_BUSCA}</div>
+        <h3>Nenhum comércio encontrado</h3>
+        <p class="meta">Não encontramos resultados para os filtros atuais. Limpe a busca para explorar todos os comércios do Centro.</p>
+        <button type="button" class="btn" id="limpar-vazio">Limpar filtros e ver todos</button>
       </div>`;
       document.getElementById("limpar-vazio").addEventListener("click", () => {
         filtro = { q: "", cat: null, nec: null, abertoAgora: false };
@@ -1006,7 +1044,7 @@
         const salva = lojasSalvas.includes(n.id);
         const statusHorario = C.estaAbertoAgora(n.horario_informado);
         const seloStatus = statusHorario
-          ? `<span class="status-pill ${statusHorario.aberto ? "aberto" : "fechado"}"><span aria-hidden="true">${statusHorario.aberto ? "●" : "○"}</span> ${esc(statusHorario.rotulo)}</span>`
+          ? `<span class="status-inline ${statusHorario.aberto ? "aberto" : "fechado"}"><span class="status-dot" aria-hidden="true"></span>${esc(statusHorario.rotulo)}</span>`
           : "";
 
         let seloFiltro = "";
@@ -1023,17 +1061,17 @@
             ? `<span class="dist-selo" aria-label="Distância em linha reta: ${esc(C.formatarDistancia(dist))}, ${esc(C.estimarCaminhada(dist))}">${ICO_DIST} <span>${esc(C.formatarDistancia(dist))}</span></span>`
             : "";
 
-        const destaques = C.destaquesAcessoNegocio(D, n.id).slice(0, 4);
+        const destaques = C.destaquesAcessoNegocio(D, n.id).slice(0, 3);
         const blocoDestaques = destaques.length
           ? `<ul class="card-acesso-lista" aria-label="Condições de acesso observadas em ${esc(n.nome)}">
               ${destaques
                 .map(
                   (d) =>
-                    `<li class="acesso-tag">${ICO_CHECK} <span>${esc(d.rotulo)}</span></li>`
+                    `<li class="acesso-tag">${iconeAcesso(d.tipo)} <span>${esc(d.rotulo)}</span></li>`
                 )
                 .join("")}
             </ul>`
-          : `<p class="meta card-sem-destaque">Consulte a ficha para detalhes de acesso.</p>`;
+          : `<p class="meta card-sem-destaque">Veja a ficha para conferir as condições de acesso.</p>`;
 
         return `<article class="card loja-card" aria-labelledby="card-tit-${esc(n.id)}">
           <div class="card-head">
@@ -1045,10 +1083,7 @@
           </div>
 
           <div class="card-body">
-            <h3 id="card-tit-${esc(n.id)}" class="card-nome">
-              <span class="card-ico-inline" aria-hidden="true">${n.icone}</span>
-              <span>${esc(n.nome)}</span>
-            </h3>
+            <h3 id="card-tit-${esc(n.id)}" class="card-nome">${esc(n.nome)}</h3>
             <p class="card-end">
               ${ICO_DIST}
               <span><span class="sr-only">Endereço ou referência: </span>${esc(n.referencia_local)}</span>
@@ -1082,13 +1117,17 @@
           btn.setAttribute(
             "aria-label",
             salvoAgora
-              ? `Remover ${n ? n.nome : "loja"} do meu roteiro`
-              : `Adicionar ${n ? n.nome : "loja"} ao meu roteiro`
+              ? `Remover ${n ? n.nome : "comércio"} do meu roteiro`
+              : `Adicionar ${n ? n.nome : "comércio"} ao meu roteiro`
           );
-          btn.innerHTML = `<span aria-hidden="true">${salvoAgora ? "✓" : "+"}</span> <span>${salvoAgora ? "No roteiro" : "Roteiro"}</span>`;
+          btn.innerHTML = `<span aria-hidden="true">${salvaTextoIcone(salvoAgora)}</span> <span>${salvoAgora ? "No roteiro" : "Roteiro"}</span>`;
         }
       });
     });
+  }
+
+  function salvaTextoIcone(salvo) {
+    return salvo ? "✓" : "+";
   }
 
   // ---------- tela: ficha do negócio ----------
@@ -1147,15 +1186,15 @@
     $app.innerHTML = `
     <nav class="breadcrumb" aria-label="Caminho de navegação">
       <ol>
-        <li><a href="#inicio">Início</a></li>
+        <li><a href="#inicio">Vitrine</a></li>
         <li aria-current="page">${esc(n.nome)}</li>
       </ol>
     </nav>
 
     <div class="ficha-top">
       <section class="info" aria-labelledby="nome-n">
-        <span class="tag">${esc(n.categoria)}</span>
-        <h1 id="nome-n"><span aria-hidden="true">${n.icone}</span> ${esc(n.nome)}</h1>
+        <p class="secao-kicker">${esc(n.categoria)}</p>
+        <h1 id="nome-n">${esc(n.nome)}</h1>
         <dl>
           <dt>Referência</dt><dd>${esc(n.referencia_local)}</dd>
           <dt>Horário</dt><dd>${esc(n.horario_informado)} <em>(informado)</em></dd>
@@ -1167,36 +1206,36 @@
 
         <div class="barra-voz" role="region" aria-label="Leitura por voz da ficha">
           <button type="button" class="btn" id="bt-voz-ouvir" aria-pressed="false">
-            <span aria-hidden="true">🔊</span> Ouvir ficha em voz alta
+            ${ICO_VOZ} <span>Ouvir ficha em voz alta</span>
           </button>
           <button type="button" class="btn sec" id="bt-voz-pausar" aria-pressed="false" hidden>
-            <span aria-hidden="true">⏸️</span> Pausar leitura
+            Pausar leitura
           </button>
           <label class="voz-vel">
             <span>Velocidade:</span>
             <select id="sel-voz-vel" aria-label="Velocidade da leitura em voz alta">
-              <option value="0.85" ${voz.velocidade === 0.85 ? "selected" : ""}>0,85× (mais devagar)</option>
+              <option value="0.85" ${voz.velocidade === 0.85 ? "selected" : ""}>0,85× (devagar)</option>
               <option value="1" ${voz.velocidade === 1 ? "selected" : ""}>1× (normal)</option>
-              <option value="1.25" ${voz.velocidade === 1.25 ? "selected" : ""}>1,25× (mais rápido)</option>
+              <option value="1.25" ${voz.velocidade === 1.25 ? "selected" : ""}>1,25× (rápido)</option>
             </select>
           </label>
-          <span id="voz-status" class="meta" aria-live="polite">Pronto para leitura em português.</span>
+          <span id="voz-status" class="meta" aria-live="polite">Leitura em português disponível.</span>
         </div>
 
         <div class="acoes">
-          <button type="button" class="btn" id="bt-loja" aria-pressed="${salva}">
-            <span aria-hidden="true">${salva ? "★" : "☆"}</span> ${salva ? "Loja salva — remover" : "Salvar loja"}
+          <button type="button" class="btn${salva ? " sec card-btn-roteiro no-roteiro" : ""}" id="bt-loja" aria-pressed="${salva}">
+            <span aria-hidden="true">${salva ? "✓" : "+"}</span> <span>${salva ? "No roteiro — remover" : "Adicionar ao roteiro"}</span>
           </button>
           <button type="button" class="btn btn-share" id="bt-compartilhar-negocio">
             ${ICO_SHARE} <span>Compartilhar ficha</span>
           </button>
-          <a class="btn sec" href="#anotacoes-${esc(n.id)}"><span aria-hidden="true">✎</span> Anotar dúvida</a>
-          <button type="button" class="btn sec" id="bt-exp-negocio"><span aria-hidden="true">📄</span> Exportar ficha (PDF / WhatsApp)</button>
-          <a class="btn sec" href="#sugerir-${esc(n.id)}"><span aria-hidden="true">📝</span> Sugerir atualização deste local</a>
+          <a class="btn sec" href="#anotacoes-${esc(n.id)}">Anotar dúvida</a>
+          <button type="button" class="btn sec" id="bt-exp-negocio">Exportar ficha</button>
+          <a class="btn sec" href="#sugerir-${esc(n.id)}">Sugerir atualização deste local</a>
         </div>
         ${
           noTema
-            ? `<div class="curio"><strong><span aria-hidden="true">${t.icone}</span> Tema da semana: ${esc(t.titulo)}</strong><br>${esc(noTema.curiosidade)}<small>${esc(noTema.fonte_curiosidade)}</small></div>`
+            ? `<div class="curio"><strong>Roteiro cultural da semana · ${esc(t.titulo)}</strong><p>${esc(noTema.curiosidade)}</p><small>${esc(noTema.fonte_curiosidade)}</small></div>`
             : ""
         }
       </section>
@@ -1425,28 +1464,34 @@
 
     $app.innerHTML = `
     <h1>Meu Roteiro</h1>
-    <p class="meta">Suas lojas e itens salvos ficam apenas neste aparelho, prontos para usar offline ou exportar.</p>
+    <p class="meta">Os comércios e itens salvos ficam guardados apenas neste aparelho, prontos para consultar offline ou exportar.</p>
     <div class="acoes">
-      <button type="button" class="btn" id="bt-exp-fav">
-        <span aria-hidden="true">📄</span> Exportar para WhatsApp / PDF
-      </button>
-      <a class="btn sec" href="#anotacoes"><span aria-hidden="true">✎</span> Minhas anotações e dúvidas</a>
+      <button type="button" class="btn" id="bt-exp-fav">Exportar roteiro</button>
+      <a class="btn sec" href="#anotacoes">Minhas anotações e dúvidas</a>
     </div>
 
     <section aria-labelledby="tit-fav-lojas">
-      <h2 id="tit-fav-lojas" tabindex="-1">Lojas no roteiro (${fl.length}/${LIM_LOJAS})</h2>
+      <h2 id="tit-fav-lojas" tabindex="-1">Comércios no roteiro (${fl.length}/${LIM_LOJAS})</h2>
       ${
         fl.length
           ? `<ul class="lista">${fl
               .map((id) => {
                 const n = negocio(id);
                 return `<li>
-                  <span><span aria-hidden="true">${n.icone}</span> <a href="#negocio-${esc(n.id)}"><strong>${esc(n.nome)}</strong></a> <span class="meta">— <span aria-hidden="true">🕒</span> ${esc(n.horario_informado)}</span></span>
+                  <div class="lista-item-info">
+                    <a href="#negocio-${esc(n.id)}"><strong>${esc(n.nome)}</strong></a>
+                    <span class="meta">${esc(n.referencia_local)} · ${esc(n.horario_informado)}</span>
+                  </div>
                   <button type="button" class="btn sec peq" data-rm-loja="${esc(n.id)}" aria-label="Remover ${esc(n.nome)} do meu roteiro">Remover</button>
                 </li>`;
               })
               .join("")}</ul>`
-          : `<p class="vazio">Nenhuma loja adicionada ainda. Na vitrine, toque em “+ Roteiro” nas lojas que deseja visitar.</p>`
+          : `<div class="vazio">
+              <div class="vazio-ico">${ICO_MAP_EMPTY}</div>
+              <h3>Seu roteiro ainda está vazio</h3>
+              <p class="meta">Toque em “+ Roteiro” nos comércios da vitrine para montar sua caminhada pelo Centro e exportar para WhatsApp ou PDF.</p>
+              <a class="btn" href="#inicio">Explorar vitrine do Centro</a>
+            </div>`
       }
     </section>
 
@@ -1459,12 +1504,19 @@
                 const i = D.itens.find((x) => x.id === f.item_id);
                 const n = negocio(i.negocio_id);
                 return `<li>
-                  <span><span aria-hidden="true">${i.icone}</span> <a href="#item-${esc(i.id)}"><strong>${esc(i.titulo)}</strong></a> <span class="meta">— ${esc(n.nome)}</span></span>
+                  <div class="lista-item-info">
+                    <a href="#item-${esc(i.id)}"><strong>${esc(i.titulo)}</strong></a>
+                    <span class="meta">${esc(n.nome)}</span>
+                  </div>
                   <button type="button" class="btn sec peq" data-rm-item="${esc(i.id)}" aria-label="Remover ${esc(i.titulo)} dos itens favoritos">Remover</button>
                 </li>`;
               })
               .join("")}</ul>`
-          : `<p class="vazio">Nenhum item favorito ainda. Abra um item e toque em “Favoritar item”.</p>`
+          : `<div class="vazio vazio-compacto">
+              <h3>Nenhum item salvo por aqui</h3>
+              <p class="meta">Abra a ficha de um comércio para salvar produtos ou serviços específicos que deseja conferir.</p>
+              <a class="btn sec" href="#inicio">Ver comércios da vitrine</a>
+            </div>`
       }
     </section>`;
 
@@ -1527,19 +1579,23 @@
 
       <div class="acoes">
         <button class="btn" type="submit">Salvar anotação</button>
-        <button type="button" class="btn sec" id="bt-exp-notas"><span aria-hidden="true">📄</span> Exportar Roteiro e Dúvidas</button>
+        <button type="button" class="btn sec" id="bt-exp-notas">Exportar roteiro e dúvidas</button>
       </div>
     </form>
 
     <section aria-labelledby="tit-duvidas">
       <h2 id="tit-duvidas">Dúvidas sugeridas</h2>
-      <p class="meta">Geradas a partir dos itens <strong>desconhecidos</strong> das lojas que você salvou.</p>
+      <p class="meta">Criadas automaticamente a partir de itens ainda não verificados nos comércios do seu roteiro.</p>
       ${
         sugeridas.length
           ? `<ul class="lista">${sugeridas
-              .map((s) => `<li><span><span aria-hidden="true">❓</span> ${esc(s)}</span></li>`)
+              .map((s) => `<li><span>${esc(s)}</span></li>`)
               .join("")}</ul>`
-          : `<p class="vazio">Salve uma loja para ver as dúvidas sugeridas.</p>`
+          : `<div class="vazio vazio-compacto">
+              <h3>Nenhuma dúvida sugerida ainda</h3>
+              <p class="meta">Adicione um comércio ao seu roteiro para receber sugestões do que confirmar antes de sair.</p>
+              <a class="btn sec" href="#inicio">Escolher comércios na vitrine</a>
+            </div>`
       }
     </section>
 
@@ -1552,12 +1608,20 @@
                 const n = negocio(x.negocio_id);
                 const rotuloLugar = n ? n.nome : "Geral";
                 return `<li>
-                  <span><strong>${esc(rotuloLugar)}:</strong> ${esc(x.texto)} <span class="meta">(${new Date(x.data).toLocaleDateString("pt-BR")})</span></span>
+                  <div class="lista-item-info">
+                    <strong>${esc(rotuloLugar)}</strong>
+                    <span>${esc(x.texto)} <span class="meta">(${new Date(x.data).toLocaleDateString("pt-BR")})</span></span>
+                  </div>
                   <button type="button" class="btn sec peq" data-rm-nota="${esc(x.id)}" aria-label="Remover anotação sobre ${esc(rotuloLugar)}">Remover</button>
                 </li>`;
               })
               .join("")}</ul>`
-          : `<p class="vazio">Nenhuma anotação ainda.</p>`
+          : `<div class="vazio">
+              <div class="vazio-ico">${ICO_NOTE_EMPTY}</div>
+              <h3>Nenhuma anotação salva</h3>
+              <p class="meta">Registre lembretes rápidos ou perguntas para fazer ao chegar no comércio. Tudo fica só no seu aparelho.</p>
+              <button type="button" class="btn sec" id="bt-focar-nota">Escrever primeira anotação</button>
+            </div>`
       }
     </section>`;
 
@@ -1565,8 +1629,12 @@
     const $erro = document.getElementById("erro-txt");
     const $cont = document.getElementById("cont-txt");
     const btExpNotas = document.getElementById("bt-exp-notas");
+    const btFocarNota = document.getElementById("bt-focar-nota");
 
     btExpNotas.addEventListener("click", () => abrirExportacaoRoteiro({}, btExpNotas));
+    if (btFocarNota) {
+      btFocarNota.addEventListener("click", () => $txt.focus());
+    }
 
     $txt.addEventListener("input", () => {
       $cont.textContent = `${$txt.value.length} de 280 caracteres`;
@@ -1728,7 +1796,11 @@
                   </li>`;
                 })
                 .join("")}</ul>`
-            : `<p class="vazio">Nenhuma solicitação registrada ainda. Envie uma sugestão acima para acompanhar na curadoria local.</p>`
+            : `<div class="vazio vazio-compacto">
+                <h3>Nenhuma solicitação enviada ainda</h3>
+                <p class="meta">Use o formulário acima para cadastrar um comércio ou avisar sobre mudanças de horário e acessibilidade.</p>
+                <button type="button" class="btn sec" id="bt-focar-sugerir">Preencher formulário</button>
+              </div>`
         }
       </section>
     </section>`;
@@ -1782,6 +1854,11 @@
     limparErroCampo($estab, $errEstab);
     limparErroCampo($info, $errInfo);
     limparErroCampo($contato, $errContato);
+
+    const btFocarSugerir = document.getElementById("bt-focar-sugerir");
+    if (btFocarSugerir) {
+      btFocarSugerir.addEventListener("click", () => $estab.focus());
+    }
 
     $form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1944,6 +2021,14 @@
       <p class="meta">Ajustes salvos apenas neste navegador (sem conta e sem envio de dados).</p>
       <div class="painel-a11y">
         <article class="a11y-card">
+          <h3>Aparência (Claro / Escuro)</h3>
+          <p>Alterne entre o tema claro para uso ao ar livre e o tema escuro confortável em ambientes com pouca luz.</p>
+          <div class="acoes">
+            <button type="button" class="btn sec" id="p-tema-claro" aria-pressed="${!a.contraste && a.tema === "claro"}">Modo claro</button>
+            <button type="button" class="btn sec" id="p-tema-escuro" aria-pressed="${!a.contraste && a.tema === "escuro"}">Modo escuro</button>
+          </div>
+        </article>
+        <article class="a11y-card">
           <h3>Alto contraste (WCAG AAA)</h3>
           <p>Fundo preto com texto branco e destaques amarelos de altíssimo contraste.</p>
           <div class="acoes">
@@ -2027,6 +2112,14 @@
       </ul>
     </section>`;
 
+    document.getElementById("p-tema-claro").addEventListener("click", () => {
+      definirTema("claro");
+      telaAcessibilidade("#p-tema-claro");
+    });
+    document.getElementById("p-tema-escuro").addEventListener("click", () => {
+      definirTema("escuro");
+      telaAcessibilidade("#p-tema-escuro");
+    });
     document.getElementById("p-contraste").addEventListener("click", () => {
       atualizarA11y({ contraste: !lerA11y().contraste }, "Alto contraste atualizado.");
       telaAcessibilidade("#p-contraste");
@@ -2144,7 +2237,7 @@
     );
     if (aberto) {
       definirMenuMobile(false);
-      const primeiro = $popoverA11y.querySelector("#bt-contraste");
+      const primeiro = $popoverA11y.querySelector("#bt-tema-claro") || $popoverA11y.querySelector("#bt-contraste");
       if (primeiro) primeiro.focus();
     }
   }
@@ -2264,33 +2357,64 @@
     });
   }
 
-  // ---------- acessibilidade da página ----------
+  // ---------- acessibilidade e tema visual (Claro / Escuro / Alto Contraste) ----------
   function sistemaPrefereMenosAnimacao() {
     return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }
 
+  function sistemaPrefereEscuro() {
+    return Boolean(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }
+
   function lerA11y() {
-    return C.normalizarA11y(ler(KEY.a11y, null), sistemaPrefereMenosAnimacao());
+    return C.normalizarA11y(ler(KEY.a11y, null), sistemaPrefereMenosAnimacao(), sistemaPrefereEscuro());
   }
 
   function aplicarA11y() {
     const a = lerA11y();
+    const escuroAtivo = a.tema === "escuro";
+    document.body.classList.toggle("escuro", escuroAtivo);
     document.body.classList.toggle("contraste", a.contraste);
     document.body.classList.toggle("espacamento", a.espacamento);
     document.documentElement.classList.toggle("espacamento", a.espacamento);
     document.body.classList.toggle("sublinhar-links", a.sublinharLinks);
     document.documentElement.classList.toggle("sem-animacao", a.reduzirAnimacao);
     document.documentElement.style.setProperty("--fs", `${a.escalaFonte}%`);
+    document.documentElement.style.colorScheme = a.contraste || escuroAtivo ? "dark" : "light";
 
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute("content", a.contraste ? "#000000" : escuroAtivo ? "#04392b" : "#064e3b");
+    }
+
+    const btTema = document.getElementById("bt-tema");
+    const btTemaClaro = document.getElementById("bt-tema-claro");
+    const btTemaEscuro = document.getElementById("bt-tema-escuro");
     const btContraste = document.getElementById("bt-contraste");
     const btMenos = document.getElementById("bt-fonte-menos");
     const btMais = document.getElementById("bt-fonte-mais");
     const btEsp = document.getElementById("bt-espacamento");
     const btAnim = document.getElementById("bt-animacao");
+    const lblPct = document.getElementById("popover-fonte-pct");
 
+    if (btTema) {
+      const emEscuro = !a.contraste && escuroAtivo;
+      btTema.setAttribute("aria-pressed", String(emEscuro));
+      btTema.setAttribute(
+        "aria-label",
+        emEscuro ? "Ativar modo claro" : "Ativar modo escuro"
+      );
+      btTema.setAttribute(
+        "title",
+        emEscuro ? "Alternar para modo claro" : "Alternar para modo escuro"
+      );
+    }
+    if (btTemaClaro) btTemaClaro.setAttribute("aria-pressed", String(!a.contraste && !escuroAtivo));
+    if (btTemaEscuro) btTemaEscuro.setAttribute("aria-pressed", String(!a.contraste && escuroAtivo));
     if (btContraste) btContraste.setAttribute("aria-pressed", String(a.contraste));
     if (btEsp) btEsp.setAttribute("aria-pressed", String(a.espacamento));
     if (btAnim) btAnim.setAttribute("aria-pressed", String(a.reduzirAnimacao));
+    if (lblPct) lblPct.textContent = `${a.escalaFonte}%`;
     if (btMenos) {
       btMenos.disabled = a.escalaFonte <= ESCALAS_FONTE[0];
       btMenos.setAttribute("aria-label", `Diminuir tamanho do texto (atual ${a.escalaFonte}%)`);
@@ -2307,6 +2431,52 @@
     gravar(KEY.a11y, proximo);
     aplicarA11y();
     if (msg) anunciar(msg);
+  }
+
+  function definirTema(novoTema) {
+    const atual = lerA11y();
+    const saiuContraste = atual.contraste;
+    const msg =
+      novoTema === "escuro"
+        ? saiuContraste
+          ? "Modo escuro ativado (alto contraste desativado)."
+          : "Modo escuro ativado."
+        : saiuContraste
+          ? "Modo claro ativado (alto contraste desativado)."
+          : "Modo claro ativado.";
+    atualizarA11y({ tema: novoTema, contraste: false }, msg);
+    if (location.hash === "#acessibilidade") telaAcessibilidade();
+  }
+
+  const btTemaHeader = document.getElementById("bt-tema");
+  if (btTemaHeader) {
+    btTemaHeader.addEventListener("click", () => {
+      const atual = lerA11y();
+      const proximo = !atual.contraste && atual.tema === "escuro" ? "claro" : "escuro";
+      definirTema(proximo);
+    });
+  }
+
+  const btTemaClaroPop = document.getElementById("bt-tema-claro");
+  if (btTemaClaroPop) {
+    btTemaClaroPop.addEventListener("click", () => definirTema("claro"));
+  }
+
+  const btTemaEscuroPop = document.getElementById("bt-tema-escuro");
+  if (btTemaEscuroPop) {
+    btTemaEscuroPop.addEventListener("click", () => definirTema("escuro"));
+  }
+
+  if (window.matchMedia) {
+    const mqEscuro = window.matchMedia("(prefers-color-scheme: dark)");
+    if (typeof mqEscuro.addEventListener === "function") {
+      mqEscuro.addEventListener("change", () => {
+        const salvo = ler(KEY.a11y, null);
+        if (!salvo || (salvo.tema !== "claro" && salvo.tema !== "escuro")) {
+          aplicarA11y();
+        }
+      });
+    }
   }
 
   document.getElementById("bt-contraste").addEventListener("click", () => {

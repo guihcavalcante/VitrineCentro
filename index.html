@@ -3,20 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>VitrineCentro - protótipo integrado</title>
-<meta name="description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
-<meta property="og:title" content="VitrineCentro — protótipo integrado">
-<meta property="og:description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
+<title>VitrineCentro — Guia do comércio acessível do Centro</title>
+<meta name="description" content="Guia prático do comércio local do Centro com informações claras de entrada, atendimento, horários e roteiro offline.">
+<meta property="og:title" content="VitrineCentro — Guia do comércio acessível do Centro">
+<meta property="og:description" content="Guia prático do comércio local do Centro com informações claras de entrada, atendimento, horários e roteiro offline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#8f3808">
+<meta name="theme-color" content="#064e3b">
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./icon-512.png">
 </head>
 <body>
+<script>
+(function(){try{var a=JSON.parse(localStorage.getItem("vc_a11y")||"null");var t=a&&(a.tema==="escuro"||a.tema==="claro")?a.tema:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"escuro":"claro");if(t==="escuro")document.body.classList.add("escuro");if(a&&a.contraste)document.body.classList.add("contraste");}catch(_e){}})();
+</script>
 <nav class="skip-nav" id="barra-atalhos" aria-label="Atalhos de navegação por teclado">
   <ul class="skip-lista">
     <li><a class="skip-link" href="#conteudo" accesskey="1">Ir para o conteúdo <kbd aria-hidden="true">1</kbd></a></li>
@@ -29,7 +32,7 @@
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="#inicio" aria-label="VitrineCentro — página inicial">
-      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img" width="40" height="40">
+      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img" width="32" height="32">
       <span class="logo-texto">Vitrine<span class="logo-destaque">Centro</span></span>
     </a>
 
@@ -41,9 +44,14 @@
     </nav>
 
     <div class="header-acoes">
+      <button type="button" class="btn-tema-toggle" id="bt-tema" aria-pressed="false" aria-label="Ativar modo escuro" title="Alternar modo claro e escuro">
+        <svg class="ico-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="ico-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </button>
+
       <div class="a11y-popover-wrap">
         <button type="button" class="btn-a11y-trigger" id="bt-toggle-a11y" aria-expanded="false" aria-controls="popover-a11y" aria-haspopup="dialog" aria-label="Abrir opções de acessibilidade">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
           <span class="a11y-trigger-lbl">Acessibilidade</span>
         </button>
 
@@ -51,28 +59,35 @@
           <div class="popover-a11y-head">
             <h2 id="popover-a11y-tit">Acessibilidade</h2>
             <button type="button" class="popover-fechar" id="bt-fechar-a11y" aria-label="Fechar opções de acessibilidade">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
-          <div class="a11y popover-a11y-lista" id="barra-a11y-controles" role="group" aria-label="Preferências de acessibilidade">
+          <div class="a11y popover-a11y-lista" id="barra-a11y-controles" role="group" aria-label="Preferências de aparência e acessibilidade">
+            <div class="popover-tema-row" role="group" aria-label="Tema visual">
+              <span class="popover-fonte-lbl">Aparência</span>
+              <div class="popover-tema-btns">
+                <button type="button" id="bt-tema-claro" aria-pressed="true">Claro</button>
+                <button type="button" id="bt-tema-escuro" aria-pressed="false">Escuro</button>
+              </div>
+            </div>
             <button type="button" id="bt-contraste" aria-pressed="false" accesskey="c">Alto contraste</button>
             <div class="popover-fonte-row">
-              <span class="popover-fonte-lbl">Tamanho do texto</span>
+              <span class="popover-fonte-lbl">Tamanho do texto <span id="popover-fonte-pct" class="popover-fonte-pct">100%</span></span>
               <div class="popover-fonte-btns">
                 <button type="button" id="bt-fonte-menos" aria-label="Diminuir tamanho do texto">A−</button>
                 <button type="button" id="bt-fonte-mais" aria-label="Aumentar tamanho do texto">A+</button>
               </div>
             </div>
             <button type="button" id="bt-espacamento" aria-pressed="false">Espaçamento de leitura</button>
-            <button type="button" id="bt-animacao" aria-pressed="false">Sem animações</button>
+            <button type="button" id="bt-animacao" aria-pressed="false">Reduzir animações</button>
           </div>
-          <a href="#acessibilidade" data-r="acessibilidade" accesskey="5" class="popover-a11y-link" id="link-declaracao-a11y">Mais ajustes, voz e atalhos →</a>
+          <a href="#acessibilidade" data-r="acessibilidade" accesskey="5" class="popover-a11y-link" id="link-declaracao-a11y">Mais ajustes, leitura por voz e atalhos →</a>
         </div>
       </div>
 
       <button type="button" class="btn-header-toggle btn-menu-mobile" id="bt-menu-mobile" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu de navegação">
-        <svg class="ico-menu-abrir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg class="ico-menu-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg class="ico-menu-abrir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="ico-menu-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         <span class="toggle-lbl">Menu</span>
       </button>
     </div>
@@ -80,45 +95,48 @@
 </header>
 
 <main id="conteudo" class="wrap" tabindex="-1">
-  <div class="rodape-pwa">
-    <button type="button" id="bt-instalar-pwa" class="btn sec" hidden>
-      <span aria-hidden="true">📲</span> Instalar App Offline
-    </button>
-  </div>
-
   <div id="app"></div>
 </main>
 
 <aside id="barra-roteiro" class="barra-roteiro" aria-label="Resumo do seu roteiro" hidden>
   <div class="barra-roteiro-inner">
     <div class="barra-roteiro-info">
-      <span class="barra-roteiro-icone" aria-hidden="true">🗺️</span>
+      <span class="barra-roteiro-icone" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+      </span>
       <div class="barra-roteiro-texto">
-        <strong id="barra-roteiro-txt">0 lojas no seu roteiro</strong>
-        <a href="#favoritos" class="barra-roteiro-link">Ver roteiro</a>
+        <strong id="barra-roteiro-txt">0 comércios no roteiro</strong>
+        <a href="#favoritos" class="barra-roteiro-link">Ver meu roteiro</a>
       </div>
     </div>
-    <button type="button" id="bt-barra-exportar" class="btn barra-roteiro-btn" aria-label="Exportar roteiro para WhatsApp ou PDF">
-      <span class="btn-txt-full">Exportar para WhatsApp / PDF</span>
-      <span class="btn-txt-curto" aria-hidden="true">Exportar PDF/Zap</span>
-    </button>
+    <button type="button" id="bt-barra-exportar" class="btn barra-roteiro-btn" aria-label="Exportar roteiro para WhatsApp ou PDF">Exportar roteiro</button>
   </div>
 </aside>
 
 <footer id="rodape" class="rodape" tabindex="-1">
   <div class="wrap rodape-inner">
-    <div class="rodape-marca">
-      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img logo-img-sm" width="32" height="32">
-      <p><strong>VitrineCentro</strong> — guia comercial offline do Centro, sem rastreamento e sem login.</p>
+    <div class="rodape-topo">
+      <div class="rodape-marca">
+        <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img logo-img-sm" width="28" height="28">
+        <p><strong>VitrineCentro</strong> — guia prático do comércio do Centro, funciona offline, sem login e sem rastreamento.</p>
+      </div>
+      <nav aria-label="Links do rodapé" class="rodape-nav">
+        <a href="#acessibilidade">Acessibilidade e atalhos</a>
+        <a href="#anotacoes">Minhas anotações</a>
+        <a href="#sobre">Sobre os dados</a>
+        <a href="#conteudo">Topo</a>
+      </nav>
     </div>
-    <p class="meta"><strong>Nota sobre os dados:</strong> protótipo com negócios, horários, contatos e condições de acesso fictícios para demonstração. Os registros de acesso não constituem certificação — confirme antes da visita.</p>
-    <p class="meta">Projetado segundo <strong>WCAG 2.2 (AA/AAA)</strong>, <strong>eMAG 3.1</strong>, <strong>LBI (Lei nº 13.146/2015)</strong>, <strong>Lei nº 11.126/2005 (Cão-Guia)</strong>, <strong>Lei nº 10.048/2000 (Prioridade)</strong> e <strong>ABNT NBR 17060</strong>.</p>
-    <nav aria-label="Links do rodapé" class="rodape-nav">
-      <a href="#acessibilidade">Declaração de Acessibilidade e Atalhos</a>
-      <a href="#anotacoes">Minhas Anotações</a>
-      <a href="#sobre">Sobre os dados</a>
-      <a href="#conteudo">Voltar ao topo</a>
-    </nav>
+    <div class="rodape-pwa-bar">
+      <button type="button" id="bt-instalar-pwa" class="btn sec peq btn-instalar-pwa" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Instalar App Offline</span>
+      </button>
+    </div>
+    <div class="rodape-notas">
+      <p class="meta"><strong>Nota sobre os dados:</strong> protótipo demonstrativo com comércios, horários, contatos e condições de acesso fictícios. Os registros são informativos e não constituem certificação — confirme antes da visita.</p>
+      <p class="meta">Conformidade técnica: WCAG 2.2 (AA/AAA), eMAG 3.1, LBI (Lei nº 13.146/2015), Lei nº 11.126/2005 (Cão-Guia), Lei nº 10.048/2000 (Atendimento Prioritário) e ABNT NBR 17060.</p>
+    </div>
   </div>
 </footer>
 
@@ -136,14 +154,14 @@
 </dialog>
 
 <dialog id="dlg-roteiro" class="modal modal-lg" aria-labelledby="dlg-rot-tit" aria-describedby="dlg-rot-desc">
-  <h2 id="dlg-rot-tit">Roteiro Offline (Impressão, PDF ou WhatsApp)</h2>
-  <p id="dlg-rot-desc" class="meta">Use os botões abaixo para imprimir em folha limpa (ou salvar como PDF), copiar o texto pronto para WhatsApp ou baixar o arquivo offline.</p>
-  <label class="lbl" for="roteiro-texto">Prévia do roteiro em texto simples</label>
+  <h2 id="dlg-rot-tit">Exportar roteiro offline</h2>
+  <p id="dlg-rot-desc" class="meta">Imprima em folha limpa, salve como PDF, copie pronto para enviar no WhatsApp ou baixe em arquivo de texto.</p>
+  <label class="lbl" for="roteiro-texto">Prévia do roteiro</label>
   <textarea id="roteiro-texto" class="roteiro-previa" readonly rows="12"></textarea>
   <div class="acoes">
-    <button type="button" class="btn" id="bt-rot-imprimir"><span aria-hidden="true">🖨️</span> Imprimir / Salvar PDF</button>
-    <button type="button" class="btn sec" id="bt-rot-copiar"><span aria-hidden="true">📋</span> Copiar para WhatsApp</button>
-    <button type="button" class="btn sec" id="bt-rot-baixar"><span aria-hidden="true">⬇️</span> Baixar arquivo .TXT</button>
+    <button type="button" class="btn" id="bt-rot-imprimir">Imprimir / Salvar PDF</button>
+    <button type="button" class="btn sec" id="bt-rot-copiar">Copiar para WhatsApp</button>
+    <button type="button" class="btn sec" id="bt-rot-baixar">Baixar .TXT</button>
     <button type="button" class="btn sec" id="bt-rot-fechar">Fechar</button>
   </div>
 </dialog>

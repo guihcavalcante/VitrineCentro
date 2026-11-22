@@ -36,6 +36,7 @@
   const ESCALAS_FONTE = [100, 115, 130, 150];
 
   const A11Y_PADRAO = {
+    tema: "claro",
     contraste: false,
     escalaFonte: 100,
     espacamento: false,
@@ -73,7 +74,7 @@
     return d && m && y ? `${d}/${m}/${y}` : String(iso || "");
   }
 
-  function normalizarA11y(raw, prefersReducedMotion) {
+  function normalizarA11y(raw, prefersReducedMotion, prefersDark) {
     const src = raw && typeof raw === "object" ? raw : {};
     let escala = Number(src.escalaFonte);
     if (!ESCALAS_FONTE.includes(escala)) {
@@ -84,8 +85,15 @@
         ? src.reduzirAnimacao
         : Boolean(prefersReducedMotion);
     const vibracao = typeof src.vibracao === "boolean" ? src.vibracao : A11Y_PADRAO.vibracao;
+    const tema =
+      src.tema === "escuro" || src.tema === "claro"
+        ? src.tema
+        : prefersDark
+          ? "escuro"
+          : A11Y_PADRAO.tema;
 
     return {
+      tema,
       contraste: Boolean(src.contraste),
       escalaFonte: escala,
       espacamento: Boolean(src.espacamento),
