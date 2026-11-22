@@ -33,22 +33,32 @@
   <div class="wrap bar">
     <a class="logo" href="#inicio" aria-label="VitrineCentro — página inicial">
       <svg class="logo-svg" viewBox="0 0 64 64" width="38" height="38" aria-hidden="true" focusable="false">
-        <path class="logo-spark-coral" d="M56 12 L57.4 15.2 L60.6 16.6 L57.4 18 L56 21.2 L54.6 18 L51.4 16.6 L54.6 15.2 Z" fill="#E85D4A"/>
-        <path class="logo-spark-sun" d="M8 38 L9.1 40.4 L11.5 41.5 L9.1 42.6 L8 45 L6.9 42.6 L4.5 41.5 L6.9 40.4 Z" fill="#F7B538"/>
-        <circle class="logo-spark-sun" cx="55" cy="46" r="2.3" fill="#F7B538"/>
-        <path class="logo-pin" d="M13 27 C13 38.5 22.8 49.6 30.3 57.6 C31.2 58.6 32.8 58.6 33.7 57.6 C41.2 49.6 51 38.5 51 27 Z" fill="#0F766E"/>
-        <path class="logo-pin-shade" d="M32 27 H51 C51 38.5 41.2 49.6 33.7 57.6 C33.1 58.2 32.5 58.4 32 58.4 Z" fill="#0B5D56" opacity="0.45"/>
-        <circle class="logo-pin-hole" cx="32" cy="35" r="8.6" fill="var(--header-bg, #FFFFFF)"/>
-        <path class="logo-coral" d="M15.2 10.6 C15.7 9 16.9 8 18.6 8 H21.8 L18.2 24 H9 Z" fill="#E85D4A"/>
-        <path class="logo-sun" d="M21.8 8 H28.6 L27.4 24 H18.2 Z" fill="#F7B538"/>
-        <path class="logo-coral" d="M28.6 8 H35.4 L36.6 24 H27.4 Z" fill="#E85D4A"/>
-        <path class="logo-sun" d="M35.4 8 H42.2 L45.8 24 H36.6 Z" fill="#F7B538"/>
-        <path class="logo-coral" d="M42.2 8 H45.4 C47.1 8 48.3 9 48.8 10.6 L55 24 H45.8 Z" fill="#E85D4A"/>
-        <path class="logo-coral-dark" d="M9 24 A4.6 4.6 0 0 0 18.2 24 Z" fill="#D14936"/>
-        <path class="logo-sun-dark" d="M18.2 24 A4.6 4.6 0 0 0 27.4 24 Z" fill="#E59E1F"/>
-        <path class="logo-coral-dark" d="M27.4 24 A4.6 4.6 0 0 0 36.6 24 Z" fill="#D14936"/>
-        <path class="logo-sun-dark" d="M36.6 24 A4.6 4.6 0 0 0 45.8 24 Z" fill="#E59E1F"/>
-        <path class="logo-coral-dark" d="M45.8 24 A4.6 4.6 0 0 0 55 24 Z" fill="#D14936"/>
+        <defs>
+          <clipPath id="vc-pin-clip-head">
+            <path d="M12.2 26.2 C12.2 39.8 22.8 51.2 30.4 58.9 C31.3 59.8 32.7 59.8 33.6 58.9 C41.2 51.2 51.8 39.8 51.8 26.2 Z"/>
+          </clipPath>
+        </defs>
+        <path class="logo-pin" d="M12.2 26.2 C12.2 39.8 22.8 51.2 30.4 58.9 C31.3 59.8 32.7 59.8 33.6 58.9 C41.2 51.2 51.8 39.8 51.8 26.2 Z" fill="#0F766E"/>
+        <g clip-path="url(#vc-pin-clip-head)">
+          <rect x="32" y="25" width="22" height="36" fill="#0B5D56" opacity="0.34"/>
+          <path d="M10 25 H54 V30.6 C45 30.6 41 28.8 32 28.8 C23 28.8 19 30.6 10 30.6 Z" fill="#084741" opacity="0.28"/>
+        </g>
+        <path class="logo-caminho" d="M23.4 33.6 C18.8 33.0 17.3 38.6 20.9 41.4 C24.3 44.0 27.8 40.6 30.1 36.4 C32.6 31.8 37.2 30.4 39.5 32.9 C41.5 35.1 38.6 37.4 34.4 38.7 C29.8 40.1 28.0 42.1 29.8 43.4 C31.1 44.3 33.3 44.4 35.6 44.4" fill="none" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="logo-cadeirante" cx="38.8" cy="38.3" r="1.4" fill="#FFFFFF"/>
+        <path class="logo-cadeirante" d="M40.7 44.3 A2.45 2.45 0 1 1 37.5 41.4" fill="none" stroke="#FFFFFF" stroke-width="1.65" stroke-linecap="round"/>
+        <path class="logo-cadeirante" d="M38.8 40.1 V42.4 H41.2 L42.3 44.6 L43.3 44.2" fill="none" stroke="#FFFFFF" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="logo-cadeirante" d="M38.8 41.3 H40.5" fill="none" stroke="#FFFFFF" stroke-width="1.45" stroke-linecap="round"/>
+        <path class="logo-coral" d="M14.8 9.6 C15.3 7.0 17.2 5.6 19.6 5.6 H44.4 C46.8 5.6 48.7 7.0 49.2 9.6 L50.2 12.0 H13.8 Z" fill="#E85D4A"/>
+        <path class="logo-coral" d="M14.8 9.6 C15.3 7.0 17.2 5.6 19.6 5.6 H22.0 L18.0 24.4 H8.0 Z" fill="#E85D4A"/>
+        <path class="logo-sun" d="M21.4 10.6 H28.6 L27.3 24.4 H18.0 Z" fill="#F7B538"/>
+        <path class="logo-coral" d="M28.6 10.6 H35.4 L36.7 24.4 H27.3 Z" fill="#E85D4A"/>
+        <path class="logo-sun" d="M35.4 10.6 H42.6 L46.0 24.4 H36.7 Z" fill="#F7B538"/>
+        <path class="logo-coral" d="M42.0 5.6 H44.4 C46.8 5.6 48.7 7.0 49.2 9.6 L56.0 24.4 H46.0 Z" fill="#E85D4A"/>
+        <path class="logo-coral-dark" d="M8.0 24.4 A5.0 4.8 0 0 0 18.0 24.4 Z" fill="#D14936"/>
+        <path class="logo-sun-dark" d="M18.0 24.4 A4.65 4.8 0 0 0 27.3 24.4 Z" fill="#E59E1F"/>
+        <path class="logo-coral-dark" d="M27.3 24.4 A4.7 4.8 0 0 0 36.7 24.4 Z" fill="#D14936"/>
+        <path class="logo-sun-dark" d="M36.7 24.4 A4.65 4.8 0 0 0 46.0 24.4 Z" fill="#E59E1F"/>
+        <path class="logo-coral-dark" d="M46.0 24.4 A5.0 4.8 0 0 0 56.0 24.4 Z" fill="#D14936"/>
       </svg>
       <span class="logo-texto"><span class="logo-vitrine">Vitrine</span><span class="logo-centro">Centro</span></span>
     </a>
@@ -160,18 +170,32 @@
     <div class="rodape-topo">
       <div class="rodape-marca">
         <svg class="logo-svg logo-svg-sm" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
-          <path class="logo-pin" d="M13 27 C13 38.5 22.8 49.6 30.3 57.6 C31.2 58.6 32.8 58.6 33.7 57.6 C41.2 49.6 51 38.5 51 27 Z" fill="#0F766E"/>
-          <circle class="logo-pin-hole" cx="32" cy="35" r="8.6" fill="var(--card, #FFFFFF)"/>
-          <path class="logo-coral" d="M15.2 10.6 C15.7 9 16.9 8 18.6 8 H21.8 L18.2 24 H9 Z" fill="#E85D4A"/>
-          <path class="logo-sun" d="M21.8 8 H28.6 L27.4 24 H18.2 Z" fill="#F7B538"/>
-          <path class="logo-coral" d="M28.6 8 H35.4 L36.6 24 H27.4 Z" fill="#E85D4A"/>
-          <path class="logo-sun" d="M35.4 8 H42.2 L45.8 24 H36.6 Z" fill="#F7B538"/>
-          <path class="logo-coral" d="M42.2 8 H45.4 C47.1 8 48.3 9 48.8 10.6 L55 24 H45.8 Z" fill="#E85D4A"/>
-          <path class="logo-coral-dark" d="M9 24 A4.6 4.6 0 0 0 18.2 24 Z" fill="#D14936"/>
-          <path class="logo-sun-dark" d="M18.2 24 A4.6 4.6 0 0 0 27.4 24 Z" fill="#E59E1F"/>
-          <path class="logo-coral-dark" d="M27.4 24 A4.6 4.6 0 0 0 36.6 24 Z" fill="#D14936"/>
-          <path class="logo-sun-dark" d="M36.6 24 A4.6 4.6 0 0 0 45.8 24 Z" fill="#E59E1F"/>
-          <path class="logo-coral-dark" d="M45.8 24 A4.6 4.6 0 0 0 55 24 Z" fill="#D14936"/>
+          <defs>
+            <clipPath id="vc-pin-clip-foot">
+              <path d="M12.2 26.2 C12.2 39.8 22.8 51.2 30.4 58.9 C31.3 59.8 32.7 59.8 33.6 58.9 C41.2 51.2 51.8 39.8 51.8 26.2 Z"/>
+            </clipPath>
+          </defs>
+          <path class="logo-pin" d="M12.2 26.2 C12.2 39.8 22.8 51.2 30.4 58.9 C31.3 59.8 32.7 59.8 33.6 58.9 C41.2 51.2 51.8 39.8 51.8 26.2 Z" fill="#0F766E"/>
+          <g clip-path="url(#vc-pin-clip-foot)">
+            <rect x="32" y="25" width="22" height="36" fill="#0B5D56" opacity="0.34"/>
+            <path d="M10 25 H54 V30.6 C45 30.6 41 28.8 32 28.8 C23 28.8 19 30.6 10 30.6 Z" fill="#084741" opacity="0.28"/>
+          </g>
+          <path class="logo-caminho" d="M23.4 33.6 C18.8 33.0 17.3 38.6 20.9 41.4 C24.3 44.0 27.8 40.6 30.1 36.4 C32.6 31.8 37.2 30.4 39.5 32.9 C41.5 35.1 38.6 37.4 34.4 38.7 C29.8 40.1 28.0 42.1 29.8 43.4 C31.1 44.3 33.3 44.4 35.6 44.4" fill="none" stroke="#FFFFFF" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle class="logo-cadeirante" cx="38.8" cy="38.3" r="1.45" fill="#FFFFFF"/>
+          <path class="logo-cadeirante" d="M40.7 44.3 A2.45 2.45 0 1 1 37.5 41.4" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+          <path class="logo-cadeirante" d="M38.8 40.1 V42.4 H41.2 L42.3 44.6 L43.3 44.2" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="logo-cadeirante" d="M38.8 41.3 H40.5" fill="none" stroke="#FFFFFF" stroke-width="1.55" stroke-linecap="round"/>
+          <path class="logo-coral" d="M14.8 9.6 C15.3 7.0 17.2 5.6 19.6 5.6 H44.4 C46.8 5.6 48.7 7.0 49.2 9.6 L50.2 12.0 H13.8 Z" fill="#E85D4A"/>
+          <path class="logo-coral" d="M14.8 9.6 C15.3 7.0 17.2 5.6 19.6 5.6 H22.0 L18.0 24.4 H8.0 Z" fill="#E85D4A"/>
+          <path class="logo-sun" d="M21.4 10.6 H28.6 L27.3 24.4 H18.0 Z" fill="#F7B538"/>
+          <path class="logo-coral" d="M28.6 10.6 H35.4 L36.7 24.4 H27.3 Z" fill="#E85D4A"/>
+          <path class="logo-sun" d="M35.4 10.6 H42.6 L46.0 24.4 H36.7 Z" fill="#F7B538"/>
+          <path class="logo-coral" d="M42.0 5.6 H44.4 C46.8 5.6 48.7 7.0 49.2 9.6 L56.0 24.4 H46.0 Z" fill="#E85D4A"/>
+          <path class="logo-coral-dark" d="M8.0 24.4 A5.0 4.8 0 0 0 18.0 24.4 Z" fill="#D14936"/>
+          <path class="logo-sun-dark" d="M18.0 24.4 A4.65 4.8 0 0 0 27.3 24.4 Z" fill="#E59E1F"/>
+          <path class="logo-coral-dark" d="M27.3 24.4 A4.7 4.8 0 0 0 36.7 24.4 Z" fill="#D14936"/>
+          <path class="logo-sun-dark" d="M36.7 24.4 A4.65 4.8 0 0 0 46.0 24.4 Z" fill="#E59E1F"/>
+          <path class="logo-coral-dark" d="M46.0 24.4 A5.0 4.8 0 0 0 56.0 24.4 Z" fill="#D14936"/>
         </svg>
         <p><strong class="logo-rodape-nome"><span class="logo-vitrine">Vitrine</span><span class="logo-centro">Centro</span></strong> — guia prático do comércio do Centro, funciona offline, sem login e sem rastreamento.</p>
       </div>
