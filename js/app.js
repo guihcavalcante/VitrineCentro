@@ -1463,7 +1463,7 @@
     const fl = ler(KEY.lojas, []).filter((id) => negocio(id));
 
     $app.innerHTML = `
-    <h1>Meu Roteiro</h1>
+    <h1 id="tit-meu-roteiro" tabindex="-1">Meu Roteiro</h1>
     <p class="meta">Os comércios e itens salvos ficam guardados apenas neste aparelho, prontos para consultar offline ou exportar.</p>
     <div class="acoes">
       <button type="button" class="btn" id="bt-exp-fav">Exportar roteiro</button>
@@ -1550,6 +1550,9 @@
     });
 
     $app.innerHTML = `
+    <div class="acoes">
+      <button type="button" class="btn sec peq" id="bt-voltar-roteiro" aria-label="Voltar para Meu Roteiro">← Voltar para Meu Roteiro</button>
+    </div>
     <h1>Minhas anotações e dúvidas</h1>
     <p class="meta">Ficam só neste aparelho. Nada é enviado ao estabelecimento nem publicado.</p>
 
@@ -1630,6 +1633,23 @@
     const $cont = document.getElementById("cont-txt");
     const btExpNotas = document.getElementById("bt-exp-notas");
     const btFocarNota = document.getElementById("bt-focar-nota");
+
+    const btVoltarRoteiro = document.getElementById("bt-voltar-roteiro");
+    if (btVoltarRoteiro) {
+      btVoltarRoteiro.addEventListener("click", () => {
+        definirMenuMobile(false);
+        definirPopoverA11y(false);
+        pararVoz(true);
+        try {
+          history.pushState(null, "", "#favoritos");
+        } catch {
+          location.hash = "#favoritos";
+        }
+        rotear("#tit-meu-roteiro");
+        window.scrollTo(0, 0);
+        anunciar(`Página carregada: ${document.title}`);
+      });
+    }
 
     btExpNotas.addEventListener("click", () => abrirExportacaoRoteiro({}, btExpNotas));
     if (btFocarNota) {
