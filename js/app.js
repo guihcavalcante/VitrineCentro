@@ -8,7 +8,7 @@
 
   const C = window.VC_CORE;
   const LIM_ITENS = 5;
-  const LIM_LOJAS = 3;
+  const LIM_LOJAS = 5;
   const KEY = {
     itens: "vc_fav_itens",
     lojas: "vc_fav_lojas",
@@ -37,8 +37,14 @@
   const $btRotFechar = document.getElementById("bt-rot-fechar");
   const $areaImpressao = document.getElementById("area-impressao");
 
+  const $navRoteiroCount = document.getElementById("nav-roteiro-count");
+  const $barraRoteiro = document.getElementById("barra-roteiro");
+  const $barraRoteiroTxt = document.getElementById("barra-roteiro-txt");
+  const $btBarraExportar = document.getElementById("bt-barra-exportar");
+
   let D = null;
-  let filtro = { q: "", cat: null, nec: null };
+  let filtro = { q: "", cat: null, nec: null, abertoAgora: false };
+  let maisFiltrosAberto = false;
   let dialogoCallback = null;
   let dialogoRetornoFoco = null;
   let roteiroRetornoFoco = null;
@@ -66,6 +72,9 @@
   const ICO_DIST = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.7-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.3-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>`;
   const ICO_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>`;
   const ICO_CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const ICO_BUSCA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><line x1="20.5" y1="20.5" x2="16.4" y2="16.4"/></svg>`;
+  const ICO_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
+  const ICO_SLIDERS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="9" cy="7" r="2.2" fill="currentColor"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="15" cy="17" r="2.2" fill="currentColor"/></svg>`;
 
   // ---------- armazenamento local seguro ----------
   function ler(k, padrao) {
@@ -713,20 +722,107 @@
     </section>`;
   }
 
+  // ---------- indicadores do roteiro (header + barra flutuante) ----------
+  function atualizarIndicadoresRoteiro() {
+    const lojas = D ? ler(KEY.lojas, []).filter((id) => negocio(id)) : ler(KEY.lojas, []);
+    const qtd = lojas.length;
+
+    if ($navRoteiroCount) {
+      $navRoteiroCount.hidden = qtd === 0;
+      $navRoteiroCount.textContent = String(qtd);
+      $navRoteiroCount.setAttribute(
+        "aria-label",
+        qtd === 1 ? "1 loja salva no roteiro" : `${qtd} lojas salvas no roteiro`
+      );
+    }
+
+    if ($barraRoteiro && $barraRoteiroTxt) {
+      $barraRoteiro.hidden = qtd === 0;
+      $barraRoteiroTxt.textContent =
+        qtd === 1 ? "1 loja no seu roteiro" : `${qtd} lojas no seu roteiro`;
+      document.body.classList.toggle("com-barra-roteiro", qtd > 0);
+    }
+  }
+
+  if ($btBarraExportar) {
+    $btBarraExportar.addEventListener("click", () => abrirExportacaoRoteiro({}, $btBarraExportar));
+  }
+
   // ---------- tela: início ----------
+  function filtrosAtivos() {
+    return Boolean((filtro.q && filtro.q.trim()) || filtro.cat || filtro.nec || filtro.abertoAgora);
+  }
+
   function telaInicio(focoSeletor) {
-    definirTitulo("Início");
+    definirTitulo("Vitrine do Centro");
     const t = temaAtual();
     const lugares = lugaresDoTema(t);
     const temas = [...D.temas_culturais].sort((a, b) => a.semana_inicio.localeCompare(b.semana_inicio));
     const necFisicas = NECESSIDADES.filter((n) => n.grupo === "fisico");
     const necAtitudinais = NECESSIDADES.filter((n) => n.grupo === "atitudinal");
+    const todasAtivo = !filtrosAtivos();
 
     $app.innerHTML = `
-    <h1>Descubra o Centro</h1>
+    <section class="hero" aria-labelledby="hero-tit">
+      <div class="hero-copy">
+        <h1 id="hero-tit">Descubra o comércio do Centro com acessibilidade</h1>
+        <p class="hero-sub">Cafés, cultura e serviços locais com informações claras de entrada, atendimento e rotas.</p>
+      </div>
+
+      <div class="hero-busca" role="search" aria-label="Buscar negócios no Centro">
+        <label for="q" class="sr-only">Buscar loja, produto, serviço ou rua</label>
+        <div class="busca-box">
+          <span class="busca-ico">${ICO_BUSCA}</span>
+          <input id="q" type="search" placeholder="Busque por café, cordel, acarajé, serviços ou rua…" value="${esc(filtro.q)}" autocomplete="off">
+          <button type="button" class="btn-limpar-q" id="bt-limpar-filtros" ${todasAtivo ? "hidden" : ""}>Limpar</button>
+        </div>
+      </div>
+
+      <div class="filtros-rapidos" role="group" aria-label="Filtros rápidos de lojas">
+        <button type="button" class="chip chip-quick" id="bt-filtro-todas" data-quick="todas" aria-pressed="${todasAtivo}">Todas</button>
+        <button type="button" class="chip chip-quick" data-nec="degrau" aria-pressed="${filtro.nec === "degrau"}">Sem degraus / Rampa</button>
+        <button type="button" class="chip chip-quick" data-nec="prioritario" aria-pressed="${filtro.nec === "prioritario"}">Atendimento prioritário</button>
+        <button type="button" class="chip chip-quick" data-nec="cao_guia" aria-pressed="${filtro.nec === "cao_guia"}">Aceita cão-guia</button>
+        <button type="button" class="chip chip-quick" id="bt-filtro-aberto" data-aberto="true" aria-pressed="${filtro.abertoAgora}">Aberto agora</button>
+        <button type="button" class="chip chip-mais" id="bt-mais-filtros" aria-expanded="${maisFiltrosAberto}" aria-controls="painel-mais-filtros">
+          ${ICO_SLIDERS} <span>Mais filtros</span>
+        </button>
+      </div>
+
+      <div id="painel-mais-filtros" class="filtros-avancados" ${maisFiltrosAberto ? "" : "hidden"}>
+        <fieldset class="chips">
+          <legend>Categorias</legend>
+          ${D.categorias
+            .map(
+              (c) =>
+                `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${filtro.cat === c}">${esc(c)}</button>`
+            )
+            .join("")}
+        </fieldset>
+        <fieldset class="chips">
+          <legend>Outras condições físicas e atitudinais (mantém itens desconhecidos visíveis)</legend>
+          ${[...necFisicas, ...necAtitudinais]
+            .filter((n) => !["degrau", "prioritario", "cao_guia"].includes(n.tipo))
+            .map(
+              (n) =>
+                `<button type="button" class="chip" data-nec="${esc(n.tipo)}" aria-pressed="${filtro.nec === n.tipo}">${esc(n.rot)}</button>`
+            )
+            .join("")}
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="secao-lojas" aria-labelledby="tit-busca">
+      <div class="secao-lojas-head">
+        <h2 id="tit-busca">Estabelecimentos no Centro</h2>
+        <p class="contador" id="contador" role="status" aria-live="polite" aria-atomic="true"></p>
+      </div>
+      ${renderRadarBar()}
+      <div class="grid" id="lista"></div>
+    </section>
 
     <section class="tema" aria-labelledby="tema-tit">
-      <span class="kicker">Tema da semana · a partir de ${fmtData(t.semana_inicio)}</span>
+      <span class="kicker">Tema cultural da semana · a partir de ${fmtData(t.semana_inicio)}</span>
       <h2 id="tema-tit"><span aria-hidden="true">${t.icone}</span> ${esc(t.titulo)}</h2>
       <p>${esc(t.texto)}</p>
       <div class="tema-lugares">
@@ -755,63 +851,64 @@
       </div>
     </section>
 
-    <section aria-labelledby="tit-busca">
-      <h2 id="tit-busca">Negócios e filtros de acesso</h2>
-      ${renderRadarBar()}
-      <div class="controles">
-        <div class="busca" role="search" aria-label="Buscar negócios no Centro">
-          <label for="q">Buscar negócio, produto ou serviço</label>
-          <div class="busca-linha">
-            <input id="q" type="search" placeholder="Ex.: café, cordel, acarajé, chaves…" value="${esc(filtro.q)}" autocomplete="off">
-            <button type="button" class="btn sec" id="bt-limpar-filtros">Limpar filtros</button>
-          </div>
-        </div>
-        <fieldset class="chips">
-          <legend>Filtrar por categoria</legend>
-          ${D.categorias
-            .map(
-              (c) =>
-                `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${filtro.cat === c}">${esc(c)}</button>`
-            )
-            .join("")}
-        </fieldset>
-        <fieldset class="chips">
-          <legend>Acessibilidade física (mantém itens desconhecidos visíveis)</legend>
-          ${necFisicas
-            .map(
-              (n) =>
-                `<button type="button" class="chip" data-nec="${esc(n.tipo)}" aria-pressed="${filtro.nec === n.tipo}">${esc(n.rot)}</button>`
-            )
-            .join("")}
-        </fieldset>
-        <fieldset class="chips">
-          <legend>Acessibilidade atitudinal e comunicacional — leis vigentes (mantém desconhecidos)</legend>
-          ${necAtitudinais
-            .map(
-              (n) =>
-                `<button type="button" class="chip" data-nec="${esc(n.tipo)}" aria-pressed="${filtro.nec === n.tipo}">${esc(n.rot)}</button>`
-            )
-            .join("")}
-        </fieldset>
-      </div>
-      <p class="contador" id="contador" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div class="grid" id="lista"></div>
-    </section>
-
     ${renderIndiceCidadao()}`;
 
     const q = document.getElementById("q");
+    const btLimpar = document.getElementById("bt-limpar-filtros");
+    const btTodas = document.getElementById("bt-filtro-todas");
+    const btAberto = document.getElementById("bt-filtro-aberto");
+    const btMais = document.getElementById("bt-mais-filtros");
+    const painelMais = document.getElementById("painel-mais-filtros");
+
+    function sincronizarBotoesFiltro() {
+      const ativo = filtrosAtivos();
+      if (btTodas) btTodas.setAttribute("aria-pressed", String(!ativo));
+      if (btLimpar) btLimpar.hidden = !ativo;
+      if (btAberto) btAberto.setAttribute("aria-pressed", String(filtro.abertoAgora));
+      $app.querySelectorAll("[data-cat]").forEach((x) => {
+        x.setAttribute("aria-pressed", String(filtro.cat === x.dataset.cat));
+      });
+      $app.querySelectorAll("[data-nec]").forEach((x) => {
+        x.setAttribute("aria-pressed", String(filtro.nec === x.dataset.nec));
+      });
+    }
+
     q.addEventListener("input", () => {
       filtro.q = q.value;
+      sincronizarBotoesFiltro();
       desenharLista(t);
     });
+
+    if (btTodas) {
+      btTodas.addEventListener("click", () => {
+        filtro = { q: "", cat: null, nec: null, abertoAgora: false };
+        q.value = "";
+        sincronizarBotoesFiltro();
+        desenharLista(t);
+        anunciar("Mostrando todos os estabelecimentos.");
+      });
+    }
+
+    if (btAberto) {
+      btAberto.addEventListener("click", () => {
+        filtro.abertoAgora = !filtro.abertoAgora;
+        sincronizarBotoesFiltro();
+        desenharLista(t);
+      });
+    }
+
+    if (btMais && painelMais) {
+      btMais.addEventListener("click", () => {
+        maisFiltrosAberto = !maisFiltrosAberto;
+        btMais.setAttribute("aria-expanded", String(maisFiltrosAberto));
+        painelMais.hidden = !maisFiltrosAberto;
+      });
+    }
 
     $app.querySelectorAll("[data-cat]").forEach((b) => {
       b.addEventListener("click", () => {
         filtro.cat = filtro.cat === b.dataset.cat ? null : b.dataset.cat;
-        $app.querySelectorAll("[data-cat]").forEach((x) => {
-          x.setAttribute("aria-pressed", String(filtro.cat === x.dataset.cat));
-        });
+        sincronizarBotoesFiltro();
         desenharLista(t);
       });
     });
@@ -819,9 +916,7 @@
     $app.querySelectorAll("[data-nec]").forEach((b) => {
       b.addEventListener("click", () => {
         filtro.nec = filtro.nec === b.dataset.nec ? null : b.dataset.nec;
-        $app.querySelectorAll("[data-nec]").forEach((x) => {
-          x.setAttribute("aria-pressed", String(filtro.nec === x.dataset.nec));
-        });
+        sincronizarBotoesFiltro();
         desenharLista(t);
       });
     });
@@ -829,9 +924,12 @@
     $app.querySelectorAll("[data-filtrar-indice]").forEach((b) => {
       b.addEventListener("click", () => {
         filtro.nec = b.dataset.filtrarIndice;
-        $app.querySelectorAll("[data-nec]").forEach((x) => {
-          x.setAttribute("aria-pressed", String(filtro.nec === x.dataset.nec));
-        });
+        if (!["degrau", "prioritario", "cao_guia"].includes(filtro.nec) && painelMais) {
+          maisFiltrosAberto = true;
+          painelMais.hidden = false;
+          if (btMais) btMais.setAttribute("aria-expanded", "true");
+        }
+        sincronizarBotoesFiltro();
         desenharLista(t);
         const alvo = document.querySelector(`[data-nec="${filtro.nec}"]`);
         if (alvo) {
@@ -841,12 +939,10 @@
       });
     });
 
-    document.getElementById("bt-limpar-filtros").addEventListener("click", () => {
-      filtro = { q: "", cat: null, nec: null };
+    btLimpar.addEventListener("click", () => {
+      filtro = { q: "", cat: null, nec: null, abertoAgora: false };
       q.value = "";
-      $app.querySelectorAll("[data-cat], [data-nec]").forEach((x) => {
-        x.setAttribute("aria-pressed", "false");
-      });
+      sincronizarBotoesFiltro();
       desenharLista(t);
       anunciar("Busca e filtros limpos.");
       q.focus();
@@ -884,54 +980,115 @@
     const sufixoRadar =
       radar.status === "ativo" && radar.origem
         ? radar.ordenar
-          ? " · ordenados do mais próximo"
-          : " · com distância offline ativa"
+          ? " · por proximidade"
+          : " · com distância ativa"
         : "";
-    $cont.textContent = `${res.length} de ${D.negocios.length} negócios encontrados${sufixoRadar}`;
+    $cont.textContent = `${res.length} de ${D.negocios.length} locais${sufixoRadar}`;
 
     if (!res.length) {
       $l.innerHTML = `<div class="vazio" style="grid-column:1/-1">
-        <p><strong>Nenhum negócio encontrado.</strong></p>
-        <p>Tente outro termo ou limpe os filtros para ver todos os lugares.</p>
-        <button type="button" class="btn sec" id="limpar-vazio">Limpar busca e filtros</button>
+        <p><strong>Nenhum estabelecimento encontrado com estes filtros.</strong></p>
+        <p>Tente outro termo ou toque em limpar para ver todos os locais do Centro.</p>
+        <button type="button" class="btn sec" id="limpar-vazio">Ver todos os locais</button>
       </div>`;
       document.getElementById("limpar-vazio").addEventListener("click", () => {
-        filtro = { q: "", cat: null, nec: null };
+        filtro = { q: "", cat: null, nec: null, abertoAgora: false };
         telaInicio("#q");
         anunciar("Busca e filtros limpos.");
       });
       return;
     }
 
+    const lojasSalvas = ler(KEY.lojas, []);
+
     $l.innerHTML = res
       .map((n) => {
-        let selo = "";
+        const salva = lojasSalvas.includes(n.id);
+        const statusHorario = C.estaAbertoAgora(n.horario_informado);
+        const seloStatus = statusHorario
+          ? `<span class="status-pill ${statusHorario.aberto ? "aberto" : "fechado"}"><span aria-hidden="true">${statusHorario.aberto ? "●" : "○"}</span> ${esc(statusHorario.rotulo)}</span>`
+          : "";
+
+        let seloFiltro = "";
         if (nec) {
           const a = acessoDe(n.id).find((x) => x.tipo === nec.tipo);
-          if (a) selo = `<div>${estadoBadge(a.estado, nec.rot)}</div>`;
+          if (a && a.estado === "desconhecido") {
+            seloFiltro = `<div class="card-aviso-desc">${estadoBadge(a.estado, nec.rot)}</div>`;
+          }
         }
+
         const dist = distanciaParaNegocio(n);
         const seloDist =
           dist !== null
             ? `<span class="dist-selo" aria-label="Distância em linha reta: ${esc(C.formatarDistancia(dist))}, ${esc(C.estimarCaminhada(dist))}">${ICO_DIST} <span>${esc(C.formatarDistancia(dist))}</span></span>`
             : "";
-        return `<article class="card" aria-labelledby="card-tit-${esc(n.id)}">
-          <div class="card-topo">
-            <div class="ic" aria-hidden="true">${n.icone}</div>
-            ${seloDist}
+
+        const destaques = C.destaquesAcessoNegocio(D, n.id).slice(0, 4);
+        const blocoDestaques = destaques.length
+          ? `<ul class="card-acesso-lista" aria-label="Condições de acesso observadas em ${esc(n.nome)}">
+              ${destaques
+                .map(
+                  (d) =>
+                    `<li class="acesso-tag">${ICO_CHECK} <span>${esc(d.rotulo)}</span></li>`
+                )
+                .join("")}
+            </ul>`
+          : `<p class="meta card-sem-destaque">Consulte a ficha para detalhes de acesso.</p>`;
+
+        return `<article class="card loja-card" aria-labelledby="card-tit-${esc(n.id)}">
+          <div class="card-head">
+            <span class="card-cat">${esc(n.categoria)}</span>
+            <div class="card-head-dir">
+              ${seloStatus}
+              ${seloDist}
+            </div>
           </div>
-          <div>
-            <span class="tag">${esc(n.categoria)}</span>
-            ${negocioNoTema(n.id, t) ? `<span class="tag tema-tag">Tema da semana</span>` : ""}
+
+          <div class="card-body">
+            <h3 id="card-tit-${esc(n.id)}" class="card-nome">
+              <span class="card-ico-inline" aria-hidden="true">${n.icone}</span>
+              <span>${esc(n.nome)}</span>
+            </h3>
+            <p class="card-end">
+              ${ICO_DIST}
+              <span><span class="sr-only">Endereço ou referência: </span>${esc(n.referencia_local)}</span>
+            </p>
+            <p class="card-hor">
+              ${ICO_CLOCK}
+              <span><span class="sr-only">Horário informado: </span>${esc(n.horario_informado)}</span>
+            </p>
+            ${blocoDestaques}
+            ${seloFiltro}
           </div>
-          <h3 id="card-tit-${esc(n.id)}">${esc(n.nome)}</h3>
-          <p class="meta"><span aria-hidden="true">📍</span> <span class="sr-only">Referência: </span>${esc(n.referencia_local)}</p>
-          <p class="meta"><span aria-hidden="true">🕒</span> <span class="sr-only">Horário: </span>${esc(n.horario_informado)} <em>(informado)</em></p>
-          ${selo}
-          <a class="btn" href="#negocio-${esc(n.id)}">Ver ficha <span class="sr-only">de ${esc(n.nome)}</span></a>
+
+          <div class="card-foot">
+            <a class="btn card-btn-detalhes" href="#negocio-${esc(n.id)}">Ver detalhes <span class="sr-only">de ${esc(n.nome)}</span></a>
+            <button type="button" class="btn sec card-btn-roteiro${salva ? " no-roteiro" : ""}" data-card-roteiro="${esc(n.id)}" aria-pressed="${salva}" aria-label="${salva ? `Remover ${esc(n.nome)} do meu roteiro` : `Adicionar ${esc(n.nome)} ao meu roteiro`}">
+              <span aria-hidden="true">${salva ? "✓" : "+"}</span> <span>${salva ? "No roteiro" : "Roteiro"}</span>
+            </button>
+          </div>
         </article>`;
       })
       .join("");
+
+    $l.querySelectorAll("[data-card-roteiro]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idLoja = btn.dataset.cardRoteiro;
+        const salvoAgora = alternarLoja(idLoja, null, true);
+        if (typeof salvoAgora === "boolean") {
+          const n = negocio(idLoja);
+          btn.classList.toggle("no-roteiro", salvoAgora);
+          btn.setAttribute("aria-pressed", String(salvoAgora));
+          btn.setAttribute(
+            "aria-label",
+            salvoAgora
+              ? `Remover ${n ? n.nome : "loja"} do meu roteiro`
+              : `Adicionar ${n ? n.nome : "loja"} ao meu roteiro`
+          );
+          btn.innerHTML = `<span aria-hidden="true">${salvoAgora ? "✓" : "+"}</span> <span>${salvoAgora ? "No roteiro" : "Roteiro"}</span>`;
+        }
+      });
+    });
   }
 
   // ---------- tela: ficha do negócio ----------
@@ -1152,25 +1309,32 @@
     }
   }
 
-  function alternarLoja(id, focoSeletor) {
+  function alternarLoja(id, focoSeletor, semRotear) {
     let l = ler(KEY.lojas, []);
     const n = negocio(id);
     const nome = n ? n.nome : "Loja";
+    let salva = false;
     if (l.includes(id)) {
       l = l.filter((x) => x !== id);
       gravar(KEY.lojas, l);
-      anunciar(`${nome} removida das lojas salvas.`);
+      salva = false;
+      anunciar(`${nome} removida do seu roteiro.`);
     } else if (l.length >= LIM_LOJAS) {
       vibrar("erro");
-      anunciar(`Limite de ${LIM_LOJAS} lojas salvas atingido. Remova uma em Favoritos.`, true);
-      return;
+      anunciar(`Limite de ${LIM_LOJAS} lojas no roteiro atingido. Remova uma em Meu Roteiro.`, true);
+      return null;
     } else {
       l.push(id);
       gravar(KEY.lojas, l);
+      salva = true;
       vibrar("sucesso");
-      anunciar(`${nome} salva! Veja em Favoritos.`);
+      anunciar(`${nome} adicionada ao seu roteiro!`);
     }
-    rotear(focoSeletor);
+    atualizarIndicadoresRoteiro();
+    if (!semRotear) {
+      rotear(focoSeletor);
+    }
+    return salva;
   }
 
   function alternarItem(id, focoSeletor) {
@@ -1253,20 +1417,38 @@
     }
   }
 
-  // ---------- tela: favoritos ----------
+  // ---------- tela: meu roteiro / favoritos ----------
   function telaFavoritos(focoSeletor) {
-    definirTitulo("Favoritos");
+    definirTitulo("Meu Roteiro");
     const fi = ler(KEY.itens, []).filter((f) => D.itens.some((i) => i.id === f.item_id));
     const fl = ler(KEY.lojas, []).filter((id) => negocio(id));
 
     $app.innerHTML = `
-    <h1>Favoritos</h1>
-    <p class="meta">Salvos apenas neste aparelho, sem conta e sem envio de dados.</p>
+    <h1>Meu Roteiro</h1>
+    <p class="meta">Suas lojas e itens salvos ficam apenas neste aparelho, prontos para usar offline ou exportar.</p>
     <div class="acoes">
       <button type="button" class="btn" id="bt-exp-fav">
-        <span aria-hidden="true">📄</span> Exportar Roteiro Offline (PDF / Impressão / WhatsApp)
+        <span aria-hidden="true">📄</span> Exportar para WhatsApp / PDF
       </button>
+      <a class="btn sec" href="#anotacoes"><span aria-hidden="true">✎</span> Minhas anotações e dúvidas</a>
     </div>
+
+    <section aria-labelledby="tit-fav-lojas">
+      <h2 id="tit-fav-lojas" tabindex="-1">Lojas no roteiro (${fl.length}/${LIM_LOJAS})</h2>
+      ${
+        fl.length
+          ? `<ul class="lista">${fl
+              .map((id) => {
+                const n = negocio(id);
+                return `<li>
+                  <span><span aria-hidden="true">${n.icone}</span> <a href="#negocio-${esc(n.id)}"><strong>${esc(n.nome)}</strong></a> <span class="meta">— <span aria-hidden="true">🕒</span> ${esc(n.horario_informado)}</span></span>
+                  <button type="button" class="btn sec peq" data-rm-loja="${esc(n.id)}" aria-label="Remover ${esc(n.nome)} do meu roteiro">Remover</button>
+                </li>`;
+              })
+              .join("")}</ul>`
+          : `<p class="vazio">Nenhuma loja adicionada ainda. Na vitrine, toque em “+ Roteiro” nas lojas que deseja visitar.</p>`
+      }
+    </section>
 
     <section aria-labelledby="tit-fav-itens">
       <h2 id="tit-fav-itens" tabindex="-1">Itens favoritos (${fi.length}/${LIM_ITENS})</h2>
@@ -1283,23 +1465,6 @@
               })
               .join("")}</ul>`
           : `<p class="vazio">Nenhum item favorito ainda. Abra um item e toque em “Favoritar item”.</p>`
-      }
-    </section>
-
-    <section aria-labelledby="tit-fav-lojas">
-      <h2 id="tit-fav-lojas" tabindex="-1">Lojas salvas (${fl.length}/${LIM_LOJAS})</h2>
-      ${
-        fl.length
-          ? `<ul class="lista">${fl
-              .map((id) => {
-                const n = negocio(id);
-                return `<li>
-                  <span><span aria-hidden="true">${n.icone}</span> <a href="#negocio-${esc(n.id)}"><strong>${esc(n.nome)}</strong></a> <span class="meta">— <span aria-hidden="true">🕒</span> ${esc(n.horario_informado)}</span></span>
-                  <button type="button" class="btn sec peq" data-rm-loja="${esc(n.id)}" aria-label="Remover ${esc(n.nome)} das lojas salvas">Remover</button>
-                </li>`;
-              })
-              .join("")}</ul>`
-          : `<p class="vazio">Nenhuma loja salva ainda.</p>`
       }
     </section>`;
 
@@ -1758,6 +1923,7 @@
               localStorage.removeItem(k);
             } catch (_e) {}
           });
+          atualizarIndicadoresRoteiro();
           vibrar("sucesso");
           anunciar("Dados locais apagados com sucesso.");
         },
@@ -1949,11 +2115,13 @@
     return m[2] === "acesso";
   }
 
-  // ---------- navegação móvel e barra rápida responsiva ----------
+  // ---------- navegação móvel e popover compacto de acessibilidade ----------
   const $btMenuMobile = document.getElementById("bt-menu-mobile");
   const $menuPrincipal = document.getElementById("menu-principal");
   const $btToggleA11y = document.getElementById("bt-toggle-a11y");
-  const $barraAtalhos = document.getElementById("barra-atalhos");
+  const $popoverA11y = document.getElementById("popover-a11y");
+  const $btFecharA11y = document.getElementById("bt-fechar-a11y");
+  const $linkDeclaracaoA11y = document.getElementById("link-declaracao-a11y");
 
   function definirMenuMobile(aberto) {
     if (!$btMenuMobile || !$menuPrincipal) return;
@@ -1963,22 +2131,21 @@
       "aria-label",
       aberto ? "Fechar menu de navegação" : "Abrir menu de navegação"
     );
-    if (aberto) definirBarraA11yMobile(false);
+    if (aberto) definirPopoverA11y(false);
   }
 
-  function definirBarraA11yMobile(aberta) {
-    if (!$btToggleA11y || !$barraAtalhos) return;
-    $barraAtalhos.classList.toggle("a11y-aberta", aberta);
-    $btToggleA11y.setAttribute("aria-expanded", String(aberta));
+  function definirPopoverA11y(aberto) {
+    if (!$btToggleA11y || !$popoverA11y) return;
+    $popoverA11y.hidden = !aberto;
+    $btToggleA11y.setAttribute("aria-expanded", String(aberto));
     $btToggleA11y.setAttribute(
       "aria-label",
-      aberta
-        ? "Fechar preferências rápidas de acessibilidade"
-        : "Abrir preferências rápidas de acessibilidade"
+      aberto ? "Fechar opções de acessibilidade" : "Abrir opções de acessibilidade"
     );
-    if (aberta) {
+    if (aberto) {
       definirMenuMobile(false);
-      if (window.scrollY > 40) window.scrollTo({ top: 0 });
+      const primeiro = $popoverA11y.querySelector("#bt-contraste");
+      if (primeiro) primeiro.focus();
     }
   }
 
@@ -1992,21 +2159,32 @@
     });
   }
 
-  if ($btToggleA11y && $barraAtalhos) {
+  if ($btToggleA11y && $popoverA11y) {
     $btToggleA11y.addEventListener("click", () => {
       const proximo = $btToggleA11y.getAttribute("aria-expanded") !== "true";
-      definirBarraA11yMobile(proximo);
+      definirPopoverA11y(proximo);
     });
+  }
+
+  if ($btFecharA11y) {
+    $btFecharA11y.addEventListener("click", () => {
+      definirPopoverA11y(false);
+      if ($btToggleA11y) $btToggleA11y.focus();
+    });
+  }
+
+  if ($linkDeclaracaoA11y) {
+    $linkDeclaracaoA11y.addEventListener("click", () => definirPopoverA11y(false));
   }
 
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
-    if ($btMenuMobile && $btMenuMobile.getAttribute("aria-expanded") === "true") {
+    if ($btToggleA11y && $btToggleA11y.getAttribute("aria-expanded") === "true") {
+      definirPopoverA11y(false);
+      $btToggleA11y.focus();
+    } else if ($btMenuMobile && $btMenuMobile.getAttribute("aria-expanded") === "true") {
       definirMenuMobile(false);
       $btMenuMobile.focus();
-    } else if ($btToggleA11y && $btToggleA11y.getAttribute("aria-expanded") === "true") {
-      definirBarraA11yMobile(false);
-      $btToggleA11y.focus();
     }
   });
 
@@ -2019,6 +2197,15 @@
     ) {
       definirMenuMobile(false);
     }
+    if (
+      $btToggleA11y &&
+      $popoverA11y &&
+      $btToggleA11y.getAttribute("aria-expanded") === "true" &&
+      !$popoverA11y.contains(e.target) &&
+      !$btToggleA11y.contains(e.target)
+    ) {
+      definirPopoverA11y(false);
+    }
   });
 
   if (window.matchMedia) {
@@ -2026,7 +2213,6 @@
     const limparDrawersDesktop = (ev) => {
       if (ev.matches) {
         definirMenuMobile(false);
-        definirBarraA11yMobile(false);
       }
     };
     if (typeof mqDesktop.addEventListener === "function") {
@@ -2036,6 +2222,7 @@
 
   window.addEventListener("hashchange", () => {
     definirMenuMobile(false);
+    definirPopoverA11y(false);
     pararVoz(true);
     const h = location.hash.slice(1);
     if (h === "conteudo" || h === "menu-principal" || h === "rodape") {
@@ -2216,6 +2403,7 @@
     const erros = C.validarDados(D);
     if (erros.length) throw new Error(erros.join("\n"));
     aplicarA11y();
+    atualizarIndicadoresRoteiro();
     rotear();
   } catch (e) {
     aplicarA11y();

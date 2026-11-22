@@ -203,3 +203,47 @@ test('curadoria colaborativa valida contato obrigatório para lojista, permite a
   const aprovada = core.aprovarRegistroCuradoria([cidadaoAnonimo.registro], cidadaoAnonimo.registro.id);
   assert.equal(aprovada[0].status, 'aprovado');
 });
+
+test('estaAbertoAgora, destaquesAcessoNegocio e contraste dos novos selos funcionam corretamente', () => {
+  const dados = carregarDados();
+
+  // Contraste AAA dos novos selos de status aberto/fechado
+  assert.ok(core.razaoContraste('#0a522d', '#e7f6ee') >= 7, 'selo Aberto agora deve ser AAA >= 7:1');
+  assert.ok(core.razaoContraste('#363b42', '#f0f2f5') >= 7, 'selo Fechado agora deve ser AAA >= 7:1');
+
+  // Quarta-feira às 15h30: n1 (Seg-Sáb 7-18), n2 (Ter-Sáb 9-17), n3 (Seg-Sex 15-20), n4 (Qua-Dom 14-21), n5 (Seg-Sex 8-17) todos abertos
+  const qua1530 = new Date(2026, 10, 18, 15, 30); // Quarta-feira
+  assert.equal(core.estaAbertoAgora('Seg a Sáb, 7h às 18h', qua1530).aberto, true);
+  assert.equal(core.estaAbertoAgora('Qua a Dom, 14h às 21h', qua1530).aberto, true);
+
+  // Domingo às 10h00: todos fechados (n4 abre às 14h)
+  const dom1000 = new Date(2026, 10, 22, 10, 0); // Domingo
+  assert.equal(core.estaAbertoAgora('Seg a Sáb, 7h às 18h', dom1000).aberto, false);
+  assert.equal(core.estaAbertoAgora('Qua a Dom, 14h às 21h', dom1000).aberto, false);
+
+  // Domingo às 16h00: somente Casa do Sanfoneiro (n4) aberta
+  const dom1600 = new Date(2026, 10, 22, 16, 0);
+  const abertasDom = core.filtrarNegocios(dados, { q: '', cat: null, nec: null, abertoAgora: true }, 't2', dom1600);
+  assert.deepEqual(Array.from(abertasDom, (n) => n.id), ['n4']);
+
+  // Filtro Sem degraus / Rampa inclui nível (n1, n3, n5) e rampa curta (n4), ocultando degrau sem rampa (n2)
+  const semDegrau = core.filtrarNegocios(dados, { q: '', cat: null, nec: 'degrau', abertoAgora: false }, 't2');
+  const idsSemDegrau = semDegrau.map((n) => n.id);
+  assert.ok(idsSemDegrau.includes('n1'));
+  assert.ok(idsSemDegrau.includes('n4'));
+  assert.ok(!idsSemDegrau.includes('n2'));
+
+  // Destaques visuais de acesso usam rótulos factuais sem usar "acessível"
+  const destaquesN1 = core.destaquesAcessoNegocio(dados, 'n1').map((d) => d.rotulo);
+  assert.ok(destaquesN1.includes('Acesso em nível'));
+  assert.ok(destaquesN1.includes('Cão-guia bem-vindo'));
+  assert.ok(destaquesN1.includes('Atendimento prioritário'));
+
+  // index.html contém popover de acessibilidade, barra flutuante de roteiro e aviso movido ao rodapé
+  const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  assert.match(html, /id="popover-a11y"/);
+  assert.match(html, /id="barra-roteiro"/);
+  assert.match(html, /id="nav-roteiro-count"/);
+  assert.ok(!html.includes('<aside class="aviso"'), 'aviso jurídico longo não deve poluir o topo do main');
+});
+

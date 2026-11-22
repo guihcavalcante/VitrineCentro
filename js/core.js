@@ -143,10 +143,121 @@
     return erros;
   }
 
-  function filtrarNegocios(dados, filtro, temaId) {
+  const DIAS_SEMANA = {
+    dom: 0,
+    seg: 1,
+    ter: 2,
+    qua: 3,
+    qui: 4,
+    sex: 5,
+    sab: 6,
+  };
+
+  function estaAbertoAgora(horarioInformado, dataRef) {
+    const raw = String(horarioInformado || "").trim();
+    if (!raw) return null;
+    const agora = dataRef instanceof Date ? dataRef : new Date();
+    const diaAtual = agora.getDay();
+    const minAtual = agora.getHours() * 60 + agora.getMinutes();
+
+    const segmentos = raw.split(/[·;]/).map((s) => s.trim()).filter(Boolean);
+    let algumValido = false;
+
+    for (const seg of segmentos) {
+      const limpo = norm(seg);
+      const mHora = limpo.match(/(\d{1,2})h(\d{2})?\s*(?:as|a|-)\s*(\d{1,2})h(\d{2})?/);
+      if (!mHora) continue;
+
+      const iniMin = Number(mHora[1]) * 60 + Number(mHora[2] || 0);
+      const fimMin = Number(mHora[3]) * 60 + Number(mHora[4] || 0);
+      const diasAtivos = new Set();
+
+      const mRange = limpo.match(/\b(dom|seg|ter|qua|qui|sex|sab)\s+a\s+(dom|seg|ter|qua|qui|sex|sab)\b/);
+      if (mRange) {
+        const dIni = DIAS_SEMANA[mRange[1]];
+        const dFim = DIAS_SEMANA[mRange[2]];
+        let d = dIni;
+        for (let step = 0; step < 7; step++) {
+          diasAtivos.add(d);
+          if (d === dFim) break;
+          d = (d + 1) % 7;
+        }
+      } else {
+        const matches = limpo.match(/\b(dom|seg|ter|qua|qui|sex|sab)\b/g);
+        if (matches) {
+          matches.forEach((tok) => diasAtivos.add(DIAS_SEMANA[tok]));
+        }
+      }
+
+      if (!diasAtivos.size) continue;
+      algumValido = true;
+
+      if (diasAtivos.has(diaAtual)) {
+        const aberto = fimMin >= iniMin
+          ? minAtual >= iniMin && minAtual < fimMin
+          : minAtual >= iniMin || minAtual < fimMin;
+        if (aberto) {
+          return { aberto: true, rotulo: "Aberto agora" };
+        }
+      }
+    }
+
+    if (!algumValido) return null;
+    return { aberto: false, rotulo: "Fechado agora" };
+  }
+
+  function destaquesAcessoNegocio(dados, negocioId) {
+    const attrs = (dados.atributos_acesso || []).filter((a) => a.negocio_id === negocioId);
+    const porTipo = new Map(attrs.map((a) => [a.tipo, a]));
+    const tags = [];
+
+    const deg = porTipo.get("degrau");
+    if (deg) {
+      if (deg.estado === "nao_observado") {
+        tags.push({ tipo: "degrau", rotulo: "Acesso em nível" });
+      } else if (deg.estado === "observado" && norm(deg.descricao).includes("rampa")) {
+        tags.push({ tipo: "degrau", rotulo: "Rampa na entrada" });
+      }
+    }
+
+    const cao = porTipo.get("cao_guia");
+    if (cao && cao.estado === "observado") {
+      tags.push({ tipo: "cao_guia", rotulo: "Cão-guia bem-vindo" });
+    }
+
+    const prio = porTipo.get("prioritario");
+    if (prio && prio.estado === "observado") {
+      tags.push({ tipo: "prioritario", rotulo: "Atendimento prioritário" });
+    }
+
+    const banh = porTipo.get("banheiro");
+    if (banh && banh.estado === "observado") {
+      tags.push({ tipo: "banheiro", rotulo: "Banheiro adaptado" });
+    }
+
+    const braille = porTipo.get("braille");
+    if (braille && braille.estado === "observado") {
+      tags.push({ tipo: "braille", rotulo: "Cardápio em Braille" });
+    }
+
+    const libras = porTipo.get("atendimento");
+    if (libras && libras.estado === "observado") {
+      tags.push({ tipo: "atendimento", rotulo: "Atendimento em Libras" });
+    }
+
+    const rota = porTipo.get("rota");
+    if (rota && rota.estado === "observado" && norm(rota.descricao).includes("piso tatil")) {
+      tags.push({ tipo: "rota", rotulo: "Piso tátil" });
+    }
+
+    return tags;
+  }
+
+  function filtrarNegocios(dados, filtro, temaId, dataRef) {
     const termo = norm((filtro && filtro.q ? filtro.q : "").trim());
     const cat = filtro && filtro.cat ? filtro.cat : null;
     const necTipo = filtro && filtro.nec ? filtro.nec : null;
+    const abertoAgora = Boolean(filtro && filtro.abertoAgora);
     const nec = NECESSIDADES.find((n) => n.tipo === necTipo) || null;
 
     const itensDe = (id) => dados.itens.filter((i) => i.negocio_id === id && i.ativo);
@@ -156,6 +267,10 @@
 
     const res = dados.negocios.filter((n) => {
       if (cat && n.categoria !== cat) return false;
+      if (abertoAgora) {
+        const status = estaAbertoAgora(n.horario_informado, dataRef);
+        if (!status || !status.aberto) return false;
+      }
       if (termo) {
         const alvo = norm(
           [
@@ -169,8 +284,9 @@
       }
       if (nec) {
         const a = acessoDe(n.id).find((x) => x.tipo === nec.tipo);
+        const temRampa = nec.tipo === "degrau" && a && a.estado === "observado" && norm(a.descricao).includes("rampa");
         // Regra do A4: nunca ocultar o estado "desconhecido"
-        if (!a || !(nec.ok(a) || a.estado === "desconhecido")) return false;
+        if (!a || !(nec.ok(a) || temRampa || a.estado === "desconhecido")) return false;
       }
       return true;
     });
@@ -552,6 +668,8 @@
     normalizarA11y,
     ajustarEscalaFonte,
     validarDados,
+    estaAbertoAgora,
+    destaquesAcessoNegocio,
     filtrarNegocios,
     calcularIndiceCidadao,
     gerarTextoRoteiro,

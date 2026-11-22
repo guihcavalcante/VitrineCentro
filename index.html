@@ -7,6 +7,9 @@
 <meta name="description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
 <meta property="og:title" content="VitrineCentro — protótipo integrado">
 <meta property="og:description" content="Vitrine web de pequenos negócios do Centro com condições de acesso campo a campo e tema cultural da semana.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/estilo.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8f3808">
@@ -14,75 +17,105 @@
 <link rel="apple-touch-icon" href="./icon-512.png">
 </head>
 <body>
-<nav class="barra-atalhos" id="barra-atalhos" aria-label="Atalhos de acessibilidade e navegação rápida">
-  <div class="wrap barra-atalhos-inner">
-    <ul class="skip-lista">
-      <li><a class="skip-link" href="#conteudo" accesskey="1">Ir para o conteúdo <kbd aria-hidden="true">1</kbd></a></li>
-      <li><a class="skip-link" href="#menu-principal" accesskey="2">Ir para o menu <kbd aria-hidden="true">2</kbd></a></li>
-      <li><a class="skip-link" href="#busca-atalho" id="atalho-busca" accesskey="3">Ir para a busca <kbd aria-hidden="true">3</kbd></a></li>
-      <li><a class="skip-link" href="#rodape" accesskey="4">Ir para o rodapé <kbd aria-hidden="true">4</kbd></a></li>
-    </ul>
-    <div class="a11y" id="barra-a11y-controles" role="group" aria-label="Preferências de acessibilidade">
-      <button type="button" id="bt-contraste" aria-pressed="false" accesskey="c">Alto contraste</button>
-      <button type="button" id="bt-fonte-menos" aria-label="Diminuir tamanho do texto">A−</button>
-      <button type="button" id="bt-fonte-mais" aria-label="Aumentar tamanho do texto">A+</button>
-      <button type="button" id="bt-espacamento" aria-pressed="false">Espaçamento</button>
-      <button type="button" id="bt-animacao" aria-pressed="false">Sem animações</button>
-    </div>
-  </div>
+<nav class="skip-nav" id="barra-atalhos" aria-label="Atalhos de navegação por teclado">
+  <ul class="skip-lista">
+    <li><a class="skip-link" href="#conteudo" accesskey="1">Ir para o conteúdo <kbd aria-hidden="true">1</kbd></a></li>
+    <li><a class="skip-link" href="#menu-principal" accesskey="2">Ir para o menu <kbd aria-hidden="true">2</kbd></a></li>
+    <li><a class="skip-link" href="#busca-atalho" id="atalho-busca" accesskey="3">Ir para a busca <kbd aria-hidden="true">3</kbd></a></li>
+    <li><a class="skip-link" href="#rodape" accesskey="4">Ir para o rodapé <kbd aria-hidden="true">4</kbd></a></li>
+  </ul>
 </nav>
 
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="#inicio" aria-label="VitrineCentro — página inicial">
-      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img" width="42" height="42">
+      <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img" width="40" height="40">
       <span class="logo-texto">Vitrine<span class="logo-destaque">Centro</span></span>
     </a>
-    <div class="mobile-controles">
-      <button type="button" class="btn-header-toggle" id="bt-toggle-a11y" aria-expanded="false" aria-controls="barra-atalhos" aria-label="Abrir preferências rápidas de acessibilidade">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
-        <span class="toggle-lbl">Acessib.</span>
-      </button>
-      <button type="button" class="btn-header-toggle" id="bt-menu-mobile" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu de navegação">
+
+    <nav id="menu-principal" class="main" aria-label="Menu principal" tabindex="-1">
+      <a href="#inicio" data-r="inicio">Vitrine</a>
+      <a href="#favoritos" data-r="favoritos">Meu Roteiro <span class="nav-count" id="nav-roteiro-count" hidden>0</span></a>
+      <a href="#sugerir" data-r="sugerir">Colaborar</a>
+      <a href="#sobre" data-r="sobre">Sobre</a>
+    </nav>
+
+    <div class="header-acoes">
+      <div class="a11y-popover-wrap">
+        <button type="button" class="btn-a11y-trigger" id="bt-toggle-a11y" aria-expanded="false" aria-controls="popover-a11y" aria-haspopup="dialog" aria-label="Abrir opções de acessibilidade">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
+          <span class="a11y-trigger-lbl">Acessibilidade</span>
+        </button>
+
+        <div id="popover-a11y" class="popover-a11y" role="dialog" aria-labelledby="popover-a11y-tit" hidden>
+          <div class="popover-a11y-head">
+            <h2 id="popover-a11y-tit">Acessibilidade</h2>
+            <button type="button" class="popover-fechar" id="bt-fechar-a11y" aria-label="Fechar opções de acessibilidade">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="a11y popover-a11y-lista" id="barra-a11y-controles" role="group" aria-label="Preferências de acessibilidade">
+            <button type="button" id="bt-contraste" aria-pressed="false" accesskey="c">Alto contraste</button>
+            <div class="popover-fonte-row">
+              <span class="popover-fonte-lbl">Tamanho do texto</span>
+              <div class="popover-fonte-btns">
+                <button type="button" id="bt-fonte-menos" aria-label="Diminuir tamanho do texto">A−</button>
+                <button type="button" id="bt-fonte-mais" aria-label="Aumentar tamanho do texto">A+</button>
+              </div>
+            </div>
+            <button type="button" id="bt-espacamento" aria-pressed="false">Espaçamento de leitura</button>
+            <button type="button" id="bt-animacao" aria-pressed="false">Sem animações</button>
+          </div>
+          <a href="#acessibilidade" data-r="acessibilidade" accesskey="5" class="popover-a11y-link" id="link-declaracao-a11y">Mais ajustes, voz e atalhos →</a>
+        </div>
+      </div>
+
+      <button type="button" class="btn-header-toggle btn-menu-mobile" id="bt-menu-mobile" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu de navegação">
         <svg class="ico-menu-abrir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg class="ico-menu-fechar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         <span class="toggle-lbl">Menu</span>
       </button>
     </div>
-    <nav id="menu-principal" class="main" aria-label="Menu principal" tabindex="-1">
-      <a href="#inicio" data-r="inicio">Início</a>
-      <a href="#favoritos" data-r="favoritos">Favoritos</a>
-      <a href="#anotacoes" data-r="anotacoes">Anotações</a>
-      <a href="#sugerir" data-r="sugerir">Colaborar</a>
-      <a href="#sobre" data-r="sobre">Sobre os dados</a>
-      <a href="#acessibilidade" data-r="acessibilidade" accesskey="5">Acessibilidade</a>
-    </nav>
   </div>
 </header>
 
 <main id="conteudo" class="wrap" tabindex="-1">
-  <aside class="aviso" aria-label="Aviso importante sobre os dados">
-    <p><strong>Protótipo com dados fictícios.</strong> Negócios, horários, contatos e condições de acesso são exemplos de teste. As informações de acesso não são certificação nem garantia: confirme antes da visita.</p>
-  </aside>
-
   <div class="rodape-pwa">
-      <button type="button" id="bt-instalar-pwa" class="btn sec" hidden>
-        <span aria-hidden="true">📲</span> Instalar App Offline
-      </button>
+    <button type="button" id="bt-instalar-pwa" class="btn sec" hidden>
+      <span aria-hidden="true">📲</span> Instalar App Offline
+    </button>
   </div>
 
   <div id="app"></div>
 </main>
 
+<aside id="barra-roteiro" class="barra-roteiro" aria-label="Resumo do seu roteiro" hidden>
+  <div class="barra-roteiro-inner">
+    <div class="barra-roteiro-info">
+      <span class="barra-roteiro-icone" aria-hidden="true">🗺️</span>
+      <div class="barra-roteiro-texto">
+        <strong id="barra-roteiro-txt">0 lojas no seu roteiro</strong>
+        <a href="#favoritos" class="barra-roteiro-link">Ver roteiro</a>
+      </div>
+    </div>
+    <button type="button" id="bt-barra-exportar" class="btn barra-roteiro-btn" aria-label="Exportar roteiro para WhatsApp ou PDF">
+      <span class="btn-txt-full">Exportar para WhatsApp / PDF</span>
+      <span class="btn-txt-curto" aria-hidden="true">Exportar PDF/Zap</span>
+    </button>
+  </div>
+</aside>
+
 <footer id="rodape" class="rodape" tabindex="-1">
   <div class="wrap rodape-inner">
     <div class="rodape-marca">
       <img src="./icon-512.png" alt="" aria-hidden="true" class="logo-img logo-img-sm" width="32" height="32">
-      <p><strong>VitrineCentro</strong> — protótipo offline sem rastreamento, sem login e sem envio de dados.</p>
+      <p><strong>VitrineCentro</strong> — guia comercial offline do Centro, sem rastreamento e sem login.</p>
     </div>
+    <p class="meta"><strong>Nota sobre os dados:</strong> protótipo com negócios, horários, contatos e condições de acesso fictícios para demonstração. Os registros de acesso não constituem certificação — confirme antes da visita.</p>
     <p class="meta">Projetado segundo <strong>WCAG 2.2 (AA/AAA)</strong>, <strong>eMAG 3.1</strong>, <strong>LBI (Lei nº 13.146/2015)</strong>, <strong>Lei nº 11.126/2005 (Cão-Guia)</strong>, <strong>Lei nº 10.048/2000 (Prioridade)</strong> e <strong>ABNT NBR 17060</strong>.</p>
     <nav aria-label="Links do rodapé" class="rodape-nav">
       <a href="#acessibilidade">Declaração de Acessibilidade e Atalhos</a>
+      <a href="#anotacoes">Minhas Anotações</a>
       <a href="#sobre">Sobre os dados</a>
       <a href="#conteudo">Voltar ao topo</a>
     </nav>
