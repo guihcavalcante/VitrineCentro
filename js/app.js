@@ -2209,13 +2209,13 @@
 
         <div id="bloco-simples-loja">
           <div class="campo">
-            <label class="lbl" for="sug-estabelecimento">Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+            <label class="lbl" id="lbl-sug-estab" for="sug-estabelecimento">Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
             <input id="sug-estabelecimento" name="estabelecimento" type="text" class="campo-inp" maxlength="160" required aria-required="true" aria-describedby="erro-sug-estab" placeholder="Ex.: Café da Praça — Praça Fausto Cardoso, nº 42" value="${esc(estabInicial)}">
             <p id="erro-sug-estab" class="msg-erro" role="alert"></p>
           </div>
 
           <div class="campo">
-            <label class="lbl" for="sug-informacao">O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+            <label class="lbl" id="lbl-sug-info" for="sug-informacao">O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
             <textarea id="sug-informacao" name="informacao" maxlength="600" required aria-required="true" aria-describedby="ajuda-sug-info erro-sug-info" placeholder="Ex.: novo horário, telefone, ou condição de acessibilidade (rampa, piso tátil, etc)."></textarea>
             <span id="ajuda-sug-info" class="meta">Descreva o novo horário, contato ou condição de acessibilidade física/atitudinal observada.</span>
             <p id="erro-sug-info" class="msg-erro" role="alert"></p>
@@ -2309,6 +2309,9 @@
     const $estab = document.getElementById("sug-estabelecimento");
     const $info = document.getElementById("sug-informacao");
     const $contato = document.getElementById("sug-contato");
+    const $lblEstab = document.getElementById("lbl-sug-estab");
+    const $lblInfo = document.getElementById("lbl-sug-info");
+    const $ajudaInfo = document.getElementById("ajuda-sug-info");
     const $lblContato = document.getElementById("lbl-sug-contato");
     const $ajudaContato = document.getElementById("ajuda-sug-contato");
     const $errEstab = document.getElementById("erro-sug-estab");
@@ -2350,13 +2353,31 @@
         definirObrigatorio($contato, false);
         $errContato.textContent = "";
       } else if (ehCidadao) {
+        $lblEstab.innerHTML =
+          'Qual comércio você visitou? <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span>';
+        $estab.placeholder = "Ex: Café do Calçadão, Ótica Centro...";
+        $lblInfo.innerHTML =
+          'O que você gostaria de atualizar ou relatar? <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span>';
+        $info.placeholder =
+          "Ex: A loja instalou rampa de acesso na entrada, atende em Libras, ou fechou mais cedo hoje.";
+        $ajudaInfo.textContent =
+          "Conte o que mudou no horário, no atendimento ou nas condições de acessibilidade observadas.";
         definirObrigatorio($contato, false);
         $errContato.textContent = "";
-        $lblContato.textContent = "Seu nome ou contato (opcional — você pode enviar anonimamente)";
-        $contato.placeholder = "Opcional (ex.: seu nome ou WhatsApp para retorno)";
+        $lblContato.textContent = "Seu WhatsApp ou e-mail (opcional)";
+        $contato.placeholder = "Deixe apenas se quiser receber retorno da nossa equipe";
         $ajudaContato.textContent =
           "Se preferir, deixe em branco para colaborar anonimamente.";
       } else {
+        $lblEstab.innerHTML =
+          'Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span>';
+        $estab.placeholder = "Ex.: Café da Praça — Praça Fausto Cardoso, nº 42";
+        $lblInfo.innerHTML =
+          'O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span>';
+        $info.placeholder =
+          "Ex.: novo horário, telefone, ou condição de acessibilidade (rampa, piso tátil, etc).";
+        $ajudaInfo.textContent =
+          "Descreva o novo horário, contato ou condição de acessibilidade física/atitudinal observada.";
         definirObrigatorio($contato, true);
         $lblContato.textContent = "Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)";
         $contato.placeholder = "Ex.: CNPJ ou WhatsApp oficial da loja para verificação";
