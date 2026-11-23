@@ -2548,6 +2548,25 @@ body.com-barra-roteiro .toast {
   transform: translate(-50%, 0);
 }
 
+/* ---------- Widget Oficial VLibras (lateral direita média, sem sobrepor Meu Roteiro) ---------- */
+div[vw].enabled {
+  position: fixed !important;
+  top: 50% !important;
+  right: 0 !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  z-index: 52 !important;
+  margin-top: 0 !important;
+}
+
+div[vw].enabled:has([vw-plugin-wrapper].active) {
+  z-index: 80 !important;
+}
+
+body.com-barra-roteiro div[vw].enabled {
+  top: 44% !important;
+}
+
 /* ---------- Diálogos Modais Nativos (<dialog>) ---------- */
 dialog.modal {
   width: min(500px, calc(100vw - 2rem));
