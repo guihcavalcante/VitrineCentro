@@ -1905,10 +1905,28 @@
       : C.PERFIS_CURADORIA[0];
     const fila = ler(KEY.curadoria, []);
 
+    const CATEGORIAS_CADASTRO = [
+      "Alimentação & Café",
+      "Saúde & Farmácia",
+      "Ótica",
+      "Moda & Vestuário",
+      "Arte & Cultura",
+      "Serviços",
+      "Outros",
+    ];
+    const ACESSOS_CADASTRO = [
+      "Entrada em nível ou rampa",
+      "Atendimento prioritário",
+      "Aceita cão-guia",
+      "Atendimento em Libras",
+      "Banheiro acessível",
+      "Cardápio ou etiquetas em Braile / fonte ampliada",
+    ];
+
     $app.innerHTML = `<section aria-labelledby="tit-sugerir">
       <h1 id="tit-sugerir">Colaborar com a VitrineCentro</h1>
       <div class="aviso" role="note">
-        <p><strong>Curadoria colaborativa:</strong> sua sugestão é enviada para análise da equipe (CDL/Sebrae) quando há conexão com a internet e também fica salva localmente neste navegador (localStorage) para consulta.</p>
+        <p><strong>Curadoria colaborativa:</strong> sua sugestão é enviada para análise da curadoria da equipe VitrineCentro em diálogo direto com lojistas e entidades locais quando há conexão com a internet e também fica salva localmente neste navegador (localStorage) para consulta.</p>
       </div>
 
       ${
@@ -1928,24 +1946,76 @@
           </select>
         </div>
 
-        <div class="campo">
-          <label class="lbl" for="sug-estabelecimento">Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
-          <input id="sug-estabelecimento" name="estabelecimento" type="text" class="campo-inp" maxlength="160" required aria-required="true" aria-describedby="erro-sug-estab" placeholder="Ex.: Café da Praça — Praça Fausto Cardoso, nº 42" value="${esc(estabInicial)}">
-          <p id="erro-sug-estab" class="msg-erro" role="alert"></p>
+        <div id="bloco-cadastro-loja" class="sug-cadastro-bloco">
+          <div class="sug-grid-2">
+            <div class="campo">
+              <label class="lbl" for="sug-cad-nome">Nome do estabelecimento <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+              <input id="sug-cad-nome" name="nome_estabelecimento" type="text" class="campo-inp" maxlength="120" required aria-required="true" aria-describedby="erro-sug-cad-nome" placeholder="Ex.: Café da Praça">
+              <p id="erro-sug-cad-nome" class="msg-erro" role="alert"></p>
+            </div>
+
+            <div class="campo">
+              <label class="lbl" for="sug-cad-cat">Categoria</label>
+              <select id="sug-cad-cat" name="categoria" class="campo-sel">
+                ${CATEGORIAS_CADASTRO.map(
+                  (cat) => `<option value="${esc(cat)}">${esc(cat)}</option>`
+                ).join("")}
+              </select>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label class="lbl" for="sug-cad-end">Endereço completo no Centro</label>
+            <input id="sug-cad-end" name="endereco" type="text" class="campo-inp" maxlength="180" placeholder="Rua, número e ponto de referência (ex.: Rua João Pessoa, nº 120 — próximo à Praça Fausto Cardoso)">
+          </div>
+
+          <div class="sug-grid-2">
+            <div class="campo">
+              <label class="lbl" for="sug-cad-hor">Horário de funcionamento</label>
+              <input id="sug-cad-hor" name="horario" type="text" class="campo-inp" maxlength="120" placeholder="Ex.: Seg a Sex, 08h às 18h">
+            </div>
+
+            <div class="campo">
+              <label class="lbl" for="sug-cad-whats">WhatsApp ou Telefone para validação <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+              <input id="sug-cad-whats" name="whatsapp_validacao" type="tel" class="campo-inp" maxlength="60" required aria-required="true" aria-describedby="erro-sug-cad-whats" placeholder="Ex.: (79) 99999-0000">
+              <p id="erro-sug-cad-whats" class="msg-erro" role="alert"></p>
+            </div>
+          </div>
+
+          <fieldset class="campo sug-fieldset-acesso">
+            <legend class="lbl">Condições de acessibilidade que o local possui</legend>
+            <div class="sug-checks">
+              ${ACESSOS_CADASTRO.map(
+                (cond, idx) => `<label class="sug-check-item" for="sug-cad-acesso-${idx}">
+                  <input id="sug-cad-acesso-${idx}" type="checkbox" name="cad_acessibilidade" value="${esc(cond)}">
+                  <span>${esc(cond)}</span>
+                </label>`
+              ).join("")}
+            </div>
+            <p class="sug-nota-transparencia meta">Após o envio, nossa curadoria entrará em contato pelo WhatsApp informado para confirmar os dados e condições de acesso antes da publicação.</p>
+          </fieldset>
         </div>
 
-        <div class="campo">
-          <label class="lbl" for="sug-informacao">O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
-          <textarea id="sug-informacao" name="informacao" maxlength="600" required aria-required="true" aria-describedby="ajuda-sug-info erro-sug-info" placeholder="Ex.: novo horário, telefone, ou condição de acessibilidade (rampa, piso tátil, etc)."></textarea>
-          <span id="ajuda-sug-info" class="meta">Descreva o novo horário, contato ou condição de acessibilidade física/atitudinal observada.</span>
-          <p id="erro-sug-info" class="msg-erro" role="alert"></p>
-        </div>
+        <div id="bloco-simples-loja">
+          <div class="campo">
+            <label class="lbl" for="sug-estabelecimento">Nome do Estabelecimento e Endereço/Rua <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+            <input id="sug-estabelecimento" name="estabelecimento" type="text" class="campo-inp" maxlength="160" required aria-required="true" aria-describedby="erro-sug-estab" placeholder="Ex.: Café da Praça — Praça Fausto Cardoso, nº 42" value="${esc(estabInicial)}">
+            <p id="erro-sug-estab" class="msg-erro" role="alert"></p>
+          </div>
 
-        <div class="campo">
-          <label class="lbl" id="lbl-sug-contato" for="sug-contato">Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)</label>
-          <input id="sug-contato" name="contato" type="text" class="campo-inp" maxlength="120" required aria-required="true" aria-describedby="ajuda-sug-contato erro-sug-contato" placeholder="Ex.: CNPJ ou WhatsApp oficial da loja para verificação">
-          <span id="ajuda-sug-contato" class="meta">Usado pela equipe de curadoria (CDL/Sebrae) para confirmar a veracidade e evitar trotes.</span>
-          <p id="erro-sug-contato" class="msg-erro" role="alert"></p>
+          <div class="campo">
+            <label class="lbl" for="sug-informacao">O que deseja informar <span aria-hidden="true">*</span><span class="sr-only">(campo obrigatório)</span></label>
+            <textarea id="sug-informacao" name="informacao" maxlength="600" required aria-required="true" aria-describedby="ajuda-sug-info erro-sug-info" placeholder="Ex.: novo horário, telefone, ou condição de acessibilidade (rampa, piso tátil, etc)."></textarea>
+            <span id="ajuda-sug-info" class="meta">Descreva o novo horário, contato ou condição de acessibilidade física/atitudinal observada.</span>
+            <p id="erro-sug-info" class="msg-erro" role="alert"></p>
+          </div>
+
+          <div class="campo">
+            <label class="lbl" id="lbl-sug-contato" for="sug-contato">Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)</label>
+            <input id="sug-contato" name="contato" type="text" class="campo-inp" maxlength="120" required aria-required="true" aria-describedby="ajuda-sug-contato erro-sug-contato" placeholder="Ex.: CNPJ ou WhatsApp oficial da loja para verificação">
+            <span id="ajuda-sug-contato" class="meta">Usado pela curadoria da equipe VitrineCentro em diálogo direto com lojistas e entidades locais para confirmar a veracidade e evitar trotes.</span>
+            <p id="erro-sug-contato" class="msg-erro" role="alert"></p>
+          </div>
         </div>
 
         <div class="acoes">
@@ -1976,7 +2046,7 @@
                         ${seloEnvio}
                       </div>
                       <h3>${esc(item.estabelecimento)}</h3>
-                      <p>${esc(item.informacao)}</p>
+                      <p class="curadoria-msg">${esc(item.informacao)}</p>
                       <p class="meta"><strong>Validação / Contato:</strong> ${textoContato} · <time datetime="${esc(item.data)}">${esc(fmtDataHora(item.data))}</time></p>
                       <div class="acoes">
                         ${
@@ -2001,6 +2071,17 @@
 
     const $form = document.getElementById("f-sugerir");
     const $perfil = document.getElementById("sug-perfil");
+    const $blocoCadastro = document.getElementById("bloco-cadastro-loja");
+    const $blocoSimples = document.getElementById("bloco-simples-loja");
+
+    const $cadNome = document.getElementById("sug-cad-nome");
+    const $cadCat = document.getElementById("sug-cad-cat");
+    const $cadEnd = document.getElementById("sug-cad-end");
+    const $cadHor = document.getElementById("sug-cad-hor");
+    const $cadWhats = document.getElementById("sug-cad-whats");
+    const $errCadNome = document.getElementById("erro-sug-cad-nome");
+    const $errCadWhats = document.getElementById("erro-sug-cad-whats");
+
     const $estab = document.getElementById("sug-estabelecimento");
     const $info = document.getElementById("sug-informacao");
     const $contato = document.getElementById("sug-contato");
@@ -2011,31 +2092,57 @@
     const $errContato = document.getElementById("erro-sug-contato");
     const $btEnviar = document.getElementById("bt-enviar-sugestao");
 
-    function atualizarCampoContato() {
+    function definirObrigatorio(el, ativo) {
+      el.required = ativo;
+      if (ativo) {
+        el.setAttribute("required", "");
+        el.setAttribute("aria-required", "true");
+      } else {
+        el.removeAttribute("required");
+        el.removeAttribute("aria-required");
+        el.removeAttribute("aria-invalid");
+      }
+    }
+
+    function atualizarModoFormulario() {
+      const ehCadastro = $perfil.value === C.PERFIS_CURADORIA[0];
       const ehCidadao = $perfil.value === C.PERFIS_CURADORIA[2];
-      if (ehCidadao) {
-        $contato.required = false;
-        $contato.removeAttribute("required");
-        $contato.removeAttribute("aria-required");
-        $contato.removeAttribute("aria-invalid");
+
+      $blocoCadastro.hidden = !ehCadastro;
+      $blocoSimples.hidden = ehCadastro;
+
+      definirObrigatorio($cadNome, ehCadastro);
+      definirObrigatorio($cadWhats, ehCadastro);
+      if (!ehCadastro) {
+        $errCadNome.textContent = "";
+        $errCadWhats.textContent = "";
+      }
+
+      definirObrigatorio($estab, !ehCadastro);
+      definirObrigatorio($info, !ehCadastro);
+      if (ehCadastro) {
+        $errEstab.textContent = "";
+        $errInfo.textContent = "";
+        definirObrigatorio($contato, false);
+        $errContato.textContent = "";
+      } else if (ehCidadao) {
+        definirObrigatorio($contato, false);
         $errContato.textContent = "";
         $lblContato.textContent = "Seu nome ou contato (opcional — você pode enviar anonimamente)";
         $contato.placeholder = "Opcional (ex.: seu nome ou WhatsApp para retorno)";
         $ajudaContato.textContent =
           "Se preferir, deixe em branco para colaborar anonimamente.";
       } else {
-        $contato.required = true;
-        $contato.setAttribute("required", "");
-        $contato.setAttribute("aria-required", "true");
+        definirObrigatorio($contato, true);
         $lblContato.textContent = "Validação do Lojista — CNPJ ou WhatsApp comercial (obrigatório)";
         $contato.placeholder = "Ex.: CNPJ ou WhatsApp oficial da loja para verificação";
         $ajudaContato.textContent =
-          "Usado pela equipe de curadoria (CDL/Sebrae) para confirmar a veracidade e evitar trotes.";
+          "Usado pela curadoria da equipe VitrineCentro em diálogo direto com lojistas e entidades locais para confirmar a veracidade e evitar trotes.";
       }
     }
 
-    atualizarCampoContato();
-    $perfil.addEventListener("change", atualizarCampoContato);
+    atualizarModoFormulario();
+    $perfil.addEventListener("change", atualizarModoFormulario);
 
     const limparErroCampo = (campo, errEl) => {
       campo.addEventListener("input", () => {
@@ -2045,24 +2152,97 @@
         }
       });
     };
+    limparErroCampo($cadNome, $errCadNome);
+    limparErroCampo($cadWhats, $errCadWhats);
     limparErroCampo($estab, $errEstab);
     limparErroCampo($info, $errInfo);
     limparErroCampo($contato, $errContato);
 
     const btFocarSugerir = document.getElementById("bt-focar-sugerir");
     if (btFocarSugerir) {
-      btFocarSugerir.addEventListener("click", () => $estab.focus());
+      btFocarSugerir.addEventListener("click", () => {
+        if ($perfil.value === C.PERFIS_CURADORIA[0]) $cadNome.focus();
+        else $estab.focus();
+      });
     }
 
     $form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const entrada = {
-        perfil: $perfil.value,
-        estabelecimento: $estab.value,
-        informacao: $info.value,
-        contato: $contato.value,
-        loja_id: lojaPre ? lojaPre.id : null,
-      };
+      const ehCadastro = $perfil.value === C.PERFIS_CURADORIA[0];
+      let entrada;
+      let payloadExtra = {};
+
+      if (ehCadastro) {
+        const nome = $cadNome.value.trim();
+        const cat = $cadCat.value;
+        const end = $cadEnd.value.trim();
+        const hor = $cadHor.value.trim();
+        const whats = $cadWhats.value.trim();
+        const acessosMarcados = Array.from(
+          $form.querySelectorAll('input[name="cad_acessibilidade"]:checked')
+        ).map((cb) => cb.value);
+
+        let primeiroInvalido = null;
+        if (!nome) {
+          $cadNome.setAttribute("aria-invalid", "true");
+          $errCadNome.textContent = "Informe o nome do estabelecimento.";
+          primeiroInvalido = $cadNome;
+        } else {
+          $cadNome.removeAttribute("aria-invalid");
+          $errCadNome.textContent = "";
+        }
+        if (!whats) {
+          $cadWhats.setAttribute("aria-invalid", "true");
+          $errCadWhats.textContent = "Informe um WhatsApp ou telefone para validação.";
+          if (!primeiroInvalido) primeiroInvalido = $cadWhats;
+        } else {
+          $cadWhats.removeAttribute("aria-invalid");
+          $errCadWhats.textContent = "";
+        }
+
+        if (primeiroInvalido) {
+          vibrar("erro");
+          anunciar("Verifique os campos obrigatórios destacados no formulário de cadastro.", true);
+          primeiroInvalido.focus();
+          return;
+        }
+
+        const linhasResumo = [
+          `Categoria: ${cat}`,
+          `Endereço completo no Centro: ${end || "Não informado"}`,
+          `Horário de funcionamento: ${hor || "Não informado"}`,
+          acessosMarcados.length
+            ? `Condições de acessibilidade:\n${acessosMarcados.map((item) => `• ${item}`).join("\n")}`
+            : "Condições de acessibilidade: Nenhuma marcada",
+        ];
+
+        entrada = {
+          perfil: $perfil.value,
+          estabelecimento: end ? `${nome} — ${end}` : nome,
+          informacao: linhasResumo.join("\n"),
+          contato: whats,
+          loja_id: lojaPre ? lojaPre.id : null,
+        };
+        payloadExtra = {
+          nome_estabelecimento: nome,
+          categoria: cat,
+          endereco_centro: end || "Não informado",
+          horario_funcionamento: hor || "Não informado",
+          whatsapp_validacao: whats,
+          condicoes_acessibilidade: acessosMarcados.length
+            ? acessosMarcados.join("; ")
+            : "Nenhuma marcada",
+        };
+      } else {
+        entrada = {
+          perfil: $perfil.value,
+          estabelecimento: $estab.value,
+          informacao: $info.value,
+          contato: $contato.value,
+          loja_id: lojaPre ? lojaPre.id : null,
+        };
+      }
+
       const validacao = C.criarRegistroCuradoria(entrada, false);
       if (!validacao.ok) {
         vibrar("erro");
@@ -2102,6 +2282,7 @@
             body: JSON.stringify({
               perfil: validacao.registro.perfil,
               estabelecimento: validacao.registro.estabelecimento,
+              ...payloadExtra,
               informacao: validacao.registro.informacao,
               contato: validacao.registro.contato || "Anônimo (não informado)",
               loja_id: validacao.registro.loja_id,
@@ -2198,7 +2379,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </span>
             <h3>Curadoria Colaborativa</h3>
-            <p>Atualização contínua validada por curadoria institucional (CDL/Sebrae), com participação direta de lojistas e clientes para manter os dados sempre úteis.</p>
+            <p>Atualização contínua realizada pela curadoria da equipe VitrineCentro em diálogo direto com lojistas e entidades locais, com participação de clientes para manter os dados sempre úteis.</p>
           </article>
         </div>
       </section>
