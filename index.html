@@ -229,13 +229,12 @@
 
 <dialog id="dlg-roteiro" class="modal modal-lg" aria-labelledby="dlg-rot-tit" aria-describedby="dlg-rot-desc">
   <h2 id="dlg-rot-tit">Exportar roteiro offline</h2>
-  <p id="dlg-rot-desc" class="meta">Imprima em folha limpa, salve como PDF, copie pronto para enviar no WhatsApp ou baixe em arquivo de texto.</p>
-  <label class="lbl" for="roteiro-texto">Prévia do roteiro</label>
-  <textarea id="roteiro-texto" class="roteiro-previa" readonly rows="12"></textarea>
+  <p id="dlg-rot-desc" class="meta">Imprima em folha limpa (Guia de Bolso), salve como PDF ou copie a mensagem pronta para enviar no WhatsApp.</p>
+  <label class="lbl" for="roteiro-texto">Prévia para WhatsApp</label>
+  <textarea id="roteiro-texto" class="roteiro-previa" readonly rows="10"></textarea>
   <div class="acoes">
     <button type="button" class="btn" id="bt-rot-imprimir">Imprimir / Salvar PDF</button>
     <button type="button" class="btn sec" id="bt-rot-copiar">Copiar para WhatsApp</button>
-    <button type="button" class="btn sec" id="bt-rot-baixar">Baixar .TXT</button>
     <button type="button" class="btn sec" id="bt-rot-fechar">Fechar</button>
   </div>
 </dialog>

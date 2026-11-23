@@ -33,7 +33,6 @@
   const $roteiroTexto = document.getElementById("roteiro-texto");
   const $btRotImprimir = document.getElementById("bt-rot-imprimir");
   const $btRotCopiar = document.getElementById("bt-rot-copiar");
-  const $btRotBaixar = document.getElementById("bt-rot-baixar");
   const $btRotFechar = document.getElementById("bt-rot-fechar");
   const $areaImpressao = document.getElementById("area-impressao");
 
@@ -42,13 +41,14 @@
   const $barraRoteiroTxt = document.getElementById("barra-roteiro-txt");
   const $btBarraExportar = document.getElementById("bt-barra-exportar");
 
+  const URL_VITRINE = "https://guihcavalcante.github.io/VitrineCentro/";
+
   let D = null;
   let filtro = { q: "", cat: null, nec: null, abertoAgora: false };
   let maisFiltrosAberto = false;
   let dialogoCallback = null;
   let dialogoRetornoFoco = null;
   let roteiroRetornoFoco = null;
-  let roteiroNomeArquivo = "roteiro-vitrinecentro.txt";
 
   // Estado da leitura por voz (Web Speech API — Fase 1)
   const voz = {
@@ -587,28 +587,110 @@
     fecharDialogo(false);
   });
 
-  // ---------- exportação de roteiro offline (Fase 2: Impressão / PDF / WhatsApp / TXT) ----------
+  // ---------- exportação inteligente de roteiro (WhatsApp adaptativo + Guia de Bolso PDF) ----------
+  function selosCurtosNegocio(negocioId) {
+    return C.destaquesAcessoNegocio(D, negocioId)
+      .map((d) => d.rotulo)
+      .join(", ");
+  }
+
+  function gerarTextoWhatsAppRoteiro(lojasAlvo, notasAlvo, ehFichaUnica) {
+    const linhas = [
+      ehFichaUnica ? "🏪 *VitrineCentro — Ficha*" : "🗺️ *Meu Roteiro — VitrineCentro*",
+      "",
+    ];
+
+    if (lojasAlvo.length) {
+      const modoCompacto = lojasAlvo.length > 5;
+      lojasAlvo.forEach((n, idx) => {
+        if (modoCompacto) {
+          linhas.push(`${idx + 1}. *${n.nome}* — ${n.referencia_local}`);
+        } else {
+          const selos = selosCurtosNegocio(n.id);
+          linhas.push(`${idx + 1}. *${n.nome}* • ${n.horario_informado}`);
+          linhas.push(`📍 ${n.referencia_local}${selos ? ` | ♿ ${selos}` : ""}`);
+          if (idx < lojasAlvo.length - 1) linhas.push("");
+        }
+      });
+    } else {
+      linhas.push("Nenhum comércio selecionado no roteiro.");
+    }
+
+    if (notasAlvo.length) {
+      linhas.push("", "📝 *Anotações:*");
+      notasAlvo.forEach((nota) => {
+        const lugar = nota.negocio_id && negocio(nota.negocio_id) ? negocio(nota.negocio_id).nome : "Geral";
+        linhas.push(`• ${lugar}: ${nota.texto}`);
+      });
+    }
+
+    linhas.push("", `VitrineCentro: ${URL_VITRINE}`);
+    return linhas.join("\n");
+  }
+
+  function gerarTextoGuiaDeBolso(lojasAlvo, notasAlvo, ehFichaUnica) {
+    const linhas = [
+      ehFichaUnica ? "VITRINECENTRO — GUIA DE BOLSO (FICHA)" : "VITRINECENTRO — GUIA DE BOLSO (CHECKLIST)",
+      "==================================================",
+      "",
+    ];
+
+    if (lojasAlvo.length) {
+      lojasAlvo.forEach((n) => {
+        const selos = selosCurtosNegocio(n.id);
+        const partes = [n.nome, n.referencia_local, n.horario_informado];
+        if (selos) partes.push(selos);
+        linhas.push(`[ ] ${partes.join(" • ")}`);
+      });
+    } else {
+      linhas.push("Nenhum comércio selecionado no roteiro.");
+    }
+
+    if (notasAlvo.length) {
+      linhas.push("", "ANOTAÇÕES PESSOAIS");
+      notasAlvo.forEach((nota) => {
+        const lugar = nota.negocio_id && negocio(nota.negocio_id) ? negocio(nota.negocio_id).nome : "Geral";
+        linhas.push(`• ${lugar}: ${nota.texto}`);
+      });
+    }
+
+    linhas.push(
+      "",
+      "--------------------------------------------------",
+      `VitrineCentro: ${URL_VITRINE} · Dados informativos; confirme no local.`
+    );
+    return linhas.join("\n");
+  }
+
   function abrirExportacaoRoteiro(opcoes, gatilho) {
     const opts = opcoes || {};
     const lojaIds = ler(KEY.lojas, []).filter((id) => negocio(id));
-    const itemIds = ler(KEY.itens, []).map((f) => f.item_id);
-    const notas = ler(KEY.notas, []);
+    const notasTodas = ler(KEY.notas, []);
 
-    const texto = C.gerarTextoRoteiro(D, {
-      lojaIds,
-      itemIds,
-      notas,
-      negocioId: opts.negocioId || null,
-    });
+    const ehFichaUnica = Boolean(opts.negocioId && negocio(opts.negocioId));
+    let lojasAlvo;
+    if (ehFichaUnica) {
+      lojasAlvo = [negocio(opts.negocioId)];
+    } else if (lojaIds.length) {
+      lojasAlvo = lojaIds.map((id) => negocio(id)).filter(Boolean);
+    } else if (opts.todosSeVazio) {
+      lojasAlvo = [...D.negocios];
+    } else {
+      lojasAlvo = [];
+    }
+
+    const notasAlvo = ehFichaUnica
+      ? notasTodas.filter((x) => x.negocio_id === opts.negocioId)
+      : notasTodas;
+
+    const textoWhats = gerarTextoWhatsAppRoteiro(lojasAlvo, notasAlvo, ehFichaUnica);
+    const textoPdf = gerarTextoGuiaDeBolso(lojasAlvo, notasAlvo, ehFichaUnica);
 
     roteiroRetornoFoco = gatilho || document.activeElement;
-    roteiroNomeArquivo = opts.negocioId
-      ? `roteiro-${opts.negocioId}-vitrinecentro.txt`
-      : "roteiro-vitrinecentro.txt";
 
-    $roteiroTexto.value = texto;
+    $roteiroTexto.value = textoWhats;
     if ($areaImpressao) {
-      $areaImpressao.innerHTML = `<pre class="folha-impressao">${esc(texto)}</pre>`;
+      $areaImpressao.innerHTML = `<pre class="folha-impressao">${esc(textoPdf)}</pre>`;
     }
 
     if (typeof $dlgRoteiro.showModal === "function") {
@@ -661,29 +743,10 @@
     }
     if (copiado) {
       vibrar("sucesso");
-      anunciar("Roteiro copiado! Cole no WhatsApp ou bloco de notas.");
+      anunciar("Roteiro copiado! Pronto para colar no WhatsApp.");
     } else {
       vibrar("erro");
       anunciar("Selecione o texto na caixa acima e use Ctrl+C para copiar.", true);
-    }
-  });
-
-  $btRotBaixar.addEventListener("click", () => {
-    try {
-      const blob = new Blob([$roteiroTexto.value], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = roteiroNomeArquivo;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      vibrar("sucesso");
-      anunciar("Arquivo de roteiro offline baixado.");
-    } catch (_e) {
-      vibrar("erro");
-      anunciar("Não foi possível baixar o arquivo neste navegador.", true);
     }
   });
 
@@ -1157,7 +1220,7 @@
 
     const btExpInicio = document.getElementById("bt-exportar-inicio");
     if (btExpInicio) {
-      btExpInicio.addEventListener("click", () => abrirExportacaoRoteiro({}, btExpInicio));
+      btExpInicio.addEventListener("click", () => abrirExportacaoRoteiro({ todosSeVazio: true }, btExpInicio));
     }
 
     vincularEventosRadar();
@@ -1894,6 +1957,129 @@
     }
   }
 
+  function extrairCamposCuradoria(item) {
+    const temEstruturado =
+      typeof item.categoria === "string" ||
+      typeof item.endereco === "string" ||
+      typeof item.horario === "string" ||
+      typeof item.acessibilidade === "string" ||
+      typeof item.observacoes === "string";
+
+    if (temEstruturado) {
+      return {
+        estabelecimento: item.nome_estabelecimento || item.estabelecimento || "",
+        categoria: item.categoria || "",
+        endereco: item.endereco || "",
+        horario: item.horario || "",
+        acessibilidade: item.acessibilidade || "",
+        observacoes: item.observacoes || "",
+      };
+    }
+
+    const texto = String(item.informacao || "");
+    if (texto.startsWith("Categoria: ")) {
+      const mCat = texto.match(/^Categoria:\s*(.*)$/m);
+      const mEnd = texto.match(/^Endereço completo no Centro:\s*(.*)$/m);
+      const mHor = texto.match(/^Horário de funcionamento:\s*(.*)$/m);
+      const idxAcesso = texto.indexOf("Condições de acessibilidade:");
+      let acessos = "";
+      if (idxAcesso !== -1) {
+        const bloco = texto
+          .slice(idxAcesso + "Condições de acessibilidade:".length)
+          .split("\n")
+          .map((l) => l.replace(/^[•\-]\s*/, "").trim())
+          .filter((l) => l && l !== "Nenhuma marcada");
+        acessos = bloco.join("; ");
+      }
+      const endVal = mEnd && mEnd[1] !== "Não informado" ? mEnd[1].trim() : "";
+      const horVal = mHor && mHor[1] !== "Não informado" ? mHor[1].trim() : "";
+      const estabLimpo = endVal && item.estabelecimento && item.estabelecimento.endsWith(` — ${endVal}`)
+        ? item.estabelecimento.slice(0, -(` — ${endVal}`).length)
+        : item.estabelecimento || "";
+      return {
+        estabelecimento: estabLimpo,
+        categoria: mCat ? mCat[1].trim() : "",
+        endereco: endVal,
+        horario: horVal,
+        acessibilidade: acessos,
+        observacoes: "",
+      };
+    }
+
+    return {
+      estabelecimento: item.estabelecimento || "",
+      categoria: "",
+      endereco: "",
+      horario: "",
+      acessibilidade: "",
+      observacoes: texto,
+    };
+  }
+
+  function csvCelula(valor) {
+    const limpo = String(valor == null ? "" : valor)
+      .replace(/\r?\n+/g, " | ")
+      .trim();
+    if (/[",;\n\r]/.test(limpo)) {
+      return `"${limpo.replace(/"/g, '""')}"`;
+    }
+    return limpo;
+  }
+
+  function gerarCsvCuradoria(fila) {
+    const cabecalho = [
+      "Data",
+      "Tipo",
+      "Estabelecimento",
+      "Categoria",
+      "Endereco",
+      "Horario",
+      "Contato",
+      "Acessibilidade",
+      "Observacoes",
+    ];
+    const linhas = [cabecalho.join(",")];
+    fila.forEach((item) => {
+      const c = extrairCamposCuradoria(item);
+      linhas.push(
+        [
+          fmtDataHora(item.data),
+          item.perfil || "",
+          c.estabelecimento,
+          c.categoria,
+          c.endereco,
+          c.horario,
+          item.contato || "Anônimo",
+          c.acessibilidade,
+          c.observacoes,
+        ]
+          .map(csvCelula)
+          .join(",")
+      );
+    });
+    return "\uFEFF" + linhas.join("\r\n");
+  }
+
+  function baixarCsvCuradoria(fila) {
+    try {
+      const csv = gerarCsvCuradoria(fila);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "curadoria-vitrinecentro.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      vibrar("sucesso");
+      anunciar(`Planilha CSV baixada com ${fila.length} ${fila.length === 1 ? "registro" : "registros"} da curadoria.`);
+    } catch (_e) {
+      vibrar("erro");
+      anunciar("Não foi possível baixar a planilha CSV neste navegador.", true);
+    }
+  }
+
   function telaSugerir(idLoja, focoSeletor) {
     definirTitulo("Colaborar");
     const lojaPre = idLoja ? negocio(idLoja) : null;
@@ -2025,10 +2211,13 @@
 
       <section aria-labelledby="tit-curadoria">
         <h2 id="tit-curadoria" tabindex="-1">Solicitações em Análise (Curadoria Local) (${fila.length})</h2>
-        <p class="meta">Registro salvo apenas neste aparelho para acompanhamento e demonstração do fluxo de curadoria.</p>
+        <p class="meta">Registros salvos neste aparelho para acompanhamento e exportação em planilha.</p>
         ${
           fila.length
-            ? `<ul class="lista-curadoria">${fila
+            ? `<div class="acoes">
+                <button type="button" class="btn sec peq" id="bt-baixar-csv-curadoria">Baixar planilha (.csv)</button>
+              </div>
+              <ul class="lista-curadoria">${fila
                 .map((item) => {
                   const aprovado = item.status === "aprovado";
                   const seloStatus = aprovado
@@ -2038,6 +2227,16 @@
                     ? `<span class="badge-envio enviado"><span aria-hidden="true">✉️</span> Enviado à curadoria</span>`
                     : `<span class="badge-envio offline"><span aria-hidden="true">💾</span> Salvo offline</span>`;
                   const textoContato = item.contato ? esc(item.contato) : "Envio anônimo (não informado)";
+                  const c = extrairCamposCuradoria(item);
+                  const resumoPartes = [];
+                  if (c.categoria) resumoPartes.push(c.categoria);
+                  if (c.endereco) resumoPartes.push(c.endereco);
+                  if (c.horario) resumoPartes.push(c.horario);
+                  const resumoCurto = resumoPartes.length
+                    ? resumoPartes.join(" · ")
+                    : c.observacoes.length > 140
+                      ? `${c.observacoes.slice(0, 137)}…`
+                      : c.observacoes;
                   return `<li>
                     <article class="curadoria-item${aprovado ? " aprovado" : ""}">
                       <div class="curadoria-topo">
@@ -2045,16 +2244,16 @@
                         ${seloStatus}
                         ${seloEnvio}
                       </div>
-                      <h3>${esc(item.estabelecimento)}</h3>
-                      <p class="curadoria-msg">${esc(item.informacao)}</p>
-                      <p class="meta"><strong>Validação / Contato:</strong> ${textoContato} · <time datetime="${esc(item.data)}">${esc(fmtDataHora(item.data))}</time></p>
+                      <h3>${esc(c.estabelecimento || item.estabelecimento)}</h3>
+                      ${resumoCurto ? `<p class="meta">${esc(resumoCurto)}</p>` : ""}
+                      <p class="meta"><strong>Contato:</strong> ${textoContato} · <time datetime="${esc(item.data)}">${esc(fmtDataHora(item.data))}</time></p>
                       <div class="acoes">
                         ${
                           !aprovado
-                            ? `<button type="button" class="btn sec peq" data-aprovar-cur="${esc(item.id)}" aria-label="Simular aprovação da solicitação para ${esc(item.estabelecimento)}"><span aria-hidden="true">✓</span> Simular Aprovação</button>`
+                            ? `<button type="button" class="btn sec peq" data-aprovar-cur="${esc(item.id)}" aria-label="Simular aprovação da solicitação para ${esc(c.estabelecimento || item.estabelecimento)}"><span aria-hidden="true">✓</span> Simular Aprovação</button>`
                             : ""
                         }
-                        <button type="button" class="btn sec peq" data-excluir-cur="${esc(item.id)}" aria-label="Excluir solicitação para ${esc(item.estabelecimento)}">Excluir</button>
+                        <button type="button" class="btn sec peq" data-excluir-cur="${esc(item.id)}" aria-label="Excluir solicitação para ${esc(c.estabelecimento || item.estabelecimento)}">Excluir</button>
                       </div>
                     </article>
                   </li>`;
@@ -2171,6 +2370,7 @@
       const ehCadastro = $perfil.value === C.PERFIS_CURADORIA[0];
       let entrada;
       let payloadExtra = {};
+      let camposCsv = {};
 
       if (ehCadastro) {
         const nome = $cadNome.value.trim();
@@ -2233,6 +2433,14 @@
             ? acessosMarcados.join("; ")
             : "Nenhuma marcada",
         };
+        camposCsv = {
+          nome_estabelecimento: nome,
+          categoria: cat,
+          endereco: end,
+          horario: hor,
+          acessibilidade: acessosMarcados.join("; "),
+          observacoes: "",
+        };
       } else {
         entrada = {
           perfil: $perfil.value,
@@ -2240,6 +2448,14 @@
           informacao: $info.value,
           contato: $contato.value,
           loja_id: lojaPre ? lojaPre.id : null,
+        };
+        camposCsv = {
+          nome_estabelecimento: $estab.value.trim(),
+          categoria: "",
+          endereco: "",
+          horario: "",
+          acessibilidade: "",
+          observacoes: $info.value.trim(),
         };
       }
 
@@ -2296,10 +2512,10 @@
         }
       }
 
-      const registroFinal = { ...validacao.registro, enviadoEmail };
+      const registroFinal = { ...validacao.registro, ...camposCsv, enviadoEmail };
       const atual = ler(KEY.curadoria, []);
       atual.unshift(registroFinal);
-      gravar(KEY.curadoria, atual.slice(0, 50));
+      gravar(KEY.curadoria, atual.slice(0, 500));
 
       vibrar("sucesso");
       anunciar(
@@ -2309,6 +2525,14 @@
       );
       telaSugerir(null, "#tit-curadoria");
     });
+
+    const btBaixarCsv = document.getElementById("bt-baixar-csv-curadoria");
+    if (btBaixarCsv) {
+      btBaixarCsv.addEventListener("click", () => {
+        const atual = ler(KEY.curadoria, []);
+        if (atual.length) baixarCsvCuradoria(atual);
+      });
+    }
 
     $app.querySelectorAll("[data-aprovar-cur]").forEach((b) => {
       b.addEventListener("click", () => {
