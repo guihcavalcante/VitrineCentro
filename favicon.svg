@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <mask id="vc-pin-mask-fav">
+      <rect width="64" height="64" fill="#000"/>
+      <path d="M12.6 26.8 C12.6 40.4 23.0 51.2 30.6 58.6 C31.4 59.4 32.6 59.4 33.4 58.6 C41.0 51.2 51.4 40.4 51.4 26.8 Z" fill="#FFF"/>
+      <circle cx="32" cy="31.8" r="9.4" fill="#000"/>
+    </mask>
+  </defs>
+  <g mask="url(#vc-pin-mask-fav)">
+    <rect x="11" y="25" width="21" height="36" fill="#0F766E"/>
+    <rect x="32" y="25" width="21" height="36" fill="#0B5D56"/>
+    <path d="M11 25 H53 V31.5 C44 31.5 40 29.6 32 29.6 C24 29.6 20 31.5 11 31.5 Z" fill="#084741" opacity="0.28"/>
+  </g>
+  <path d="M15.0 9.5 C15.0 6.8 17.1 5.2 19.8 5.2 H44.2 C46.9 5.2 49.0 6.8 49.0 9.5 V12.0 H15.0 Z" fill="#E85D4A"/>
+  <path d="M15.0 11.2 H21.8 L17.6 25.1 H8.0 Z" fill="#E85D4A"/>
+  <path d="M21.8 11.2 H28.6 L27.2 25.1 H17.6 Z" fill="#F7B538"/>
+  <path d="M28.6 11.2 H35.4 L36.8 25.1 H27.2 Z" fill="#E85D4A"/>
+  <path d="M35.4 11.2 H42.2 L46.4 25.1 H36.8 Z" fill="#F7B538"/>
+  <path d="M42.2 11.2 H49.0 L56.0 25.1 H46.4 Z" fill="#E85D4A"/>
+  <path d="M8.0 24.5 H17.6 V25.2 A4.8 4.8 0 0 1 8.0 25.2 Z" fill="#D94B38"/>
+  <path d="M17.6 24.5 H27.2 V25.2 A4.8 4.8 0 0 1 17.6 25.2 Z" fill="#EDA121"/>
+  <path d="M27.2 24.5 H36.8 V25.2 A4.8 4.8 0 0 1 27.2 25.2 Z" fill="#D94B38"/>
+  <path d="M36.8 24.5 H46.4 V25.2 A4.8 4.8 0 0 1 36.8 25.2 Z" fill="#EDA121"/>
+  <path d="M46.4 24.5 H56.0 V25.2 A4.8 4.8 0 0 1 46.4 25.2 Z" fill="#D94B38"/>
+</svg>

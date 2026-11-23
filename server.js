@@ -6,6 +6,7 @@ const PUBLIC_ROOT_FILES = new Set([
   'index.html',
   'manifest.json',
   'sw.js',
+  'favicon.svg',
   'favicon.png',
   'icon-192.png',
   'icon-512.png',

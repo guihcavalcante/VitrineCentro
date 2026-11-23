@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrinecentro-v12';
+const CACHE_NAME = 'vitrinecentro-v13';
 
 const ARQUIVOS_ESSENCIAIS = [
   './',
@@ -8,6 +8,7 @@ const ARQUIVOS_ESSENCIAIS = [
   './js/app.js',
   './dados/dados.js',
   './manifest.json',
+  './favicon.svg',
   './favicon.png',
   './icon-192.png',
   './icon-512.png'
