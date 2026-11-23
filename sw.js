@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrinecentro-v13';
+const CACHE_NAME = 'vitrinecentro-vfinal-1';
 
 const ARQUIVOS_ESSENCIAIS = [
   './',
@@ -14,52 +14,60 @@ const ARQUIVOS_ESSENCIAIS = [
   './icon-512.png'
 ];
 
-// 1. Instalação: baixa todos os arquivos essenciais imediatamente para funcionar offline
+// 1. Instalação: pré-carrega arquivos essenciais diretamente da rede e ativa imediatamente
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ARQUIVOS_ESSENCIAIS);
+      return Promise.all(
+        ARQUIVOS_ESSENCIAIS.map((url) =>
+          cache.add(new Request(url, { cache: 'reload' }))
+        )
+      );
     })
   );
   self.skipWaiting();
 });
 
-// 2. Ativação: apaga caches antigos de versões anteriores
+// 2. Ativação: remove todos os caches antigos e assume imediatamente o controle dos clientes
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((nomes) => {
-      return Promise.all(
-        nomes
-          .filter((nome) => nome !== CACHE_NAME)
-          .map((nome) => caches.delete(nome))
-      );
-    })
+    caches
+      .keys()
+      .then((nomes) =>
+        Promise.all(
+          nomes
+            .filter((nome) => nome !== CACHE_NAME)
+            .map((nome) => caches.delete(nome))
+        )
+      )
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// 3. Interceptação de requisições: entrega do cache ou busca na rede e salva
+// 3. Interceptação (Network-First): busca sempre na rede primeiro e usa o cache apenas offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((respostaCache) => {
-      const buscaRede = fetch(event.request)
-        .then((respostaRede) => {
-          if (respostaRede && respostaRede.status === 200) {
-            const copia = respostaRede.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
-          }
-          return respostaRede;
-        })
-        .catch(() => {
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-          return respostaCache;
-        });
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
 
-      return respostaCache || buscaRede;
-    })
+  event.respondWith(
+    fetch(event.request)
+      .then((respostaRede) => {
+        if (respostaRede && respostaRede.status === 200 && respostaRede.type === 'basic') {
+          const copia = respostaRede.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
+        }
+        return respostaRede;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((respostaCache) => {
+          if (respostaCache) return respostaCache;
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html').then((idx) => idx || caches.match('./'));
+          }
+          return undefined;
+        });
+      })
   );
 });
