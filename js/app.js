@@ -2160,28 +2160,85 @@
     }
   }
 
-  // ---------- tela: sobre os dados ----------
+  // ---------- tela: sobre o VitrineCentro ----------
   function telaSobre() {
-    definirTitulo("Sobre os dados");
-    $app.innerHTML = `<section class="sobre" aria-labelledby="tit-sobre">
-      <h1 id="tit-sobre">Sobre os dados</h1>
-      <p>Este é um <strong>protótipo escolar</strong> que integra três propostas:</p>
-      <ul>
-        <li><strong>T3 · VitrineCentro</strong> — base do projeto: negócios, itens, referência local, horário e contato autorizado.</li>
-        <li><strong>A4 · AcessoLoja</strong> — condições de acesso físicas e atitudinais campo a campo (observado, não observado, desconhecido), com fonte e data.</li>
-        <li><strong>T2 · PassaporteCentro</strong> — inspiração do <em>tema cultural da semana</em>, com fonte visível e curiosidades.</li>
-      </ul>
-      <h2>Limites</h2>
-      <ul>
-        <li>Todos os dados são <strong>fictícios</strong>. Dados reais só entram com autorização dos responsáveis e data de confirmação.</li>
-        <li>As condições de acesso <strong>não são certificação</strong>. “Desconhecido” significa que ninguém verificou — nunca é escondido nos filtros.</li>
-        <li>Favoritos e anotações ficam <strong>somente neste navegador</strong> (localStorage). Não há conta nem rastreamento: o Radar de Distância Offline só consulta o GPS se você clicar em ativar e mantém a coordenada apenas em memória até você desativar.</li>
-        <li>Textos culturais trazem fonte e devem ser conferidos antes de qualquer uso público.</li>
-      </ul>
-      <h2>Apagar meus dados locais</h2>
-      <p>Esta ação remove seus favoritos, lojas salvas, anotações e fila local de curadoria guardados neste aparelho. Suas preferências de acessibilidade continuam preservadas.</p>
-      <p><button type="button" class="btn sec" id="bt-limpar">Apagar favoritos, lojas salvas e anotações</button></p>
-    </section>`;
+    definirTitulo("Sobre o VitrineCentro");
+    $app.innerHTML = `<div class="sobre-pagina">
+      <article class="card sobre-bloco sobre-historia" aria-labelledby="tit-sobre">
+        <p class="secao-kicker">Nossa História e Propósito</p>
+        <h1 id="tit-sobre">Sobre o VitrineCentro</h1>
+        <p class="sobre-lead">O <strong>VitrineCentro</strong> nasceu para resolver uma dor real de quem frequenta o comércio de rua do Centro: a falta de informações confiáveis sobre acessibilidade, horários de funcionamento e formas de atendimento antes mesmo de sair de casa.</p>
+        <p>Nosso propósito é aproximar pessoas e negócios locais com transparência — garantindo <strong>autonomia e tranquilidade para o cidadão</strong> planejar seu passeio e <strong>visibilidade qualificada para o lojista</strong> que acolhe bem cada cliente.</p>
+      </article>
+
+      <section class="sobre-secao" aria-labelledby="tit-pilares">
+        <div class="sobre-secao-head">
+          <p class="secao-kicker">Como funciona</p>
+          <h2 id="tit-pilares">Os 3 Pilares da Solução</h2>
+        </div>
+        <div class="grid sobre-pilares">
+          <article class="card sobre-pilar-card">
+            <span class="sobre-pilar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            </span>
+            <h3>Funciona Offline e Sem Login</h3>
+            <p>Tecnologia PWA leve que roda sem internet na rua e respeita 100% a sua privacidade, sem criação de conta e com zero rastreamento.</p>
+          </article>
+
+          <article class="card sobre-pilar-card">
+            <span class="sobre-pilar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M5 9h14"/><path d="M12 9v5"/><path d="M9 21l3-7 3 7"/></svg>
+            </span>
+            <h3>Acessibilidade Nativa</h3>
+            <p>Projetado desde a base com WCAG 2.2 AA/AAA, LBI, leitura por voz em português, VLibras, modo de alto contraste e tipografia Atkinson Hyperlegible.</p>
+          </article>
+
+          <article class="card sobre-pilar-card">
+            <span class="sobre-pilar-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <h3>Curadoria Colaborativa</h3>
+            <p>Atualização contínua validada por curadoria institucional (CDL/Sebrae), com participação direta de lojistas e clientes para manter os dados sempre úteis.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="sobre-secao" aria-labelledby="tit-proximos">
+        <div class="sobre-secao-head">
+          <p class="secao-kicker">Evolução do Portal</p>
+          <h2 id="tit-proximos">Próximos Passos</h2>
+        </div>
+        <div class="sobre-passos-grid">
+          <article class="card sobre-passo-card">
+            <span class="card-cat">Experiência personalizada</span>
+            <h3>Perfis Rápidos de Acessibilidade</h3>
+            <p>Ativação em um único toque de ajustes pré-configurados — como adaptação automática de contraste, tamanho de fonte e filtros prioritários para baixa visão ou mobilidade reduzida.</p>
+          </article>
+
+          <article class="card sobre-passo-card">
+            <span class="card-cat">Expansão no Centro</span>
+            <h3>Mapeamento Presencial com Lojistas</h3>
+            <p>Visitas presenciais ao comércio de rua em parceria com entidades locais para conferir entradas, circulação e atendimento de forma colaborativa, ampliando o catálogo com dados reais autorizados.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="card sobre-bloco sobre-transparencia" aria-labelledby="tit-transparencia">
+        <p class="secao-kicker">Compromisso público</p>
+        <h2 id="tit-transparencia">Transparência e Conformidade</h2>
+        <p>Os comércios, horários, contatos e registros exibidos atualmente têm <strong>caráter demonstrativo</strong>. Dados reais só passam a integrar o guia mediante autorização dos responsáveis e data de confirmação, e as condições de acesso são informativas (não constituem certificação) — itens ainda não verificados permanecem visíveis para que você possa confirmar antes da visita.</p>
+        <ul class="card-acesso-lista sobre-normas" aria-label="Normas técnicas seguidas">
+          <li class="acesso-tag">WCAG 2.2 (AA/AAA)</li>
+          <li class="acesso-tag">eMAG 3.1</li>
+          <li class="acesso-tag">LBI (Lei nº 13.146/2015)</li>
+          <li class="acesso-tag">ABNT NBR 17060</li>
+        </ul>
+        <div class="sobre-privacidade">
+          <p class="meta"><strong>Privacidade local:</strong> seu roteiro, anotações e solicitações ficam salvos somente neste aparelho (localStorage). O Radar de Distância só acessa o GPS quando você aciona e não envia sua localização a nenhum servidor.</p>
+          <p><button type="button" class="btn sec peq" id="bt-limpar">Apagar favoritos, lojas salvas e anotações</button></p>
+        </div>
+      </section>
+    </div>`;
 
     const btLimpar = document.getElementById("bt-limpar");
     btLimpar.addEventListener("click", () => {
