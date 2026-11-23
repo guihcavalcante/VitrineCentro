@@ -40,6 +40,7 @@
   const $barraRoteiro = document.getElementById("barra-roteiro");
   const $barraRoteiroTxt = document.getElementById("barra-roteiro-txt");
   const $btBarraExportar = document.getElementById("bt-barra-exportar");
+  const $btBarraFechar = document.getElementById("bt-barra-fechar");
 
   const URL_VITRINE = "https://guihcavalcante.github.io/VitrineCentro/";
 
@@ -49,6 +50,12 @@
   let dialogoCallback = null;
   let dialogoRetornoFoco = null;
   let roteiroRetornoFoco = null;
+  let barraRoteiroFechada = false;
+  try {
+    barraRoteiroFechada = sessionStorage.getItem("vc_barra_roteiro_fechada") === "1";
+  } catch (_e) {
+    barraRoteiroFechada = false;
+  }
 
   // Estado da leitura por voz (Web Speech API — Fase 1)
   const voz = {
@@ -884,6 +891,14 @@
   }
 
   // ---------- indicadores do roteiro (header + barra flutuante) ----------
+  function definirBarraRoteiroFechada(fechada) {
+    barraRoteiroFechada = Boolean(fechada);
+    try {
+      if (barraRoteiroFechada) sessionStorage.setItem("vc_barra_roteiro_fechada", "1");
+      else sessionStorage.removeItem("vc_barra_roteiro_fechada");
+    } catch (_e) {}
+  }
+
   function atualizarIndicadoresRoteiro() {
     const lojas = D ? ler(KEY.lojas, []).filter((id) => negocio(id)) : ler(KEY.lojas, []);
     const qtd = lojas.length;
@@ -898,15 +913,24 @@
     }
 
     if ($barraRoteiro && $barraRoteiroTxt) {
-      $barraRoteiro.hidden = qtd === 0;
+      const visivel = qtd > 0 && !barraRoteiroFechada;
+      $barraRoteiro.hidden = !visivel;
       $barraRoteiroTxt.textContent =
         qtd === 1 ? "1 comércio no seu roteiro" : `${qtd} comércios no seu roteiro`;
-      document.body.classList.toggle("com-barra-roteiro", qtd > 0);
+      document.body.classList.toggle("com-barra-roteiro", visivel);
     }
   }
 
   if ($btBarraExportar) {
     $btBarraExportar.addEventListener("click", () => abrirExportacaoRoteiro({}, $btBarraExportar));
+  }
+
+  if ($btBarraFechar) {
+    $btBarraFechar.addEventListener("click", () => {
+      definirBarraRoteiroFechada(true);
+      atualizarIndicadoresRoteiro();
+      anunciar("Barra de roteiro fechada. O contador segue disponível em Meu Roteiro no menu superior.");
+    });
   }
 
   // ---------- tela: início ----------
@@ -1603,6 +1627,7 @@
       l.push(id);
       gravar(KEY.lojas, l);
       salva = true;
+      definirBarraRoteiroFechada(false);
       vibrar("sucesso");
       anunciar(`${nome} adicionada ao seu roteiro!`);
     }

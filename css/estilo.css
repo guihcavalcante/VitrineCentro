@@ -2582,6 +2582,7 @@ body.contraste .sug-check-item:has(input:checked) {
 }
 
 .barra-roteiro-inner {
+  position: relative;
   pointer-events: auto;
   max-width: 780px;
   margin-inline: auto;
@@ -2589,12 +2590,45 @@ body.contraste .sug-check-item:has(input:checked) {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.82rem 1.2rem;
+  padding: 0.82rem 3.45rem 0.82rem 1.2rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-top: 4px solid var(--sun);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-lg);
+}
+
+.barra-roteiro-fechar {
+  position: absolute;
+  top: 0.42rem;
+  right: 0.45rem;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.barra-roteiro-fechar:hover {
+  background: var(--coral-soft);
+  border-color: var(--coral-border);
+  color: var(--coral-hover);
+}
+
+body.contraste .barra-roteiro-fechar {
+  background: #000000;
+  color: #FFD60A;
+  border: 2px solid #FFD60A;
 }
 
 .barra-roteiro-info {
@@ -3462,6 +3496,15 @@ html.sem-animacao *::after {
     flex-wrap: wrap;
     padding: 0.68rem 0.85rem;
     gap: 0.55rem;
+  }
+
+  .barra-roteiro-info {
+    padding-right: 2.75rem;
+  }
+
+  .barra-roteiro-fechar {
+    top: 0.4rem;
+    right: 0.4rem;
   }
 
   .barra-roteiro-icone {
