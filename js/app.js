@@ -348,6 +348,67 @@
     return C.calcularDistanciaHaversine(radar.origem.lat, radar.origem.lng, n.lat, n.lng);
   }
 
+  function formatarDistanciaFalada(metros) {
+    const arred = Math.max(0, Math.round(metros));
+    if (arred < 1000) {
+      return arred === 1 ? "1 metro" : `${arred} metros`;
+    }
+    const km = (metros / 1000).toFixed(1).replace(".", ",");
+    return km === "1,0" ? "1 quilômetro" : `${km} quilômetros`;
+  }
+
+  function obterMaisProximoVisivel() {
+    if (!D || !radar.origem) return null;
+    const h = location.hash.slice(1) || "inicio";
+    const m = h.split("-");
+    let candidatos = [];
+    if (m[0] === "negocio" && m[1] && negocio(m[1])) {
+      candidatos = [negocio(m[1])];
+    } else {
+      const t = temaAtual();
+      candidatos = C.filtrarNegocios(D, filtro, t ? t.id : null);
+      if (!candidatos.length) candidatos = D.negocios || [];
+    }
+
+    let melhor = null;
+    let menorDist = Infinity;
+    candidatos.forEach((n) => {
+      const d = distanciaParaNegocio(n);
+      if (typeof d === "number" && Number.isFinite(d) && d < menorDist) {
+        menorDist = d;
+        melhor = n;
+      }
+    });
+    return melhor ? { negocio: melhor, distancia: menorDist } : null;
+  }
+
+  function anunciarPontoMaisProximo() {
+    const proximo = obterMaisProximoVisivel();
+    const mensagem = proximo
+      ? `Localização ativa. O ponto mais próximo é ${proximo.negocio.nome}, a cerca de ${formatarDistanciaFalada(proximo.distancia)}, localizado em ${proximo.negocio.referencia_local}.`
+      : "Localização ativa. Distâncias calculadas offline no seu aparelho.";
+
+    anunciar(mensagem);
+
+    if (temVoz()) {
+      try {
+        pararVoz(true);
+        window.speechSynthesis.cancel();
+        const utt = new window.SpeechSynthesisUtterance(mensagem);
+        utt.lang = "pt-BR";
+        utt.rate = voz.velocidade || 1;
+        const vozes = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+        const pt =
+          vozes.find((v) => v.lang && v.lang.toLowerCase().startsWith("pt-br")) ||
+          vozes.find((v) => v.lang && v.lang.toLowerCase().startsWith("pt"));
+        if (pt) utt.voice = pt;
+        window.speechSynthesis.speak(utt);
+      } catch (_e) {
+        // Silencia falha caso o navegador bloqueie síntese de voz automática
+      }
+    }
+  }
+
   function ativarRadarGPS(focoSeletor) {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       radar.status = "erro";
@@ -374,8 +435,8 @@
         };
         radar.erro = "";
         vibrar("sucesso");
-        anunciar("Radar offline ativado! Distâncias calculadas em linha reta no seu aparelho.");
         rotear(focoSeletor);
+        anunciarPontoMaisProximo();
       },
       (err) => {
         radar.status = "erro";
@@ -400,8 +461,8 @@
     radar.origem = { ...C.PONTO_CENTRO_ARACAJU };
     radar.erro = "";
     vibrar("sucesso");
-    anunciar("Radar offline ativado no ponto de demonstração: Praça Fausto Cardoso, Centro de Aracaju.");
     rotear(focoSeletor);
+    anunciarPontoMaisProximo();
   }
 
   function desativarRadar(focoSeletor) {

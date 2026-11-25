@@ -13,6 +13,7 @@ window.DADOS = {
   "categorias": [
     "Alimentação",
     "Arte e Cultura",
+    "Cultura & Turismo",
     "Serviços"
   ],
   "tipos_acesso": {
@@ -92,6 +93,32 @@ window.DADOS = {
       "lat": -10.9154,
       "lng": -37.0504,
       "exemplo_ficticio": true
+    },
+    {
+      "id": "n6",
+      "nome": "Museu da Gente Sergipana",
+      "categoria": "Cultura & Turismo",
+      "icone": "🏛️",
+      "referencia_local": "Av. Ivo do Prado, 398 — Centro Histórico, em frente ao Rio Sergipe",
+      "horario_informado": "Ter a Sex, 10h às 16h · Sáb e Dom, 10h às 15h",
+      "contato_autorizado": "(79) 3218-1551 · Entrada gratuita",
+      "data_confirmacao": "2026-11-20",
+      "lat": -10.9163,
+      "lng": -37.0478,
+      "exemplo_ficticio": false
+    },
+    {
+      "id": "n7",
+      "nome": "Praça Fausto Cardoso / Palácio Museu Olímpio Campos",
+      "categoria": "Cultura & Turismo",
+      "icone": "🏛️",
+      "referencia_local": "Praça Fausto Cardoso, s/n — Centro Histórico de Aracaju",
+      "horario_informado": "Ter a Sex, 10h às 17h · Sáb e Dom, 9h às 13h",
+      "contato_autorizado": "(79) 3214-2548 · Praça aberta diariamente",
+      "data_confirmacao": "2026-11-20",
+      "lat": -10.9116,
+      "lng": -37.0496,
+      "exemplo_ficticio": false
     }
   ],
   "itens": [
@@ -189,6 +216,38 @@ window.DADOS = {
       "titulo": "Abará",
       "descricao_curta": "Massa de feijão cozida na folha de bananeira.",
       "icone": "🍃",
+      "ativo": true
+    },
+    {
+      "id": "i13",
+      "negocio_id": "n6",
+      "titulo": "Exposição interativa da cultura sergipana",
+      "descricao_curta": "Instalações audiovisuais sobre falares, festas, culinária e tradições de Sergipe.",
+      "icone": "🎭",
+      "ativo": true
+    },
+    {
+      "id": "i14",
+      "negocio_id": "n6",
+      "titulo": "Visita guiada acessível",
+      "descricao_curta": "Mediação cultural gratuita com recursos táteis, elevador e acolhimento inclusivo.",
+      "icone": "♿",
+      "ativo": true
+    },
+    {
+      "id": "i15",
+      "negocio_id": "n7",
+      "titulo": "Salões históricos do Palácio Museu",
+      "descricao_curta": "Acervo patrimonial restaurado com mobiliário e arquitetura histórica do século XIX.",
+      "icone": "🏛️",
+      "ativo": true
+    },
+    {
+      "id": "i16",
+      "negocio_id": "n7",
+      "titulo": "Passeio pela Praça Fausto Cardoso",
+      "descricao_curta": "Praça histórica arborizada com coreto, monumentos e feiras culturais ao ar livre.",
+      "icone": "🌳",
       "ativo": true
     }
   ],
@@ -592,6 +651,166 @@ window.DADOS = {
       "estado": "nao_observado",
       "descricao": "Tabela de serviços sem versão em Braille no momento.",
       "fonte_observacao": "Informado pelo estabelecimento (simulado)"
+    },
+    {
+      "id": "a51",
+      "negocio_id": "n6",
+      "tipo": "degrau",
+      "estado": "nao_observado",
+      "descricao": "Acesso por rampa suave na entrada e elevador interno para todos os pavimentos.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a52",
+      "negocio_id": "n6",
+      "tipo": "largura",
+      "estado": "observado",
+      "descricao": "Portas e vãos expositivos amplos com circulação livre.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a53",
+      "negocio_id": "n6",
+      "tipo": "circulacao",
+      "estado": "observado",
+      "descricao": "Salas expositivas planas, amplas e interligadas por elevador acessível.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a54",
+      "negocio_id": "n6",
+      "tipo": "balcao",
+      "estado": "observado",
+      "descricao": "Recepção com trecho rebaixado para atendimento confortável.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a55",
+      "negocio_id": "n6",
+      "tipo": "banheiro",
+      "estado": "observado",
+      "descricao": "Sanitários adaptados com barras de apoio e espaço de giro.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a56",
+      "negocio_id": "n6",
+      "tipo": "atendimento",
+      "estado": "observado",
+      "descricao": "Recursos de mediação inclusiva e atendimento em Libras sob agendamento.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a57",
+      "negocio_id": "n6",
+      "tipo": "rota",
+      "estado": "observado",
+      "descricao": "Calçada nivelada com rampa de acesso pela Av. Ivo do Prado.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a58",
+      "negocio_id": "n6",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Entrada garantida para visitantes com cão-guia em todas as galerias.",
+      "fonte_observacao": "Lei nº 11.126/2005 · referência institucional"
+    },
+    {
+      "id": "a59",
+      "negocio_id": "n6",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Recepção e acesso prioritário sinalizados para idosos, gestantes e PcD.",
+      "fonte_observacao": "Lei nº 10.048/2000 · referência institucional"
+    },
+    {
+      "id": "a60",
+      "negocio_id": "n6",
+      "tipo": "braille",
+      "estado": "observado",
+      "descricao": "Módulos táteis e informações acessíveis em Braille na exposição.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a61",
+      "negocio_id": "n7",
+      "tipo": "degrau",
+      "estado": "nao_observado",
+      "descricao": "Praça com rampas nas esquinas e acesso adaptado ao Palácio Museu.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a62",
+      "negocio_id": "n7",
+      "tipo": "largura",
+      "estado": "observado",
+      "descricao": "Portais históricos amplos com passagem desimpedida.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a63",
+      "negocio_id": "n7",
+      "tipo": "circulacao",
+      "estado": "observado",
+      "descricao": "Passeios largos na praça e elevador interno nos pavimentos do museu.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a64",
+      "negocio_id": "n7",
+      "tipo": "balcao",
+      "estado": "desconhecido",
+      "descricao": "Altura do balcão de recepção a confirmar presencialmente.",
+      "fonte_observacao": "—"
+    },
+    {
+      "id": "a65",
+      "negocio_id": "n7",
+      "tipo": "banheiro",
+      "estado": "observado",
+      "descricao": "Banheiro adaptado disponível para visitantes dentro do Palácio Museu.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a66",
+      "negocio_id": "n7",
+      "tipo": "atendimento",
+      "estado": "desconhecido",
+      "descricao": "Disponibilidade de mediação em Libras a confirmar previamente.",
+      "fonte_observacao": "—"
+    },
+    {
+      "id": "a67",
+      "negocio_id": "n7",
+      "tipo": "rota",
+      "estado": "observado",
+      "descricao": "Calçadas amplas com rampas de travessia integrando a praça ao calçadão comercial.",
+      "fonte_observacao": "Curadoria VitrineCentro · referência institucional"
+    },
+    {
+      "id": "a68",
+      "negocio_id": "n7",
+      "tipo": "cao_guia",
+      "estado": "observado",
+      "descricao": "Praça pública e dependências do Palácio Museu acolhem cão-guia.",
+      "fonte_observacao": "Lei nº 11.126/2005 · referência institucional"
+    },
+    {
+      "id": "a69",
+      "negocio_id": "n7",
+      "tipo": "prioritario",
+      "estado": "observado",
+      "descricao": "Acolhimento prioritário na recepção e visitas mediadas.",
+      "fonte_observacao": "Lei nº 10.048/2000 · referência institucional"
+    },
+    {
+      "id": "a70",
+      "negocio_id": "n7",
+      "tipo": "braille",
+      "estado": "desconhecido",
+      "descricao": "Disponibilidade de guia impresso em Braille a confirmar na recepção.",
+      "fonte_observacao": "—"
     }
   ],
   "fotos_autorizadas": [
@@ -633,6 +852,22 @@ window.DADOS = {
       "arquivo": "placeholder",
       "legenda": "Galeria com piso tátil (ilustração)",
       "texto_alternativo": "Ilustração de entrada de galeria com piso tátil.",
+      "autorizacao_status": "exemplo_ficticio"
+    },
+    {
+      "id": "f6",
+      "negocio_id": "n6",
+      "arquivo": "placeholder",
+      "legenda": "Museu da Gente Sergipana (ilustração)",
+      "texto_alternativo": "Ilustração de fachada histórica acessível do Museu da Gente Sergipana com entrada em nível.",
+      "autorizacao_status": "exemplo_ficticio"
+    },
+    {
+      "id": "f7",
+      "negocio_id": "n7",
+      "arquivo": "placeholder",
+      "legenda": "Praça Fausto Cardoso e Palácio Museu Olímpio Campos (ilustração)",
+      "texto_alternativo": "Ilustração do Palácio Museu Olímpio Campos e da Praça Fausto Cardoso com calçada ampla.",
       "autorizacao_status": "exemplo_ficticio"
     }
   ],
@@ -713,6 +948,34 @@ window.DADOS = {
       "ordem": 2,
       "curiosidade": "Neste exemplo, o ateliê vende cordéis que contam histórias de sanfoneiros.",
       "fonte_curiosidade": "Exemplo fictício"
+    }
+  ],
+  "programacao_semana": [
+    {
+      "id": "prog1",
+      "negocio_id": "n7",
+      "titulo": "Feira Cultural & Artesanato na Praça Fausto Cardoso",
+      "dia_horario": "Sáb, 9h às 14h",
+      "local": "Praça Fausto Cardoso — Centro Histórico",
+      "acessibilidade": [
+        "Rampas nas esquinas",
+        "Calçada ampla",
+        "Aceita cão-guia"
+      ],
+      "destaque": "Artesanato sergipano, literatura de cordel e gastronomia ao ar livre integrados ao passeio de compras."
+    },
+    {
+      "id": "prog2",
+      "negocio_id": "n6",
+      "titulo": "Visita Guiada Acessível no Museu da Gente Sergipana",
+      "dia_horario": "Qui e Sáb, 10h30 e 14h30",
+      "local": "Museu da Gente Sergipana — Av. Ivo do Prado, 398",
+      "acessibilidade": [
+        "Entrada em nível e elevador",
+        "Banheiro adaptado",
+        "Recursos táteis / Libras"
+      ],
+      "destaque": "Mediação cultural gratuita para combinar história local e acessibilidade ao seu roteiro pelo Centro."
     }
   ]
 };
