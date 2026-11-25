@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vitrinecentro-vfinal-1';
+const CACHE_NAME = 'vitrinecentro-vfinal-2';
 
 const ARQUIVOS_ESSENCIAIS = [
   './',

@@ -72,6 +72,7 @@
     modo: null, // "gps" | "demo"
     ordenar: true,
     erro: "",
+    falando: false,
   };
 
   // Ícones SVG finos e consistentes (1.8px, aria-hidden="true")
@@ -235,7 +236,9 @@
     voz.ativa = false;
     voz.pausada = false;
     voz.utterance = null;
+    radar.falando = false;
     atualizarControlesVoz();
+    atualizarBotaoVozRadar();
     if (!silencioso && estavaAtiva) {
       anunciar("Leitura por voz interrompida.");
     }
@@ -382,6 +385,27 @@
     return melhor ? { negocio: melhor, distancia: menorDist } : null;
   }
 
+  function atualizarBotaoVozRadar() {
+    const btRadarVoz = document.getElementById("bt-radar-parar-voz");
+    if (btRadarVoz) btRadarVoz.hidden = !radar.falando;
+    const btFichaVoz = document.getElementById("bt-ficha-radar-parar-voz");
+    if (btFichaVoz) btFichaVoz.hidden = !radar.falando;
+  }
+
+  function pararVozRadar(silencioso) {
+    const estavaFalando = radar.falando;
+    radar.falando = false;
+    if (temVoz()) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (_e) {}
+    }
+    atualizarBotaoVozRadar();
+    if (!silencioso && estavaFalando) {
+      anunciar("Áudio do GPS interrompido.");
+    }
+  }
+
   function anunciarPontoMaisProximo() {
     const proximo = obterMaisProximoVisivel();
     const mensagem = proximo
@@ -402,9 +426,24 @@
           vozes.find((v) => v.lang && v.lang.toLowerCase().startsWith("pt-br")) ||
           vozes.find((v) => v.lang && v.lang.toLowerCase().startsWith("pt"));
         if (pt) utt.voice = pt;
+        utt.onstart = () => {
+          radar.falando = true;
+          atualizarBotaoVozRadar();
+        };
+        utt.onend = () => {
+          radar.falando = false;
+          atualizarBotaoVozRadar();
+        };
+        utt.onerror = () => {
+          radar.falando = false;
+          atualizarBotaoVozRadar();
+        };
+        radar.falando = true;
+        atualizarBotaoVozRadar();
         window.speechSynthesis.speak(utt);
       } catch (_e) {
-        // Silencia falha caso o navegador bloqueie síntese de voz automática
+        radar.falando = false;
+        atualizarBotaoVozRadar();
       }
     }
   }
@@ -451,7 +490,7 @@
         anunciar(radar.erro, true);
         rotear(focoSeletor);
       },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: false, timeout: 25000, maximumAge: 60000 }
     );
   }
 
@@ -466,6 +505,7 @@
   }
 
   function desativarRadar(focoSeletor) {
+    pararVozRadar(true);
     radar.status = "inativo";
     radar.origem = null;
     radar.modo = null;
@@ -513,6 +553,7 @@
           : "Distâncias a partir da sua localização";
       desc = `Referência: ${esc(radar.origem.rotulo)} · tempo estimado a pé.`;
       acoes = `
+        <button type="button" class="btn sec peq" id="bt-radar-parar-voz" ${radar.falando ? "" : "hidden"}>Parar áudio</button>
         <button type="button" class="btn sec peq" id="bt-radar-ordem" aria-pressed="${radar.ordenar}">Mais perto primeiro</button>
         <button type="button" class="btn sec peq" id="bt-radar">${radar.modo === "demo" ? "Usar meu GPS" : "Atualizar GPS"}</button>
         <button type="button" class="btn sec peq" id="bt-radar-desativar">Desativar</button>
@@ -542,11 +583,13 @@
     const btDemo = document.getElementById("bt-radar-demo");
     const btOrdem = document.getElementById("bt-radar-ordem");
     const btDesativar = document.getElementById("bt-radar-desativar");
+    const btPararVoz = document.getElementById("bt-radar-parar-voz");
 
     if (btGps) btGps.addEventListener("click", () => ativarRadarGPS("#bt-radar"));
     if (btDemo) btDemo.addEventListener("click", () => ativarRadarDemo("#bt-radar-ordem"));
     if (btOrdem) btOrdem.addEventListener("click", () => alternarOrdenacaoRadar("#bt-radar-ordem"));
     if (btDesativar) btDesativar.addEventListener("click", () => desativarRadar("#bt-radar"));
+    if (btPararVoz) btPararVoz.addEventListener("click", () => pararVozRadar(false));
   }
 
   // ---------- Compartilhamento Elegante (Web Share API + Fallback Clipboard) ----------
@@ -1481,7 +1524,10 @@
                 <span class="dist-ficha-sub">Cálculo 100% offline em linha reta · ${esc(radar.origem.rotulo)}</span>
               </div>
             </div>
-            <button type="button" class="btn sec peq" id="bt-ficha-radar-off">Desativar radar</button>
+            <div class="radar-acoes">
+              <button type="button" class="btn sec peq" id="bt-ficha-radar-parar-voz" ${radar.falando ? "" : "hidden"}>Parar áudio</button>
+              <button type="button" class="btn sec peq" id="bt-ficha-radar-off">Desativar radar</button>
+            </div>
           </div>`
         : temCoord
           ? `<div class="dist-ficha" role="region" aria-label="Radar de distância offline">
@@ -1639,6 +1685,10 @@
     const btFichaOff = document.getElementById("bt-ficha-radar-off");
     if (btFichaOff) {
       btFichaOff.addEventListener("click", () => desativarRadar("#bt-ficha-radar-gps"));
+    }
+    const btFichaPararVoz = document.getElementById("bt-ficha-radar-parar-voz");
+    if (btFichaPararVoz) {
+      btFichaPararVoz.addEventListener("click", () => pararVozRadar(false));
     }
 
     const btExp = document.getElementById("bt-exp-negocio");
@@ -3360,6 +3410,21 @@
       anunciar("VitrineCentro instalado com sucesso para uso offline.");
     });
   }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      if (radar.falando) pararVozRadar(true);
+      return;
+    }
+    if (document.visibilityState === "visible" && "serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .getRegistration()
+        .then((reg) => {
+          if (reg) reg.update();
+        })
+        .catch(() => {});
+    }
+  });
 
   // ---------- inicialização ----------
   try {
